@@ -1,0 +1,4 @@
+# Fixture mapping for the render self-test (fictional IDs only).
+demo:
+  light: light.example_badkamer
+  temp: sensor.example_badkamer_temperatuur

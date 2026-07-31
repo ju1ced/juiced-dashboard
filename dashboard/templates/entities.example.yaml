@@ -1,0 +1,24 @@
+# Entity mapping — CONTRACT / REFERENCE (committed, fictional IDs only).
+#
+# Committed dashboard YAML references logical placeholders like `<<badkamer.light>>`.
+# The renderer resolves them from your local, git-ignored `entities.local.yaml`.
+# This file documents the expected structure with FICTIONAL example IDs — never put real
+# entity IDs or device serials here (it is committed to a public repo).
+#
+# Groups are free-form; group by room and by domain as makes sense for your setup.
+
+# Shared energy KPIs used by the global navigation badge (templates/decluttering_templates.yaml):
+energy:
+  battery_soc: sensor.example_home_battery_soc
+  charge_power: sensor.example_home_battery_charge_power
+  discharge_power: sensor.example_home_battery_discharge_power
+  solar_power: sensor.example_solar_power
+  grid_import: sensor.example_grid_import
+  peak_power: sensor.example_grid_peak_this_month
+
+# Per-room example (mirrors the badkamer view):
+badkamer:
+  light: light.example_badkamer
+  climate: climate.example_badkamer
+  temp: sensor.example_badkamer_temperature
+  humidity: sensor.example_badkamer_humidity

@@ -1,0 +1,11 @@
+# Wired into CI as a blocking gate in PR-02.
+config:
+  default: true
+  MD013: false # line length
+  MD033: false # inline HTML (used in PR template)
+  MD041: false # first line heading
+globs:
+  - "**/*.md"
+ignores:
+  - "node_modules"
+  - "build"

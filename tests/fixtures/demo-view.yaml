@@ -1,0 +1,13 @@
+---
+title: demo
+path: demo
+type: sections
+sections:
+  - type: grid
+    cards:
+      - type: custom:mushroom-light-card
+        entity: "<<demo.light>>"
+      - type: entities
+        entities:
+          - entity: "<<demo.temp>>"
+            name: Temperatuur
