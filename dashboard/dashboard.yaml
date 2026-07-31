@@ -1,0 +1,11 @@
+---
+title: Juiced Dashboard
+# Composition root for the YAML-mode dashboard (see docs/pr-roadmap.md).
+# Shared templates and one `!include` per view are wired here as views are migrated.
+# Empty during the foundation phase (PR-01).
+#
+# Example of how views/templates get wired in later PRs:
+#   decluttering_templates: !include templates/decluttering_templates.yaml
+#   views:
+#     - !include views/badkamer.yaml
+views: []

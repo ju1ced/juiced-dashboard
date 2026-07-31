@@ -1,0 +1,4 @@
+---
+title: Demo
+views:
+  - !include demo-view.yaml

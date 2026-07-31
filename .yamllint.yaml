@@ -1,0 +1,15 @@
+# Wired into CI as a blocking gate in PR-02.
+extends: default
+rules:
+  line-length:
+    max: 140
+    level: warning
+  document-start: disable
+  comments:
+    min-spaces-from-content: 1
+  truthy:
+    check-keys: false
+ignore: |
+  node_modules/
+  build/
+  *.local.yaml
