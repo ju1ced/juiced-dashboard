@@ -6,10 +6,10 @@ git-ignored local file. This guide is designed so the mapping costs you almost n
 
 ## The idea in one picture
 
-```
+```text
 committed (public):   entity: "<<badkamer.light>>"
-local (git-ignored):  badkamer: { light: light.spots_badkamer }   # entities.local.yaml
-render:               entity: light.spots_badkamer                 # build/… (git-ignored)
+local (git-ignored):  badkamer: { light: light.example_spots }   # entities.local.yaml
+render:               entity: light.example_spots                # build/… (git-ignored)
 ```
 
 - **Placeholder syntax:** `<<group.key>>` (at least one dot). Group by room/domain however you like.

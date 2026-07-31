@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-"""CI guard: fail if real entity IDs or device serials are committed.
+"""Privacy guard: block real entity IDs and device serials in committed dashboard YAML.
 
-Committed dashboard YAML must use logical placeholders (``<<group.key>>``), not real entity
-IDs. Real IDs and serials belong only in the git-ignored entities.local.yaml. This guard
-scans git-tracked dashboard YAML (excluding *.local.* and *.example.*) and fails on:
+Rules (see docs/entity-mapping.md):
+  - **Serials** (e.g. ``sn_1234567890``) are blocked in ALL scanned files, including
+    examples and fixtures.
+  - **Real entity IDs** (``<domain>.<name>``) are blocked in normal dashboard YAML — use a
+    ``<<group.key>>`` placeholder instead.
+  - In example/fixture files, entity IDs are allowed ONLY if provably fictional: the name
+    part must start with ``example_`` (e.g. ``light.example_kitchen``).
 
-  - device serials (e.g. ``sn_1234567890``)
-  - real entity IDs (``<domain>.<name>``) that are NOT wrapped in a ``<<...>>`` placeholder
+False positives avoided: placeholders (``<<...>>``), Lovelace action/service names
+(``perform_action: light.turn_on``), icons (``mdi:...``), URLs, and templating are not
+flagged as entity IDs.
 
-    python scripts/check_entity_refs.py           # scans git-tracked files
-    python scripts/check_entity_refs.py a.yaml ... # scans the given paths (pre-commit hook)
+    python scripts/check_entity_refs.py            # scan git-tracked dashboard + fixtures
+    python scripts/check_entity_refs.py a.yaml ... # scan explicit paths (pre-commit / tests)
 """
 import os
 import re
@@ -23,49 +28,79 @@ SERIAL_RE = re.compile(r"\bsn_[0-9]{6,}\b")
 DOMAINS = (
     "light|switch|sensor|binary_sensor|cover|climate|media_player|fan|lock|vacuum|camera|"
     "number|select|button|scene|script|input_boolean|input_number|input_text|input_select|"
-    "person|device_tracker|alarm_control_panel|humidifier|water_heater|siren|valve|update|"
-    "weather|todo|calendar|image|lawn_mower|remote|counter|timer"
+    "input_datetime|person|device_tracker|alarm_control_panel|humidifier|water_heater|siren|"
+    "valve|update|weather|todo|calendar|image|lawn_mower|remote|counter|timer|group"
 )
 ENTITY_RE = re.compile(r"\b(?:%s)\.[a-z0-9_]+\b" % DOMAINS)
+# Service / action names (not entities): `perform_action: light.turn_on`, `service: script.x`
+SERVICE_TOKEN_RE = re.compile(
+    r"(?:perform_action|service|action)\s*:\s*[\"']?(?:%s)\.[a-z0-9_]+" % DOMAINS
+)
+INCLUDE_RE = re.compile(r"!include\s+\S+")
+EXAMPLE_NAME_RE = re.compile(r"\.(example_[a-z0-9_]*)\b")
+# name-parts that are file extensions, not entities (e.g. an !include of light.yaml)
+FILE_EXTS = {"yaml", "yml", "json", "js", "css", "md", "png", "jpg", "jpeg", "svg", "txt", "html"}
+
+
+def is_example_or_fixture(path):
+    p = path.replace("\\", "/")
+    base = os.path.basename(p)
+    return ".example." in base or "tests/fixtures/" in p
 
 
 def tracked_yaml():
+    globs = ["dashboard/*.yaml", "dashboard/**/*.yaml", "tests/**/*.yaml"]
     try:
-        out = subprocess.check_output(
-            ["git", "ls-files", "dashboard/*.yaml", "dashboard/**/*.yaml"],
-            cwd=REPO_ROOT, text=True,
-        )
+        out = subprocess.check_output(["git", "ls-files", *globs], cwd=REPO_ROOT, text=True)
     except subprocess.CalledProcessError:
         return []
     files = [os.path.join(REPO_ROOT, p) for p in out.split() if p.strip()]
-    return [f for f in files if ".local." not in f and ".example." not in f]
+    # never scan local mappings (git-ignored anyway) or negative test fixtures
+    return [f for f in files if ".local." not in f and "/fixtures/negative/" not in f.replace("\\", "/")]
 
 
 def scan(path):
+    example = is_example_or_fixture(path)
     violations = []
     with open(path, "r", encoding="utf-8") as fh:
         for i, line in enumerate(fh, 1):
             for m in SERIAL_RE.finditer(line):
                 violations.append((i, "serial", m.group(0)))
-            stripped = PLACEHOLDER_RE.sub("", line)  # ignore placeholder contents
-            for m in ENTITY_RE.finditer(stripped):
-                violations.append((i, "entity_id", m.group(0)))
+            # strip placeholders, !include paths and service/action tokens first
+            cleaned = PLACEHOLDER_RE.sub("", line)
+            cleaned = INCLUDE_RE.sub("", cleaned)
+            cleaned = SERVICE_TOKEN_RE.sub("", cleaned)
+            for m in ENTITY_RE.finditer(cleaned):
+                token = m.group(0)
+                if token.rsplit(".", 1)[1] in FILE_EXTS:
+                    continue  # a filename like light.yaml, not an entity
+                if example:
+                    if not EXAMPLE_NAME_RE.search(token):
+                        violations.append((i, "non-fictional-example", token))
+                else:
+                    violations.append((i, "entity_id", token))
     return violations
 
 
 def main():
-    paths = sys.argv[1:] or tracked_yaml()
-    paths = [p for p in paths if ".local." not in p and ".example." not in p]
+    args = [a for a in sys.argv[1:]]
+    paths = args or tracked_yaml()
+    paths = [p for p in paths if ".local." not in p]
     total = 0
     for path in paths:
         for line, kind, val in scan(path):
             rel = os.path.relpath(path, REPO_ROOT)
-            print(f"{rel}:{line}: real {kind} committed: {val}  (use a <<group.key>> placeholder)")
+            hint = {
+                "serial": "device serials must never be committed",
+                "entity_id": "use a <<group.key>> placeholder",
+                "non-fictional-example": "example IDs must start with 'example_'",
+            }[kind]
+            print(f"{rel}:{line}: {kind}: {val}  ({hint})")
             total += 1
     if total:
-        print(f"\nFAIL: {total} real entity reference(s) in committed YAML.", file=sys.stderr)
+        print(f"\nFAIL: {total} privacy violation(s) in committed YAML.", file=sys.stderr)
         sys.exit(1)
-    print(f"OK: no real entity IDs/serials in {len(paths)} committed dashboard file(s).")
+    print(f"OK: no real entity IDs/serials in {len(paths)} scanned file(s).")
 
 
 if __name__ == "__main__":

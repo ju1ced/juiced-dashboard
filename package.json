@@ -1,0 +1,11 @@
+{
+  "name": "juiced-dashboard",
+  "private": true,
+  "description": "Dev tooling (markdown lint) for the Juiced Dashboard repo.",
+  "scripts": {
+    "lint:md": "markdownlint-cli2 \"**/*.md\""
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.23.0"
+  }
+}

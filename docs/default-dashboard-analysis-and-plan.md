@@ -65,6 +65,7 @@ De belangrijkste bevindingen:
 | `juiced-dashboard` repo | `/projects/juiced-dashboard/` | Doelrepo | **Hoog** — leeg (alleen prompt + 1 commit `start`) |
 
 **Beperkingen / niet vastgesteld:**
+
 - Er zijn **geen echte performancemetingen** gedaan (geen browserprofiling beschikbaar in deze omgeving). Alle performance-uitspraken zijn `[FEIT]` over structuur of `[HYPOTHESE]` over runtime-effect — zie hfdst. 7 voor de meetmethode.
 - De 12 kamerviews zijn structureel geïnventariseerd (kaarttypes, aantallen); niet elke individuele entity-binding is regel voor regel gevalideerd tegen de entity-registry.
 - Van de "niet-gebruikte" resources is vastgesteld dat ze **niet in het default dashboard** voorkomen; of ze elders (map, dashboard-test, Kia-YAML) gebruikt worden is niet uitputtend gecontroleerd (zie hfdst. 8).
@@ -86,6 +87,7 @@ De belangrijkste bevindingen:
 **Kopie-verificatie default vs MCP Test** `[FEIT]`: identieke `config_hash` (`bbd397db37302fb9`), identieke grootte (452.914 bytes), **27 views**, **1.072 kaarten**, identieke view-titels en identiek kaarttype-histogram. → MCP Test is byte-identiek en dus een correcte, veilige testkopie.
 
 **Structuur van het default dashboard** `[FEIT]`:
+
 - `config` bevat: `kiosk_mode`, `decluttering_templates` (1: `global_navigation_badges`), `button_card_templates` (4: `vacuum_service`, `vacuum_room`, `ac_charge_speed`, `soc_target`), en `views` (27).
 - `kiosk_mode.hide_header` = JS-template `[[[ is_state("input_boolean.kiosk_hide_header_sidebar", "on") ]]]` — header/sidebar worden verborgen via een input_boolean (kiosk-gebruik). `[FEIT]`
 - **Navigatie:** elke view heeft één badge: `custom:decluttering-card` met template `global_navigation_badges`. Die template is een `mushroom-chips-card` met chips voor Back/Home + energie-KPI's (batterij-SoC, laad/ontlaadvermogen, zonneopbrengst, netverbruik, piekvermogen) met `navigate`-acties. Dit is dé gedeelde navigatiebalk. `[FEIT]`
@@ -134,6 +136,7 @@ De belangrijkste bevindingen:
 **Functionaliteit die absoluut behouden moet blijven** (harde eis): alle 27 views; de gedeelde navigatiebadge met energie-KPI's; kiosk-mode header-toggle; de 4 `button_card_templates` (vacuum + laden); camera-integraties; `auto-entities` dynamische lijsten (batteries1, anycubic); de ingebedde EV6- en Garden-cards; energie-/water-grafieken.
 
 **Gedeelde/globale elementen (kandidaten voor centrale componenten):**
+
 - `decluttering_templates.global_navigation_badges` (nav op alle views) — **P1 gedeelde component**.
 - `button_card_templates` (4) — **P2 gedeelde component**.
 - Kamerpatroon (12× vrijwel identiek) — **P1 kandidaat voor één decluttering-/room-template**.
@@ -239,6 +242,7 @@ De belangrijkste bevindingen:
 ### 9.1 Kia Connect-dashboard (`/projects/ha-kia-connect-dashboard`, YAML-mode)
 
 `[FEIT]` Herbruikbare patronen:
+
 - **Composition root + includes:** `dashboard.yaml` bevat enkel `title`, `decluttering_templates: !include ...` en `views: - !include views/<x>.yaml`. Geen grote inline kaarten in de root.
 - **Mappenverantwoordelijkheid** (uit `docs/include-conventions.md`): `views/` (top-level), `cards/` (herbruikbare fragmenten), `popups/` (detail), `templates/` (contracten: `colors.yaml`, `icons.yaml`, `decluttering_templates.yaml`, `entities.yaml`), `themes/`.
 - **Include-regels:** views → cards/popups/templates; cards → templates; templates includen géén views/popups. Kleine, review-bare bestanden.
@@ -250,6 +254,7 @@ De belangrijkste bevindingen:
 ### 9.2 Garden-dashboard (`/projects/garden-dashboard`, single-file custom card)
 
 `[FEIT]` Herbruikbare patronen:
+
 - **Één dependency-vrije JS-module** (Shadow DOM, `ha-card`, thema-variabelen met fallbacks). Geen Mushroom/card-mod/layout-card/decluttering nodig → drop-in in een bestaande view.
 - **Render-gating (zeer relevant voor perf):** `hasRelevantChange(prevHass, nextHass, entityIds)` — rendert alleen opnieuw als een *geconfigureerde* entity's `state`/`last_updated` wijzigt; skipt anders volledig. Rendering wordt bovendien uitgesteld terwijl een slider focus heeft.
 - **List-driven config, géén hardcoded entity-ID's:** `zones[]`/`irrigation[]`; elke niet-primaire entity optioneel → graceful bij ontbrekende entities.
@@ -289,6 +294,7 @@ De belangrijkste bevindingen:
 **Keuze: Optie C (Hybride), met Optie A als fundament.** `[INTERPRETATIE]`
 
 **Motivatie (traceerbaar naar bevindingen):**
+
 - Lost **T1** (P0) op: alles naar Git, YAML-mode, review + rollback.
 - Lost **T2/T3** op via gedeelde `templates/` + decluttering voor het kamerpatroon (12 views → 1 template + 12 dunne includes).
 - Respecteert **functionele pariteit**: YAML-migratie is 1:1 en incrementeel per view (laag risico), i.t.t. een volledige JS-herbouw (Optie B, hoog risico).
@@ -296,6 +302,7 @@ De belangrijkste bevindingen:
 - Views 20 (EV6) en 26 (garden) **bewijzen** dat de card-embed-aanpak in deze instantie al werkt.
 
 **Wat wordt gedeelde component:**
+
 - `templates/decluttering_templates.yaml`: `global_navigation_badges` (bestaat al) + nieuw `room_view` / `room_light_row` / `sensor_graph_row`.
 - `templates/colors.yaml` + `templates/icons.yaml`: semantische tokens (naar Kia-model).
 - `themes/juiced-horizon.yaml`: centraal thema (Kia-stijl doortrekken).
@@ -352,6 +359,7 @@ juiced-dashboard/
 ```
 
 HA-wiring (voorbeeld, YAML-mode):
+
 ```yaml
 lovelace:
   dashboards:
@@ -401,12 +409,14 @@ lovelace:
 ## 15. Teststrategie en acceptatiecriteria
 
 **Statisch/CI:**
+
 - `yamllint` + schema-/structuurvalidatie van alle dashboard-YAML.
 - `prettier --check`, `markdownlint` (naar referentie-CI).
 - **Entity-ref-guard:** CI faalt bij directe entity-ID's buiten `entities.yaml`/`*.local.yaml` (Kia-patroon).
 - Ontbrekende-entity-check: script dat mapping-ID's tegen de HA-registry houdt (read-only, via MCP) — rapporteert missing/unknown/unavailable.
 
 **Functioneel:**
+
 - **Pariteitsvergelijking default ↔ MCP Test** per view: zelfde kaarten/entities/acties aanwezig (kaartinventaris-diff met hetzelfde script als dit onderzoek).
 - Handmatige rooktest per gemigreerde view op MCP Test.
 
@@ -415,6 +425,7 @@ lovelace:
 **Performance:** hertest tegen de baseline (hfdst. 7) na fases 3, 6, 7 — scripting time, DOM-nodes, JS-payload, template-listeners.
 
 **Acceptatiecriteria per fase (voorbeeld Fase 3 — kamers):**
+
 - [ ] Alle 12 kamers renderen op MCP Test zonder console-errors.
 - [ ] Kaart-/entity-inventaris per kamer = default (pariteit).
 - [ ] Elke kamer heeft een stabiel `path`.
@@ -472,27 +483,34 @@ lovelace:
 ## 20. Bijlagen
 
 ### Bijlage A — Dashboardlijst (live)
+
 5 dashboards: `lovelace` (Overview, storage, **default**), `mcp-test-dashboard` (**kopie**), `map`, `dashboard-test` (admin), `kia-ev6` (Nebula, yaml). `[FEIT]`
 
 ### Bijlage B — Kerncijfers default dashboard
+
 - Views: **27** · Kaarten: **1.072** · Unieke entities: **522** · Config: **452.914 bytes** · Hash: `bbd397db37302fb9`.
 - View-types: 1 hybride masonry/sections (Home) + 26 `sections`.
 - decluttering_templates: 1 (`global_navigation_badges`) · button_card_templates: 4.
 
 ### Bijlage C — Kaarttype-histogram (top) `[FEIT]`
+
 entities 170 · vertical-stack 150 · grid 103 · mushroom-entity 72 · mushroom-chips 49 · horizontal-stack 48 · mini-graph 48 · mushroom-template 37 · mushroom-light 37 · stack-in-card 32 · button-card 31 · decluttering 27 · expander 23 · mod-card 21 · gauge 20 · conditional 19 · mushroom-cover 18 · simple-thermostat 16 · tile 14 · auto-entities 11 · apexcharts 10 · … (± 30 custom-types totaal).
 
 ### Bijlage D — Template-/feature-tellingen `[FEIT]`
+
 `{%` 926 · `{{` 369 · card_mod 279 · is_state( 278 · state_attr( 157 · states( 117 · `[[[` (JS-templates) 17.
 
 ### Bijlage E — Camera-entities `[FEIT]`
+
 deurbel, garage, serverroom, kamer_adriaan, tuin, tuinhuis (elk `*_high_resolution_channel`) + buienradar. (7 totaal.)
 
 ### Bijlage F — Frontend-resources: 51 totaal (50 module + 1 inline CSS). Gebruiksverificatie in hfdst. 6/8. `[FEIT]`
 
 ### Bijlage G — Graphify-coverage `[FEIT]`
+
 Graphify (`/projects/HomeAssistant/graphify-out`) indexeert: custom_components (1218), www (264), dashboards/ (60 — **Kia-YAML**), blueprints (6), root-YAML's. **Bevat het storage-mode default dashboard niet.** Voor het default dashboard is live HA MCP de bron.
 
 ### Bijlage H — Referentie-repo's `[FEIT]`
+
 Kia: `/projects/ha-kia-connect-dashboard` (+ `/projects/HomeAssistant/dashboards/kia`) — YAML-package + custom card, CI, thema-tokens, entity-mapping-contract.
 Garden: `/projects/garden-dashboard` — single-file render-gated custom card, list-driven, privacy via `*.local.yaml`.

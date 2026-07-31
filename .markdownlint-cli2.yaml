@@ -1,9 +1,13 @@
-# Wired into CI as a blocking gate in PR-02.
+# Markdown lint config (blocking gate in CI, run locally via `make lint` / `npx markdownlint-cli2`).
 config:
   default: true
-  MD013: false # line length
-  MD033: false # inline HTML (used in PR template)
-  MD041: false # first line heading
+  MD013: false # line length — technical docs use long lines/tables
+  MD033: false # inline HTML — used in the PR template
+  MD041: false # first line need not be a top-level heading
+  MD024:
+    siblings_only: true # allow the same heading text under different parents
+  MD028: false # allow a blank line between adjacent blockquotes (separate notes)
+  MD050: false # strong-emphasis style (asterisk vs underscore) is not enforced
 globs:
   - "**/*.md"
 ignores:
