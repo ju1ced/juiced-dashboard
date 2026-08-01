@@ -39,3 +39,36 @@ rejects real IDs/serials in committed files. See
 - Views may include cards and templates. Cards may include templates. Templates do not
   include views. Themes do not include structure.
 - Keep files small enough to review in focused pull requests.
+
+### Include path resolution — file-relative
+
+`!include <path>` is **file-relative**: resolved relative to the directory of the file that
+declares the include, exactly like Home Assistant's own YAML loader. So:
+
+- `dashboard/dashboard.yaml` includes a view with `!include views/badkamer.yaml`
+  (relative to `dashboard/`);
+- `dashboard/views/badkamer.yaml` includes a card with `!include ../cards/foo.yaml`
+  (relative to `dashboard/views/`).
+
+This convention is implemented in `scripts/juiced_common.py` (`IncludeLoader`) and enforced
+by `scripts/validate_compose.py` (a missing include fails with a clear message). Nested
+resolution is covered by `tests/test_pipeline.py`.
+
+## Validation pipeline
+
+The foundation is kept reproducible by a validation pipeline (GitHub Actions +
+`make validate` locally). Blocking gates:
+
+- **yamllint** / **markdownlint-cli2** — YAML and Markdown linting.
+- **`check_entity_refs.py`** — privacy guard: blocks real entity IDs and device serials in
+  committed YAML (examples/fixtures must use the `example_` convention).
+- **`validate_compose.py`** — `!include` resolves; every view has a stable `path` and `type`.
+- **`check_entities.py`** — offline mapping completeness + entity-id format (`--live` cross-checks
+  the running HA; local-only).
+- **`check_resources.py`** — every `custom:<type>` used is declared in `dashboard/resources.yaml`
+  (`--live` cross-checks HA-registered resources; local-only).
+- **`render_dashboard.py --self-test`** — the placeholder-mapping render mechanism.
+- **`pytest`** — positive and negative fixtures for every guard.
+
+The HA-dependent (`--live`) checks are local-only: GitHub Actions cannot reach the stdio HA
+MCP and no HA secrets are used in CI.

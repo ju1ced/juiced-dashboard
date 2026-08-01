@@ -1,0 +1,8 @@
+---
+title: room
+path: room
+type: sections
+sections:
+  - type: grid
+    cards:
+      - !include ../cards/light.yaml

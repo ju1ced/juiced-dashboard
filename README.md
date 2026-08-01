@@ -54,7 +54,20 @@ serials never leave your machine. Full guide: [`docs/entity-mapping.md`](docs/en
 
 ## Development
 
+One-time setup:
+
 ```bash
-python scripts/validate_compose.py     # !include resolves, views have path/type
-python scripts/check_entity_refs.py     # fails if real IDs/serials sneak into committed YAML
+pip install -r requirements-dev.txt   # pyyaml, yamllint, pytest
+npm install                           # markdownlint-cli2 (needs Node)
 ```
+
+Run the **same blocking checks as CI** with a single command:
+
+```bash
+make validate
+```
+
+This runs: yaml + markdown lint, the privacy/composition/mapping/resource guards, the render
+self-test and the pytest tool tests. Individual targets: `make lint`, `make guards`,
+`make render`, `make test`. Optional local-only HA checks: `make` targets aside, run
+`python scripts/check_entities.py --live` and `python scripts/check_resources.py --live`.
