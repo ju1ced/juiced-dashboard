@@ -4,8 +4,8 @@ title: Juiced Dashboard
 # Shared templates and one `!include` per view are wired here as views are migrated.
 # Empty during the foundation phase (PR-01).
 #
-# Example of how views/templates get wired in later PRs:
-#   decluttering_templates: !include templates/decluttering_templates.yaml
-#   views:
-#     - !include views/badkamer.yaml
+# Shared decluttering templates (global navigation badge). Placeholders are resolved at
+# render time from the git-ignored entities.local.yaml.
+decluttering_templates: !include templates/decluttering_templates.yaml
+# Views are wired in with one `!include` each as they are migrated (Fase 3/4).
 views: []
