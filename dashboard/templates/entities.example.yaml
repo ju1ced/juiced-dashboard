@@ -7,14 +7,20 @@
 #
 # Groups are free-form; group by room and by domain as makes sense for your setup.
 
-# Shared energy KPIs used by the global navigation badge (templates/decluttering_templates.yaml):
+# Navigation badge (templates/decluttering_templates.yaml -> global_navigation_badges):
+nav:
+  home_button: input_button.example_home
+  kiosk_toggle: input_boolean.example_kiosk_hide_header
+
+# Shared energy KPIs used by the navigation badge:
 energy:
-  battery_soc: sensor.example_home_battery_soc
-  charge_power: sensor.example_home_battery_charge_power
-  discharge_power: sensor.example_home_battery_discharge_power
+  battery_soc: sensor.example_battery_soc
+  charge_power: sensor.example_battery_charge_power
+  discharge_power: sensor.example_battery_discharge_power
   solar_power: sensor.example_solar_power
   grid_import: sensor.example_grid_import
   peak_power: sensor.example_grid_peak_this_month
+  charger_daily: sensor.example_charger_energy_daily
 
 # Per-room example (mirrors the badkamer view):
 badkamer:

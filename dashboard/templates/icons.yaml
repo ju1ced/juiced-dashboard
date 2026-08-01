@@ -1,0 +1,20 @@
+# Semantic icon catalog — centralizes icon choices so they stay consistent across views.
+# Cards/templates reference these names instead of repeating raw mdi:/phu: strings.
+# (phu: icons come from the hass-hue-icons resource.)
+home: mdi:home
+battery: mdi:home-battery
+battery_charging: mdi:battery-charging
+battery_discharging: mdi:battery-arrow-down
+solar: mdi:solar-panel
+grid_import: mdi:transmission-tower-import
+grid_peak: mdi:summit
+charger: phu:charging-station
+car: mdi:car-electric
+garden: phu:garden
+
+light: mdi:lightbulb
+temperature: mdi:thermometer
+humidity: mdi:water-percent
+motion: mdi:motion-sensor
+window_open: mdi:window-open
+window_closed: mdi:window-closed

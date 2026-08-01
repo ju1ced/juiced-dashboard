@@ -1,0 +1,81 @@
+# Shared decluttering templates (committed; logical placeholders only — no real IDs).
+# 'global_navigation_badges' is the shared navigation badge used by every view.
+# Real entity IDs for the placeholder keys live in the git-ignored entities.local.yaml.
+global_navigation_badges:
+  card:
+    type: custom:mushroom-chips-card
+    chips:
+    - type: back
+    - type: entity
+      entity: <<nav.home_button>>
+      tap_action:
+        action: navigate
+        navigation_path: home
+      name: Home
+      content_info: name
+      use_entity_picture: true
+    - type: entity
+      entity: <<energy.battery_soc>>
+      icon_color: teal
+      icon: mdi:home-battery
+      tap_action:
+        action: navigate
+        navigation_path: energy
+    - type: entity
+      entity: <<energy.charge_power>>
+      icon_color: green
+      icon: mdi:battery-charging
+      tap_action:
+        action: navigate
+        navigation_path: energy
+    - type: entity
+      entity: <<energy.discharge_power>>
+      icon_color: red
+      icon: mdi:battery-arrow-down
+      tap_action:
+        action: navigate
+        navigation_path: energy
+    - type: entity
+      entity: <<energy.solar_power>>
+      icon_color: green
+      icon: mdi:solar-panel
+      tap_action:
+        action: navigate
+        navigation_path: energy
+    - type: entity
+      entity: <<energy.grid_import>>
+      icon_color: deep-orange
+      icon: mdi:transmission-tower-import
+      tap_action:
+        action: navigate
+        navigation_path: energy
+    - type: entity
+      entity: <<energy.peak_power>>
+      icon_color: red
+      icon: mdi:summit
+    - type: entity
+      entity: <<nav.kiosk_toggle>>
+      content_info: none
+      tap_action:
+        action: toggle
+      use_entity_picture: true
+    - type: entity
+      name: Laadpaal
+      icon: phu:charging-station
+      entity: <<energy.charger_daily>>
+    - type: template
+      icon: mdi:car-electric
+      content: Nebula
+      icon_color: '#006400'
+      tap_action:
+        action: navigate
+        navigation_path: car
+    - type: template
+      icon: phu:garden
+      content: Tuin
+      icon_color: '#006400'
+      tap_action:
+        action: navigate
+        navigation_path: garden
+    - type: menu
+    alignment: center

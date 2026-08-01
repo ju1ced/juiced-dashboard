@@ -1,0 +1,22 @@
+# Semantic colour catalog — the single source of truth for colours used by cards/templates.
+# Values reference the Juiced Horizon theme tokens (dashboard/themes/juiced-horizon.yaml) so
+# colours follow the active light/dark mode instead of being hard-coded per card. Cards should
+# use these CSS variables (via native card options or theme-aware styling) rather than literal
+# hex values — this is what lets us retire the ~279 inline card-mod colour overrides.
+brand_primary: "var(--juiced-brand-primary)"
+brand_secondary: "var(--juiced-brand-secondary)"
+brand_accent: "var(--juiced-brand-accent)"
+
+text_primary: "var(--juiced-text-primary)"
+text_secondary: "var(--juiced-text-secondary)"
+text_muted: "var(--juiced-text-muted)"
+
+surface_base: "var(--juiced-surface-base)"
+surface_raised: "var(--juiced-surface-raised)"
+surface_elevated: "var(--juiced-surface-elevated)"
+
+status_ok: "var(--juiced-status-ok)"
+status_info: "var(--juiced-status-info)"
+status_warning: "var(--juiced-status-warning)"
+status_critical: "var(--juiced-status-critical)"
+status_offline: "var(--juiced-status-offline)"

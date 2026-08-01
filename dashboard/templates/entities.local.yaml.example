@@ -6,6 +6,10 @@
 # Then replace each `TODO: set entity_id` with your real entity ID. See docs/entity-mapping.md.
 # Structure follows entities.example.yaml. Real IDs stay only on your machine.
 
+nav:
+  home_button: "TODO: set entity_id"
+  kiosk_toggle: "TODO: set entity_id"
+
 energy:
   battery_soc: "TODO: set entity_id"
   charge_power: "TODO: set entity_id"
@@ -13,3 +17,4 @@ energy:
   solar_power: "TODO: set entity_id"
   grid_import: "TODO: set entity_id"
   peak_power: "TODO: set entity_id"
+  charger_daily: "TODO: set entity_id"
