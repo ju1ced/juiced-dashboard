@@ -131,6 +131,7 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 ### M1 — Foundation
 
 **PR-01 · chore(repo): scaffolding, docs & GitHub-setup** — *geen afhankelijkheden*
+
 - Structuur uit analyserapport §12 (`dashboard/{views,cards,templates,themes}`, `scripts/`, `docs/`, `.github/`).
 - Commit de bestaande docs (`default-dashboard-analysis-and-plan.md`, `poc-badkamer-migration.md`, dit bestand), `README.md`, `ARCHITECTURE.md`, `.gitignore`, `CODEOWNERS`, `PULL_REQUEST_TEMPLATE.md`.
 - GitHub milestones + labels aanmaken (§11).
@@ -138,14 +139,17 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 - **Acceptatie:** repo-boom staat, CI-skelet draait (nog leeg), docs renderen, en `git show --stat` op de PR-commit bevat **geen** `dashboard/views/*` of ongesaniteerde templates.
 
 **PR-02 · ci: validatiepipeline** — *na PR-01*
+
 - `scripts/validate_compose.py` (uit de POC), `check_entity_refs.py`, `check_entities.py`, `check_resources.py`; `.github/workflows/ci.yaml`; `.yamllint.yaml`, `.prettierignore`, `.markdownlint-cli2.yaml` (naar Kia).
 - **Acceptatie:** CI faalt aantoonbaar op een test-fixture met een echte entity-ref; slaagt op geldige YAML.
 
 **PR-03 · feat(theme): `juiced-horizon` thema-tokens** — *na PR-01*
+
 - `dashboard/themes/juiced-horizon.yaml`: semantische tokens (surface/text/brand/status, radius, shadow) met `modes: {dark, light}` (best-practice: beide modi definiëren).
 - **Acceptatie:** thema laadt op MCP Test; contrast getoetst (naar Kia `contrast-validation`).
 
 **PR-04 · feat(templates): gedeelde templates + entity-mapping-contract** — *na PR-01*
+
 - **Parameteriseer** `global_navigation_badges`: de nav-badge verwijst nu naar **serials** (`sensor.sn_<serial>_battery_soc_total`, `..._power_charge_total`, `..._power_discharge_total`, zonnepanelen/net-sensors). Vervang deze door logische keys (bv. `energy.battery_soc`, `energy.charge_power`) en zet de echte ID's in `entities.local.yaml`. Committeer alleen de geparameteriseerde template.
 - Verder: `button_card_templates.yaml` (`vacuum_service`, `vacuum_room`, `ac_charge_speed`, `soc_target`), `colors.yaml`, `icons.yaml`, `entities.yaml` (generiek voorbeeld) + `entities.local.yaml.example`.
 - **Acceptatie:** compose-validatie groen; entity-ref-guard groen (**geen serials in de gecommitte template**); nav-badge rendert op MCP Test na render met de lokale mapping.
@@ -153,21 +157,25 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 ### M2 — Tooling & baseline
 
 **PR-05 · tooling: extract/render/stage-scripts** — *na PR-02/04*
+
 - `scripts/extract_view.py` (read-only view uit default → geparameteriseerde YAML + mapping-suggestie), `render_dashboard.py` (logische keys → echte ID's), `stage_to_mcptest.py` (snapshot → surgical `views[i]`-write met `BestPracticeKey` + verse hash → post-write pariteitscheck), `parity_setdiff.py` (de `(entity, card_type, action)`-set-diff uit §2).
 - **`BestPracticeKey` roteert per uur** (server-mededeling): `stage_to_mcptest.py` haalt de sleutel **at runtime** op via `ha_get_skill_guide` en slaat hem **nooit** op. Idem: haal telkens een **verse** `config_hash` vlak vóór de write.
 - **Acceptatie:** scripts reproduceren de badkamer-POC (extract → render → stage → set-diff-pariteit) end-to-end.
 
 **PR-06 · docs(perf): baseline op MCP Test** — *na PR-05*
+
 - Voer de meetmethode uit analyserapport §7 uit (DevTools/Lighthouse per view: scripting time, DOM-nodes, JS-payload, template-listeners) op MCP Test. Leg echte cijfers vast in `docs/performance-baseline.md`. **Geen verzonnen benchmarks.**
 - **Acceptatie:** baseline vastgelegd voor minstens Home, terras, energy, serverroom + een lichte view (person).
 
 ### M3 — Kamerviews (functionele pariteit)
 
 **PR-07 · feat(templates): `room_view` + `room_*`-templates + badkamer als referentie** — *na PR-04/05*
+
 - Definieer `room_view`, `room_light_row`, `sensor_graph_row` (decluttering) uit het herhaalde kamerpatroon; herbouw **badkamer** hiermee (parameteriseer de POC-view). Los meteen T8 (privacy) op voor deze view.
 - **Acceptatie:** getemplatiseerde badkamer heeft **functionele pariteit** met default (entity/actie-set + screenshot op MCP Test).
 
 **PR-08 … PR-19 · feat(views): resterende 12 kamers** — *na PR-07* (per view, batchbaar)
+
 - Volgorde (licht → zwaar, om het template vroeg te toetsen): inkomhal, logeerkamer, slaapkamer, kinderkamer, bureau, toilet & berging, woonkamer, oprit, keuken, garage, serverroom, terras.
 - Elke PR: extract → parameteriseer → `room_view` → stage/pariteit op MCP Test. **Camera-views** (oprit, garage, serverroom, terras, kinderkamer) krijgen expliciet een lichte preview/sub-stream-afweging (analyserapport V4).
 - **Acceptatie per view:** functionele pariteit + responsief + CI groen.
@@ -175,6 +183,7 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 ### M4 — Domeinviews (overwegend byte-pariteit, 1:1 lift)
 
 **PR-21 … PR-30 · feat(views): domeinviews** — *na PR-05* (per view)
+
 - net, valliant, hainfo, water, person, ecopower, batteries1, anycubic, zwembad, huis. `huis` (7× simple-thermostat) en `energy` blijven bespoke; `auto-entities`-views (batteries1, anycubic) 1:1 behouden.
 - **PR-31 (optioneel):** `map`-dashboard meenemen als aparte view/dashboard.
 - **Acceptatie:** byte-pariteit (of functioneel waar bewust vereenvoudigd) + CI groen.
@@ -182,18 +191,21 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 ### M5 — Ingebedde reference-cards
 
 **PR-32 · feat(views): EV6 + garden** — *na PR-05*
+
 - Neem de bestaande `custom:kia-dashboard-card` (EV6) en `custom:garden-dashboard-card` (garden) 1:1 over. Bewijs dat het "één-card-per-domein"-patroon werkt (het draait al in productie).
 - **Acceptatie:** beide views renderen op MCP Test; cards laden uit hun HACS-resources.
 
 ### M6 — Zware bespoke views
 
 **PR-33 · feat(views): Home-hub YAML-1:1 + stabiel `path`** — *na PR-04*
+
 - Home (137 kaarten) 1:1 naar YAML; **ken een stabiel `path` toe** (lost fragiel `lovelace/0` op, T4); ontvlecht het hybride `sections`+`cards`+`header` (T7).
 - **Acceptatie:** functionele pariteit; deeplink werkt via stabiel pad.
 
 **PR-34 · feat(views): energy YAML-1:1** — *na PR-04* — idem voor energy (73 kaarten, zeer custom-heavy).
 
 **PR-35 (optioneel) · feat(card): `custom:juiced-home-card`** — *na PR-33*
+
 - Render-gated custom card (Garden-model: `hasRelevantChange`, Shadow DOM, thema-tokens, geen zware deps) voor de Home-hub. Aparte HACS-distributie (`hacs.json`, `dist/`, `node --test`).
 - **Acceptatie:** unit-tests groen; pariteit met de YAML-versie; meetbare perf-winst t.o.v. baseline (PR-06).
 
@@ -202,6 +214,7 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 ### M7 — Optimalisatie
 
 **PR-37 · perf: resource-sanering** — *na M3/M4*
+
 - Verifieer de kandidaat-ongebruikte resources (analyserapport T5) tegen **álle** dashboards (default, map, dashboard-test, Kia-YAML) vóór verwijdering: Bubble-Card, config-template-card, energy-flow-card-plus, energy-period-selector-plus, flower-card, pool-monitor-card, vehicle-status-card, dual_gauge, cover-icon-element, hassio-trash-card + onzekere iconensets (T6). Documenteer wat verwijderd wordt (id+url) voor rollback.
 - **Acceptatie:** alleen bewezen-ongebruikte resources verwijderd; MCP Test rendert ongestoord.
 
@@ -220,6 +233,7 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 
 - **Staging (doorlopend):** render → MCP-push naar `mcp-test-dashboard` per view (PR-05-tooling). Geen HA-configwijziging nodig; volledig reversibel.
 - **Productie (Git-native, naar het bestaande Kia-patroon op deze host):** de HA-instance draait yaml-mode dashboards vanuit `HomeAssistant/dashboards/<naam>/`. Deploy = `juiced-dashboard` (gerenderd met de lokale mapping) uitchecken/renderen naar `HomeAssistant/dashboards/juiced/` en registreren in `configuration.yaml` als:
+
   ```yaml
   lovelace:
     dashboards:
@@ -228,6 +242,7 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
         title: Juiced
         filename: dashboards/juiced/dashboard.yaml
   ```
+
   Deze HA-configwijziging is **human-gated** (aparte repo/host).
 - **Cutover:** pas ná acceptatie (PR-41) en expliciete goedkeuring wordt `juiced-home` de primaire/nieuwe default. Het oude default dashboard blijft als fallback bestaan; niets wordt verwijderd.
 

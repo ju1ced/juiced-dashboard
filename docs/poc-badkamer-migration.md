@@ -29,6 +29,7 @@ De view is op verzoek **live herschreven vanuit de repo-YAML** op `mcp-test-dash
 - Resultaat: `write_committed: true`, `post_write_verified: true`.
 
 **Onafhankelijke verificatie na de write** (herlezen `mcp-test-dashboard`):
+
 - `badkamer` (view 11) op MCP Test == repo `dashboard/views/badkamer.yaml` → **True**.
 - Alle 26 andere views ongewijzigd t.o.v. pre-write → **NONE changed** (chirurgisch, geen nevenschade).
 - Dashboardstructuur intact: 27 views, `decluttering_templates`, alle 4 `button_card_templates`, `kiosk_mode`; grootte/hash identiek (`452914` / `bbd397db37302fb9`) → inhoudelijk-getrouwe write.
@@ -52,4 +53,4 @@ moeten: herhaal de `views[11]`-transform met de `view`-inhoud uit
 
 ## Volgende stap
 
-Fase 2: gedeelde templates uitbouwen (`room_view`/`room_light_row`/`sensor_graph_row`) + entity-mapping, daarna de resterende 11 kamerviews via hetzelfde patroon (Fase 3).
+Fase 2: gedeelde templates uitbouwen (`room_view`/`room_light_row`/`sensor_graph_row`) + entity-mapping, daarna de resterende 12 kamerviews via hetzelfde patroon (Fase 3).

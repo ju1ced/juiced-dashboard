@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Python dev dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: YAML lint
+        run: yamllint .
+
+      - name: Markdown lint
+        run: npx --yes markdownlint-cli2 "**/*.md"
+
+      - name: Privacy guard (no real entity IDs / serials committed)
+        run: python scripts/check_entity_refs.py
+
+      - name: Composition validation (!include resolves, views well-formed)
+        run: python scripts/validate_compose.py
+
+      - name: Entity mapping (offline completeness + format)
+        run: python scripts/check_entities.py --mapping dashboard/templates/entities.example.yaml
+
+      - name: Resource manifest (custom cards declared)
+        run: python scripts/check_resources.py
+
+      - name: Render self-test (placeholder mapping mechanism)
+        run: python scripts/render_dashboard.py --self-test
+
+      - name: Tool tests (positive + negative fixtures)
+        run: pytest -q
+
+# The HA-dependent checks are LOCAL-ONLY (not run here): GitHub Actions cannot reach the
+# stdio Home Assistant MCP and no HA secrets are used in CI. Run them locally with:
+#   python scripts/check_entities.py --live
+#   python scripts/check_resources.py --live

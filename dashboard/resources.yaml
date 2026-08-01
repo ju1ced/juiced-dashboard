@@ -1,0 +1,55 @@
+# Declared frontend-resource dependencies (offline source of truth for check_resources.py).
+# Every `custom:<type>` used in committed dashboard YAML must appear here. These are public
+# HACS card names — no secrets. Keep in sync as views are migrated; run
+# `python scripts/check_resources.py --live` locally to compare against the running HA.
+allowed_custom_cards:
+  # lovelace-mushroom
+  - custom:mushroom-entity-card
+  - custom:mushroom-chips-card
+  - custom:mushroom-template-card
+  - custom:mushroom-light-card
+  - custom:mushroom-cover-card
+  - custom:mushroom-title-card
+  - custom:mushroom-person-card
+  - custom:mushroom-climate-card
+  - custom:mushroom-alarm-control-panel-card
+  # graphs / gauges
+  - custom:mini-graph-card
+  - custom:apexcharts-card
+  - custom:canvas-gauge-card
+  - custom:flex-horseshoe-card
+  - custom:bar-card
+  # layout / containers
+  - custom:button-card
+  - custom:decluttering-card
+  - custom:expander-card
+  - custom:mod-card
+  - custom:stack-in-card
+  - custom:vertical-stack-in-card
+  - custom:layout-card
+  - custom:restriction-card
+  - custom:auto-entities
+  - custom:state-switch
+  # entity rows
+  - custom:paper-buttons-row
+  - custom:battery-entity-row
+  - custom:template-entity-row
+  - custom:multiple-entity-row
+  - custom:fold-entity-row
+  - custom:battery-state-card
+  # climate / media
+  - custom:simple-thermostat
+  - custom:mini-media-player
+  # power / energy
+  - custom:power-flow-card-plus
+  - custom:power-distribution-card
+  # domain-specific
+  - custom:anycubic-card
+  - custom:sensor-monitor-card
+  - custom:linak-desk-card
+  - custom:rain-gauge-card
+  - custom:windrose-card
+  - custom:frigate-card
+  - custom:advanced-camera-card
+  - custom:kia-dashboard-card
+  - custom:garden-dashboard-card
