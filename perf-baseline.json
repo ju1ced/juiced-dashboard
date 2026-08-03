@@ -1,0 +1,365 @@
+{
+  "note": "Static baseline (counts only, no entity IDs). Regenerate with scripts/perf_baseline.py.",
+  "global": {
+    "views": 27,
+    "total_cards": 1046,
+    "unique_entities": 822,
+    "template_tokens": {
+      "jinja_stmt": 926,
+      "jinja_expr": 369,
+      "js_template": 0,
+      "card_mod": 258
+    },
+    "bundle": {
+      "total_bytes": 19285313,
+      "total_kb": 18833.3,
+      "modules_measured": 47,
+      "modules_missing": [
+        "/browser_mod.js (not under /hacsfiles)",
+        "/hacsfiles/ha-kia-connect-dashboard/ha-kia-connect-dashboard.js",
+        "/hacsfiles/garden-dashboard/garden-dashboard.js"
+      ],
+      "top_modules": [
+        {
+          "module": "ha-knx-uf-iconset/ha-knx-uf-iconset.js",
+          "kb": 5547.9
+        },
+        {
+          "module": "custom-brand-icons/custom-brand-icons.js",
+          "kb": 4426.9
+        },
+        {
+          "module": "apexcharts-card/apexcharts-card.js",
+          "kb": 1589.6
+        },
+        {
+          "module": "vehicle-status-card/vehicle-status-card.js",
+          "kb": 1294.4
+        },
+        {
+          "module": "Bubble-Card/bubble-card.js",
+          "kb": 816.9
+        },
+        {
+          "module": "lovelace-mushroom/mushroom.js",
+          "kb": 695.4
+        },
+        {
+          "module": "hass-hue-icons/hass-hue-icons.js",
+          "kb": 581.5
+        },
+        {
+          "module": "hass-anycubic_card/anycubic-card.js",
+          "kb": 329.7
+        },
+        {
+          "module": "rain-gauge-card/rain-gauge-card.js",
+          "kb": 313.9
+        },
+        {
+          "module": "energy-flow-card-plus/energy-flow-card-plus.js",
+          "kb": 311.2
+        }
+      ]
+    }
+  },
+  "views": [
+    {
+      "title": "Home",
+      "path": null,
+      "type": "masonry",
+      "cards": 137,
+      "max_depth": 6,
+      "entities": 204,
+      "custom_cards": 106,
+      "card_mod": 190,
+      "jinja": 600
+    },
+    {
+      "title": "oprit",
+      "path": "oprit",
+      "type": "sections",
+      "cards": 33,
+      "max_depth": 5,
+      "entities": 25,
+      "custom_cards": 18,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "inkomhal",
+      "path": "inkomhal",
+      "type": "sections",
+      "cards": 28,
+      "max_depth": 5,
+      "entities": 14,
+      "custom_cards": 19,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "toilet & berging",
+      "path": "toilet",
+      "type": "sections",
+      "cards": 37,
+      "max_depth": 5,
+      "entities": 12,
+      "custom_cards": 26,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "woonkamer",
+      "path": "woonkamer",
+      "type": "sections",
+      "cards": 50,
+      "max_depth": 5,
+      "entities": 52,
+      "custom_cards": 46,
+      "card_mod": 4,
+      "jinja": 0
+    },
+    {
+      "title": "keuken",
+      "path": "keuken",
+      "type": "sections",
+      "cards": 57,
+      "max_depth": 5,
+      "entities": 88,
+      "custom_cards": 50,
+      "card_mod": 14,
+      "jinja": 0
+    },
+    {
+      "title": "garage",
+      "path": "garage",
+      "type": "sections",
+      "cards": 57,
+      "max_depth": 5,
+      "entities": 66,
+      "custom_cards": 41,
+      "card_mod": 5,
+      "jinja": 0
+    },
+    {
+      "title": "bureau",
+      "path": "bureau",
+      "type": "sections",
+      "cards": 38,
+      "max_depth": 5,
+      "entities": 29,
+      "custom_cards": 25,
+      "card_mod": 3,
+      "jinja": 0
+    },
+    {
+      "title": "serverroom",
+      "path": "serverroom",
+      "type": "sections",
+      "cards": 71,
+      "max_depth": 5,
+      "entities": 84,
+      "custom_cards": 61,
+      "card_mod": 10,
+      "jinja": 49
+    },
+    {
+      "title": "slaapkamer",
+      "path": "slaapkamer",
+      "type": "sections",
+      "cards": 38,
+      "max_depth": 5,
+      "entities": 24,
+      "custom_cards": 28,
+      "card_mod": 2,
+      "jinja": 5
+    },
+    {
+      "title": "kinderkamer",
+      "path": "kinderkamer",
+      "type": "sections",
+      "cards": 37,
+      "max_depth": 5,
+      "entities": 21,
+      "custom_cards": 24,
+      "card_mod": 1,
+      "jinja": 0
+    },
+    {
+      "title": "badkamer",
+      "path": "badkamer",
+      "type": "sections",
+      "cards": 32,
+      "max_depth": 5,
+      "entities": 25,
+      "custom_cards": 22,
+      "card_mod": 2,
+      "jinja": 0
+    },
+    {
+      "title": "logeerkamer",
+      "path": null,
+      "type": "sections",
+      "cards": 31,
+      "max_depth": 5,
+      "entities": 17,
+      "custom_cards": 21,
+      "card_mod": 1,
+      "jinja": 0
+    },
+    {
+      "title": "terras",
+      "path": "terras",
+      "type": "sections",
+      "cards": 79,
+      "max_depth": 5,
+      "entities": 42,
+      "custom_cards": 51,
+      "card_mod": 1,
+      "jinja": 4
+    },
+    {
+      "title": "huis",
+      "path": "house",
+      "type": "sections",
+      "cards": 46,
+      "max_depth": 3,
+      "entities": 32,
+      "custom_cards": 43,
+      "card_mod": 10,
+      "jinja": 50
+    },
+    {
+      "title": "net",
+      "path": "net",
+      "type": "sections",
+      "cards": 17,
+      "max_depth": 4,
+      "entities": 54,
+      "custom_cards": 43,
+      "card_mod": 0,
+      "jinja": 16
+    },
+    {
+      "title": "valliant",
+      "path": "valliant",
+      "type": "sections",
+      "cards": 18,
+      "max_depth": 3,
+      "entities": 20,
+      "custom_cards": 6,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "System and update info",
+      "path": "hainfo",
+      "type": "sections",
+      "cards": 43,
+      "max_depth": 4,
+      "entities": 29,
+      "custom_cards": 18,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "water",
+      "path": "water",
+      "type": "sections",
+      "cards": 16,
+      "max_depth": 2,
+      "entities": 19,
+      "custom_cards": 3,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "person",
+      "path": "person",
+      "type": "sections",
+      "cards": 6,
+      "max_depth": 4,
+      "entities": 20,
+      "custom_cards": 16,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "EV6",
+      "path": "car",
+      "type": "sections",
+      "cards": 3,
+      "max_depth": 1,
+      "entities": 0,
+      "custom_cards": 2,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "energy",
+      "path": "energy",
+      "type": "sections",
+      "cards": 73,
+      "max_depth": 5,
+      "entities": 25,
+      "custom_cards": 44,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "batteries1",
+      "path": "batteries1",
+      "type": "sections",
+      "cards": 13,
+      "max_depth": 3,
+      "entities": 0,
+      "custom_cards": 15,
+      "card_mod": 12,
+      "jinja": 486
+    },
+    {
+      "title": "ecopower",
+      "path": "ecopower",
+      "type": "sections",
+      "cards": 23,
+      "max_depth": 2,
+      "entities": 35,
+      "custom_cards": 11,
+      "card_mod": 0,
+      "jinja": 0
+    },
+    {
+      "title": "anycubic",
+      "path": "anycubic",
+      "type": "sections",
+      "cards": 41,
+      "max_depth": 3,
+      "entities": 19,
+      "custom_cards": 33,
+      "card_mod": 0,
+      "jinja": 85
+    },
+    {
+      "title": "zwembad",
+      "path": "zwembad",
+      "type": "sections",
+      "cards": 19,
+      "max_depth": 3,
+      "entities": 53,
+      "custom_cards": 8,
+      "card_mod": 3,
+      "jinja": 0
+    },
+    {
+      "title": "garden",
+      "path": "garden",
+      "type": "sections",
+      "cards": 3,
+      "max_depth": 1,
+      "entities": 4,
+      "custom_cards": 2,
+      "card_mod": 0,
+      "jinja": 0
+    }
+  ]
+}
