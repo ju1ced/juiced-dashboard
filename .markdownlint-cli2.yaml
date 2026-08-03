@@ -8,6 +8,7 @@ config:
     siblings_only: true # allow the same heading text under different parents
   MD028: false # allow a blank line between adjacent blockquotes (separate notes)
   MD050: false # strong-emphasis style (asterisk vs underscore) is not enforced
+  MD060: false # table column pipe alignment (impractical for generated tables)
 globs:
   - "**/*.md"
 ignores:
