@@ -8,4 +8,5 @@ title: Juiced Dashboard
 # render time from the git-ignored entities.local.yaml.
 decluttering_templates: !include templates/decluttering_templates.yaml
 # Views are wired in with one `!include` each as they are migrated (Fase 3/4).
-views: []
+views:
+  - !include views/badkamer.yaml

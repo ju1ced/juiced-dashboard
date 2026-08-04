@@ -1,18 +1,9 @@
 # Entity mapping — CONTRACT / REFERENCE (committed, fictional IDs only).
-#
-# Committed dashboard YAML references logical placeholders like `<<badkamer.light>>`.
-# The renderer resolves them from your local, git-ignored `entities.local.yaml`.
-# This file documents the expected structure with FICTIONAL example IDs — never put real
-# entity IDs or device serials here (it is committed to a public repo).
-#
-# Groups are free-form; group by room and by domain as makes sense for your setup.
-
-# Navigation badge (templates/decluttering_templates.yaml -> global_navigation_badges):
+# Committed dashboard YAML uses <<group.key>> placeholders resolved from your
+# git-ignored entities.local.yaml. Never put real IDs/serials here (public repo).
 nav:
   home_button: input_button.example_home
   kiosk_toggle: input_boolean.example_kiosk_hide_header
-
-# Shared energy KPIs used by the navigation badge:
 energy:
   battery_soc: sensor.example_battery_soc
   charge_power: sensor.example_battery_charge_power
@@ -21,10 +12,36 @@ energy:
   grid_import: sensor.example_grid_import
   peak_power: sensor.example_grid_peak_this_month
   charger_daily: sensor.example_charger_energy_daily
-
-# Per-room example (mirrors the badkamer view):
 badkamer:
-  light: light.example_badkamer
-  climate: climate.example_badkamer
-  temp: sensor.example_badkamer_temperature
-  humidity: sensor.example_badkamer_humidity
+  badkamer: light.example_badkamer
+  daikin_badkamer_room_temperature: climate.example_daikin_badkamer_room_temperature
+  ht_badkamer_temperatuur: sensor.example_ht_badkamer_temperatuur
+  ht_badkamer_luchtvochtigheid: sensor.example_ht_badkamer_luchtvochtigheid
+  raamsensor_badkamer_licht: sensor.example_raamsensor_badkamer_licht
+  raamsensor_badkamer_raam: binary_sensor.example_raamsensor_badkamer_raam
+  bewegingssensor_badkamer_occupancy: binary_sensor.example_bewegingssensor_badkamer_occupancy
+  raamsensor_badkamer_rotation: sensor.example_raamsensor_badkamer_rotation
+  bewegingssensor_badkamer_battery: sensor.example_bewegingssensor_badkamer_battery
+  raamsensor_badkamer_batterij: sensor.example_raamsensor_badkamer_batterij
+  voordeur_sensor_battery_low: binary_sensor.example_voordeur_sensor_battery_low
+  keuken: media_player.example_keuken
+  living: media_player.example_living
+  kantoor: media_player.example_kantoor
+  badkamer_2: media_player.example_badkamer_2
+  slaapkamer: media_player.example_slaapkamer
+  bbq_buitenkeuken: media_player.example_bbq_buitenkeuken
+  tuinhuis: media_player.example_tuinhuis
+  daikin_badkamer_climatecontrol_dagelijks_elektriciteitsverbruik_koelen: sensor.example_daikin_badkamer_climatecontrol_dagelijks_elektriciteitsverbruik_koelen
+  daikin_badkamer_climatecontrol_dagelijks_elektriciteitsverbruik_verwarmen: sensor.example_daikin_badkamer_climatecontrol_dagelijks_elektriciteitsverbruik_verwarmen
+  daikin_badkamer_climatecontrol_maandelijks_elektriciteitsverbruik_koelen: sensor.example_daikin_badkamer_climatecontrol_maandelijks_elektriciteitsverbruik_koelen
+  daikin_badkamer_climatecontrol_maandelijks_elektriciteitsverbruik_verwarmen: sensor.example_daikin_badkamer_climatecontrol_maandelijks_elektriciteitsverbruik_verwarmen
+  daikin_badkamer_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen: sensor.example_daikin_badkamer_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen
+  daikin_badkamer_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen: sensor.example_daikin_badkamer_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen
+  rolluik_badkamer_links: cover.example_rolluik_badkamer_links
+  rolluik_badkamer_rechts: cover.example_rolluik_badkamer_rechts
+  smart_plug_handdoekdroger: switch.example_smart_plug_handdoekdroger
+  smart_plug_handdoekdroger_power: sensor.example_smart_plug_handdoekdroger_power
+  handdoekdroger_daily: sensor.example_handdoekdroger_daily
+  handdoekdroger_monthly: sensor.example_handdoekdroger_monthly
+  handdoekdroger_yearly: sensor.example_handdoekdroger_yearly
+  smart_plug_handdoekdroger_energy: sensor.example_smart_plug_handdoekdroger_energy
