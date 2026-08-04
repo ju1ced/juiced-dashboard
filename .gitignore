@@ -14,3 +14,7 @@ node_modules/
 # Python
 __pycache__/
 *.pyc
+
+# Local HA credentials for the perf harness — never commit
+perf/ha.env
+*.token
