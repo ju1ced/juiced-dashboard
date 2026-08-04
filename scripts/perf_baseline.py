@@ -210,18 +210,30 @@ def to_markdown(data):
         lines.append(f"| {v['title']} | {v['type']} | {v['cards']} | {v['max_depth']} | "
                      f"{v['entities']} | {v['custom_cards']} | {v['card_mod']} | {v['jinja']} |")
     lines.append("")
-    lines.append("## Runtime metrics (fill in on MCP Test — NOT auto-generated)")
+    rt = data.get("runtime")
+    lines.append("## Runtime metrics (measured on MCP Test)")
     lines.append("")
-    lines.append("Procedure per view on `mcp-test-dashboard` (Chrome, incognito, cache disabled):")
-    lines.append("")
-    lines.append("1. Open the view; DevTools → Performance → record a reload; note **Scripting (ms)** and **# DOM nodes**.")
-    lines.append("2. Lighthouse (Desktop) → note **Total Blocking Time** and **Time to Interactive**.")
-    lines.append("3. Coverage tab → note **% unused JS** of the bundle.")
-    lines.append("")
-    lines.append("| View | Scripting ms | DOM nodes | TBT ms | TTI ms | Unused JS % |")
-    lines.append("| --- | ---: | ---: | ---: | ---: | ---: |")
-    for name in ("Home", "terras", "energy", "serverroom", "person"):
-        lines.append(f"| {name} |  |  |  |  |  |")
+    if rt:
+        lines.append("Measured with `perf/collect_runtime.mjs` (headless Chromium, Shadow-DOM-aware node")
+        lines.append("count, JS Coverage). `Load` is navigation-only; main-thread cost is in `Long-tasks`.")
+        lines.append("")
+        lines.append("| View | Load ms | DOM nodes | Long-tasks ms | JS heap MB | Unused JS % |")
+        lines.append("| --- | ---: | ---: | ---: | ---: | ---: |")
+        for vid, m in rt.items():
+            label = "Home" if str(vid) == "0" else vid
+            if m.get("error") or m.get("authFailed"):
+                lines.append(f"| {label} | (measurement failed) |  |  |  |  |")
+            else:
+                lines.append(f"| {label} | {m.get('load')} | {m.get('domNodes')} | "
+                             f"{m.get('longTasksMs')} | {m.get('jsHeapMB')} | {m.get('jsUnusedPct')} |")
+    else:
+        lines.append("Not yet measured. Run `perf/collect_runtime.mjs` (see perf/README.md) and pass")
+        lines.append("`--runtime perf/runtime-results.json` to this script to fill this table.")
+        lines.append("")
+        lines.append("| View | Load ms | DOM nodes | Long-tasks ms | JS heap MB | Unused JS % |")
+        lines.append("| --- | ---: | ---: | ---: | ---: | ---: |")
+        for name in ("Home", "terras", "energy", "serverroom", "person"):
+            lines.append(f"| {name} |  |  |  |  |  |")
     lines.append("")
     return "\n".join(lines)
 
@@ -234,9 +246,14 @@ def main():
     ap.add_argument("--resources-dir", default=None)
     ap.add_argument("--json-out", default=None)
     ap.add_argument("--md-out", default=None)
+    ap.add_argument("--runtime", default=None, help="runtime-results.json to fill the runtime table")
     args = ap.parse_args()
 
     data = build(args.export, args.resources_list, args.resources_dir)
+    if args.runtime and os.path.exists(args.runtime):
+        with open(args.runtime, "r", encoding="utf-8") as fh:
+            rt = json.load(fh)
+        data["runtime"] = {r["view"]: r for r in rt.get("results", [])}
     if args.json_out:
         with open(args.json_out, "w", encoding="utf-8") as fh:
             json.dump(data, fh, indent=2)

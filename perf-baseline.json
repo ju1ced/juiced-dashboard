@@ -361,5 +361,62 @@
       "card_mod": 0,
       "jinja": 0
     }
-  ]
+  ],
+  "runtime": {
+    "0": {
+      "view": "0",
+      "authFailed": false,
+      "wallMs": 6647,
+      "load": 61,
+      "domNodes": 5320,
+      "longTasksMs": 2531,
+      "jsHeapMB": 117.3,
+      "jsTotalKB": 25685,
+      "jsUnusedPct": 35.8
+    },
+    "terras": {
+      "view": "terras",
+      "authFailed": false,
+      "wallMs": 6569,
+      "load": 24,
+      "domNodes": 3482,
+      "longTasksMs": 2257,
+      "jsHeapMB": 110.6,
+      "jsTotalKB": 25427,
+      "jsUnusedPct": 35.9
+    },
+    "energy": {
+      "view": "energy",
+      "authFailed": false,
+      "wallMs": 6481,
+      "load": 46,
+      "domNodes": 7830,
+      "longTasksMs": 1786,
+      "jsHeapMB": 149.7,
+      "jsTotalKB": 25428,
+      "jsUnusedPct": 36.9
+    },
+    "serverroom": {
+      "view": "serverroom",
+      "authFailed": false,
+      "wallMs": 9222,
+      "load": 31,
+      "domNodes": 4330,
+      "longTasksMs": 4431,
+      "jsHeapMB": 117.3,
+      "jsTotalKB": 25424,
+      "jsUnusedPct": 36.1
+    },
+    "person": {
+      "view": "person",
+      "authFailed": false,
+      "wallMs": 6457,
+      "load": 46,
+      "domNodes": 2134,
+      "longTasksMs": 1572,
+      "jsHeapMB": 98.2,
+      "jsTotalKB": 25715,
+      "jsUnusedPct": 37.4
+    }
+  }
 }

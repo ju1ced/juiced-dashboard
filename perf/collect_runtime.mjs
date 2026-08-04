@@ -63,16 +63,23 @@ async function measure(context, viewId) {
   const target = `${url}/${DASHBOARD}/${viewId}`;
   const t0 = Date.now();
   await page.goto(target, { waitUntil: "load", timeout: 45000 });
-  // let the dashboard hydrate
-  await page.waitForTimeout(4000);
+  // let the SPA hydrate and render cards (HA renders into Shadow DOM after load)
+  await page.waitForTimeout(6000);
   const landed = page.url();
   const authFailed = /\/auth\/authorize|\/auth\/login/.test(landed);
   const metrics = await page.evaluate(() => {
     const nav = performance.getEntriesByType("navigation")[0] || {};
+    // shadow-DOM-aware node count — HA renders almost everything inside shadow roots
+    function countNodes(root) {
+      let n = 0;
+      const els = root.querySelectorAll("*");
+      n += els.length;
+      els.forEach((e) => { if (e.shadowRoot) n += countNodes(e.shadowRoot); });
+      return n;
+    }
     return {
-      domContentLoaded: Math.round(nav.domContentLoadedEventEnd || 0),
       load: Math.round(nav.loadEventEnd || 0),
-      domNodes: document.getElementsByTagName("*").length,
+      domNodes: countNodes(document),
       longTasksMs: Math.round(window.__longtasks || 0),
       jsHeapMB: performance.memory ? +(performance.memory.usedJSHeapSize / 1048576).toFixed(1) : null,
     };
@@ -80,8 +87,25 @@ async function measure(context, viewId) {
   const cov = await page.coverage.stopJSCoverage();
   let total = 0, used = 0;
   for (const e of cov) {
-    total += e.source ? e.source.length : 0;
-    for (const r of e.ranges) used += r.end - r.start;
+    const len = e.source ? e.source.length : 0;
+    total += len;
+    if (!len) continue;
+    // version-robust: old API exposes top-level ranges {start,end};
+    // new API nests covered ranges under functions[].ranges {startOffset,endOffset,count}
+    const covered = new Uint8Array(len);
+    if (Array.isArray(e.ranges)) {
+      // old API: top-level ranges are the COVERED regions
+      for (const r of e.ranges) for (let i = r.start; i < r.end && i < len; i++) covered[i] = 1;
+    } else {
+      // new API: v8 nested ranges, outer-to-inner; innermost count wins
+      for (const f of e.functions || []) {
+        for (const r of f.ranges) {
+          const v = r.count > 0 ? 1 : 0;
+          for (let i = r.startOffset; i < r.endOffset && i < len; i++) covered[i] = v;
+        }
+      }
+    }
+    for (let i = 0; i < len; i++) used += covered[i];
   }
   await page.close();
   return {
