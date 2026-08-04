@@ -59,18 +59,15 @@
 | EV6 | sections | 3 | 1 | 0 | 2 | 0 | 0 |
 | garden | sections | 3 | 1 | 4 | 2 | 0 | 0 |
 
-## Runtime metrics (fill in on MCP Test — NOT auto-generated)
+## Runtime metrics (measured on MCP Test)
 
-Procedure per view on `mcp-test-dashboard` (Chrome, incognito, cache disabled):
+Measured with `perf/collect_runtime.mjs` (headless Chromium, Shadow-DOM-aware node
+count, JS Coverage). `Load` is navigation-only; main-thread cost is in `Long-tasks`.
 
-1. Open the view; DevTools → Performance → record a reload; note **Scripting (ms)** and **# DOM nodes**.
-2. Lighthouse (Desktop) → note **Total Blocking Time** and **Time to Interactive**.
-3. Coverage tab → note **% unused JS** of the bundle.
-
-| View | Scripting ms | DOM nodes | TBT ms | TTI ms | Unused JS % |
+| View | Load ms | DOM nodes | Long-tasks ms | JS heap MB | Unused JS % |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Home |  |  |  |  |  |
-| terras |  |  |  |  |  |
-| energy |  |  |  |  |  |
-| serverroom |  |  |  |  |  |
-| person |  |  |  |  |  |
+| Home | 61 | 5320 | 2531 | 117.3 | 35.8 |
+| terras | 24 | 3482 | 2257 | 110.6 | 35.9 |
+| energy | 46 | 7830 | 1786 | 149.7 | 36.9 |
+| serverroom | 31 | 4330 | 4431 | 117.3 | 36.1 |
+| person | 46 | 2134 | 1572 | 98.2 | 37.4 |
