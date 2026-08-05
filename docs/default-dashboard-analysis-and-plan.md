@@ -229,7 +229,7 @@ De belangrijkste bevindingen:
 | T3 | **Zware inline templating & card-mod** verspreid over views (moeilijk te onderhouden, foutgevoelig) | 926×`{%`, 279×card-mod `[FEIT]` | Complexiteit | P1 |
 | T4 | **2 views zonder stabiel `path`** → fragiele numerieke render-URL's (`lovelace/0`, `lovelace/12`); navigatie/deeplinks breken bij herordening | HA-warning `[FEIT]` | Fragiliteit | P1 |
 | T5 | **Resources niet in default gebruikt** (kandidaat-dood, mits elders ook ongebruikt): Bubble-Card, config-template-card, energy-flow-card-plus, energy-period-selector-plus, flower-card, pool-monitor-card, vehicle-status-card, dual_gauge, cover-icon-element, hassio-trash-card | grep = 0 in default `[FEIT]`; elders = onbevestigd `[HYPOTHESE]` | Mogelijke dead weight | P2 |
-| T6 | **Iconensets deels onzeker** (custom-brand-icons, simpleicons, thermal_comfort_icons, ha-knx-uf-iconset): prefix-gebaseerde detectie gaf 0, maar prefix kan afwijken | grep = 0, prefix onbevestigd `[HYPOTHESE]` | Te verifiëren | P2 |
+| T6 | **Iconensets** (custom-brand-icons, thermal_comfort_icons, ha-knx-uf-iconset) — prefix onzeker | grep = 0 op **verkeerde** prefixes `[HYPOTHESE]` | **Gecorrigeerd — zie [`resource-audit.md`](resource-audit.md): echte prefixes `kuf:`/`phu:`; beide grote sets zijn IN GEBRUIK, niet verwijderbaar** | P2 |
 | T7 | Home-view mengt `sections` + legacy `cards` + `header` | view 0 keys `[FEIT]` | Inconsistentie | P2 |
 | T8 | Entity-ID's (incl. serienummers, bv. `sensor.sn_<serial>_*`) hard in config | config `[FEIT]` | Koppeling/privacy | P1 (voor repo) |
 
