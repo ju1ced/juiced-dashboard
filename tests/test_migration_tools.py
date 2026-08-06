@@ -72,6 +72,38 @@ def test_parity_entity_diff_fails(tmp_path):
     assert rc != 0 and "PARITY FAIL" in out, out
 
 
+def test_parity_expands_decluttering_template(tmp_path):
+    # A: the light expressed inline, with its toggle action.
+    a = write(str(tmp_path / "a.yaml"),
+              "type: sections\ncards:\n"
+              "  - {type: custom:mushroom-light-card, entity: light.x, "
+              "tap_action: {action: toggle}}\n")
+    # A room sub-template: the entity comes in as a variable, the action lives in
+    # the body — so parity must expand the call to see either.
+    templates = write(str(tmp_path / "tpl.yaml"),
+                      "room_light_row:\n"
+                      "  default:\n"
+                      "  - name: null\n"
+                      "  card:\n"
+                      "    type: custom:mushroom-light-card\n"
+                      "    entity: '[[entity]]'\n"
+                      "    name: '[[name]]'\n"
+                      "    tap_action:\n"
+                      "      action: toggle\n")
+    # B: same light via a decluttering-card call (variables as a list of dicts).
+    b = write(str(tmp_path / "b.yaml"),
+              "type: sections\ncards:\n"
+              "  - type: custom:decluttering-card\n"
+              "    template: room_light_row\n"
+              "    variables:\n"
+              "    - entity: light.x\n")
+    rc, out = run("parity_setdiff.py", a, b, "--templates", templates)
+    assert rc == 0 and "PARITY OK" in out, out
+    # Without the templates the call cannot expand -> entity + action go missing.
+    rc2, out2 = run("parity_setdiff.py", a, b, "--templates", str(tmp_path / "none.yaml"))
+    assert rc2 != 0 and "PARITY FAIL" in out2, out2
+
+
 def test_stage_generates_transform(tmp_path):
     rv = write(str(tmp_path / "rendered.yaml"), "title: v\npath: v\ntype: sections\nsections: []\n")
     outfile = str(tmp_path / "transform.txt")

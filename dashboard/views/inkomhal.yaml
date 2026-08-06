@@ -1,0 +1,234 @@
+# inkomhal view — migrated to committed YAML (PR-08, first templatized room).
+# Repeated patterns use the shared decluttering sub-templates room_light_row and
+# sensor_graph_row (see templates/decluttering_templates.yaml). Bespoke parts —
+# the doorbell camera + Reolink detections, battery rows and the mod-card — stay
+# inline. All real IDs resolve from the git-ignored entities.local.yaml.
+theme: Backend-selected
+title: inkomhal
+path: inkomhal
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  # --- Left column: lights + status/battery grid, wrapped in the mod-card -----
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:decluttering-card
+        template: room_light_row
+        variables:
+        - entity: <<inkomhal.voordeur_licht>>
+        - name: Voordeur
+      - type: custom:decluttering-card
+        template: room_light_row
+        variables:
+        - entity: <<inkomhal.hal_beneden_licht>>
+        - icon: bha:ceiling-spot-lamp
+    - type: horizontal-stack
+      cards:
+      - type: custom:decluttering-card
+        template: room_light_row
+        variables:
+        - entity: <<inkomhal.trap_licht>>
+        - name: Trap
+        - icon: hue:ceiling-flourish-pendant
+    - type: custom:mod-card
+      style: |
+        ha-card {
+          background: var( --ha-card-background, var(--card-background-color, white) );
+          border-radius: var(--ha-card-border-radius, 4px);
+          box-shadow: var( --ha-card-box-shadow, 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) );
+        }
+        h1 {
+          color: red !important;
+        }
+      card:
+        type: vertical-stack
+        cards:
+        - type: grid
+          columns: 2
+          square: false
+          input_entity: <<inkomhal.deursensor_voordeur>>
+          input_name: ''
+          cards:
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.deursensor_voordeur>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:lock
+                  'on': mdi:lock-open
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': voordeur gesloten
+                  'on': voordeur Open
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.beweging>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen beweging
+                  'on': beweging gedetecteerd
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.deurbel_persoon>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen Persoon
+                  'on': Persoon gedetecteerd
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.deurbel_pakket>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen Pakje
+                  'on': Pakje gedetecteerd
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.deurbel_voertuig>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen auto
+                  'on': Auto gedetecteerd
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.temperatuur>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+          - type: entities
+            entities:
+            - type: custom:paper-buttons-row
+              buttons:
+              - entity: <<inkomhal.vochtigheid>>
+                layout: icon|state|name
+                name: '%'
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+          - type: entities
+            entities:
+            - type: custom:battery-entity-row
+              attribute: battery_percent
+              critical: 25
+              entity: <<inkomhal.deursensor_voordeur_batterij>>
+              name: Voordeur
+              unit: '%'
+              warning: 50
+          - type: entities
+            entities:
+            - type: custom:battery-entity-row
+              attribute: battery_percent
+              critical: 25
+              entity: <<inkomhal.multisensor_batterij>>
+              name: Multisensor
+              unit: '%'
+              warning: 50
+          - type: entities
+            entities:
+            - type: custom:battery-entity-row
+              attribute: battery_percent
+              critical: 25
+              entity: <<inkomhal.bthome_batterij>>
+              name: Multisensor
+              unit: '%'
+              warning: 50
+  # --- Right column: doorbell camera + temp/humidity graph --------------------
+  - type: vertical-stack
+    cards:
+    - type: picture-entity
+      entity: <<inkomhal.deurbel_camera>>
+      camera_view: live
+      fit_mode: cover
+      show_state: true
+      show_name: true
+      image:
+        media_content_id: https://demo.home-assistant.io/stub_config/bedroom.png
+    - type: custom:decluttering-card
+      template: sensor_graph_row
+      variables:
+      - temp_entity: <<inkomhal.temperatuur>>
+      - humidity_entity: <<inkomhal.vochtigheid>>
+  column_span: 2
+max_columns: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap

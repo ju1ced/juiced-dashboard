@@ -79,3 +79,93 @@ global_navigation_badges:
         navigation_path: garden
     - type: menu
     alignment: center
+
+# --- Room sub-templates (PR-08) ---------------------------------------------
+# Reusable decluttering templates for the repeated room patterns. Instantiated
+# per view with a `custom:decluttering-card` + `variables:`. These bodies carry
+# NO entity IDs — the real IDs are passed in as variables (rendered from the
+# git-ignored entities.local.yaml) at the call site.
+
+# One light control, normalized to a shared option set. `name`/`icon` are
+# optional (null => the mushroom default: friendly name / auto icon), so a light
+# with no explicit name or icon renders exactly as before. The only options
+# dropped versus the raw cards are hide_state/show_color_control, both already
+# equal to their mushroom defaults — so this is visually lossless.
+room_light_row:
+  default:
+  - name: null
+  - icon: null
+  card:
+    type: custom:mushroom-light-card
+    entity: '[[entity]]'
+    name: '[[name]]'
+    icon: '[[icon]]'
+    use_light_color: true
+    show_brightness_control: true
+    show_color_temp_control: true
+    collapsible_controls: true
+    tap_action:
+      action: toggle
+
+# Temperature + humidity readout with a 72h area chart. Faithful lift of the
+# repeated stack-in-card block; only the two sensor entities vary per room.
+sensor_graph_row:
+  card:
+    type: custom:stack-in-card
+    cards:
+    - type: grid
+      square: false
+      columns: 2
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: '[[temp_entity]]'
+        primary_info: state
+        secondary_info: name
+        name: Temperatuur
+        icon_color: green
+      - type: custom:mushroom-entity-card
+        entity: '[[humidity_entity]]'
+        primary_info: state
+        secondary_info: name
+        name: Vochtigheidsgraad
+        icon_color: blue
+    - type: custom:apexcharts-card
+      apex_config:
+        chart:
+          height: 150px
+        legend:
+          show: false
+      graph_span: 72h
+      yaxis:
+      - id: first
+        decimals: 0
+        apex_config:
+          tickAmount: 4
+      - id: second
+        opposite: true
+        decimals: 0
+        apex_config:
+          tickAmount: 4
+      header:
+        show: false
+        title: ApexCharts-Card
+        colorize_states: true
+      all_series_config:
+        stroke_width: 3
+        opacity: 0.3
+        type: area
+      series:
+      - entity: '[[temp_entity]]'
+        name: Temperatuur
+        color: '#00bb33'
+        yaxis_id: first
+        group_by:
+          func: max
+          duration: 30min
+      - entity: '[[humidity_entity]]'
+        name: Vochtigheidsgraad
+        color: '#2196f3'
+        yaxis_id: second
+        group_by:
+          func: max
+          duration: 30min
