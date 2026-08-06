@@ -45,3 +45,18 @@ badkamer:
   handdoekdroger_monthly: sensor.example_handdoekdroger_monthly
   handdoekdroger_yearly: sensor.example_handdoekdroger_yearly
   smart_plug_handdoekdroger_energy: sensor.example_smart_plug_handdoekdroger_energy
+inkomhal:
+  voordeur_licht: light.example_inkomhal_voordeur
+  hal_beneden_licht: light.example_inkomhal_hal_beneden
+  trap_licht: light.example_inkomhal_trap
+  deursensor_voordeur: binary_sensor.example_inkomhal_deursensor_voordeur
+  beweging: binary_sensor.example_inkomhal_beweging
+  deurbel_persoon: binary_sensor.example_inkomhal_deurbel_persoon
+  deurbel_pakket: binary_sensor.example_inkomhal_deurbel_pakket
+  deurbel_voertuig: binary_sensor.example_inkomhal_deurbel_voertuig
+  temperatuur: sensor.example_inkomhal_temperatuur
+  vochtigheid: sensor.example_inkomhal_vochtigheid
+  deursensor_voordeur_batterij: sensor.example_inkomhal_deursensor_voordeur_batterij
+  multisensor_batterij: sensor.example_inkomhal_multisensor_batterij
+  bthome_batterij: sensor.example_inkomhal_bthome_batterij
+  deurbel_camera: camera.example_inkomhal_deurbel
