@@ -1,0 +1,85 @@
+# Resource-removal manifest — rollback-ready cutover cleanup list.
+#
+# Companion to docs/resource-audit.md. Lists the frontend resources that are
+# VERIFIED unused across ALL dashboards (see `verification:` below). This file
+# does NOT remove anything — `ha_config_delete_dashboard_resource` is a GLOBAL
+# registry change that also affects the default dashboard, so removal stays
+# gated on explicit approval and is scheduled for the cutover (roadmap PR-37).
+#
+# Per resource:
+#   remove   -> ha_config_delete_dashboard_resource(resource_id=<id>)
+#   rollback -> ha_config_set_dashboard_resource(url=<url>, resource_type=module)
+#              (canonical rollback is via HACS, which owns the /hacsfiles/ files)
+
+verification:
+  date: 2026-08-06
+  dashboards_checked:            # all 5 registered dashboards — coverage complete
+    - lovelace          # default (storage)
+    - map               # storage, strategy (no cards)
+    - dashboard-test    # storage
+    - mcp-test-dashboard # storage
+    - kia-ev6           # yaml-mode (dashboards/kia/)
+  method: >
+    Custom cards matched on `custom:<type>` across every dashboard (0 refs).
+    Icon sets matched on their registered prefix, AND on entity-icon overrides
+    (entity `icon` attribute) via ha_eval_template. thermal_comfort_icons (tc:)
+    has 0 entity-icon overrides -> confirmed unused. vehicle-status-card
+    independently re-checked via cross-dashboard search (0 matches).
+  do_not_remove:                 # big icon sets — proven IN USE (would break icons)
+    ha-knx-uf-iconset: {prefix: "kuf:", usage: "default dashboard + 2 entity-icon overrides", size_kb: 5548}
+    custom-brand-icons: {prefix: "phu:", usage: "nav badge + 7 entity-icon overrides", size_kb: 4427}
+
+# ~2.1 MB, ~11% of the 18.4 MB bundle. vehicle-status-card is the only large one.
+remove:
+  - name: vehicle-status-card
+    id: 1db2cdb3255a44b8ab232cebdbc83f66
+    url: /hacsfiles/vehicle-status-card/vehicle-status-card.js?hacstag=8593716631250
+    type: module
+    size_kb: 1294
+  - name: energy-flow-card-plus
+    id: 453456c2c0c043479c2504dd19e3e4c9
+    url: /hacsfiles/energy-flow-card-plus/energy-flow-card-plus.js?hacstag=638230244023
+    type: module
+    size_kb: 311
+  - name: hassio-trash-card
+    id: 8c079a5acea047c18b1fc1b6eafca662
+    url: /hacsfiles/hassio-trash-card/trashcard.js?hacstag=678764124247
+    type: module
+    size_kb: 207
+  - name: pool-monitor-card
+    id: fe28bfb660fa413a998784dea2eabfd4
+    url: /hacsfiles/pool-monitor-card/pool-monitor-card.js?hacstag=6402444492110
+    type: module
+    size_kb: 84
+  - name: config-template-card
+    id: 589d1e3c48ff40069918fa9b5a797573
+    url: /hacsfiles/config-template-card/config-template-card.js?hacstag=172177543136
+    type: module
+    size_kb: 66
+  - name: energy-period-selector-plus
+    id: 14a9400376f24b2fbe8decc583b29554
+    url: /hacsfiles/energy-period-selector-plus/energy-period-selector-plus.js?hacstag=639953950023
+    type: module
+    size_kb: 54
+  - name: dual-gauge-card
+    id: 60cad19e770949188bd24755b802e07e
+    url: /hacsfiles/dual_gauge/dual-gauge-card.js?hacstag=109827837312
+    type: module
+    size_kb: 44
+  - name: flower-card
+    id: 8a4223cc57a947159f7a05ac790754c6
+    url: /hacsfiles/lovelace-flower-card/flower-card.js?hacstag=297423025202670
+    type: module
+    size_kb: 39
+  - name: thermal_comfort_icons
+    id: 90cc5abc960942f396d232978c0e366a
+    url: /hacsfiles/thermal_comfort_icons/thermal_comfort_icons.js?hacstag=449218690130
+    type: module
+    size_kb: 28
+    note: "icon set (tc:) — 0 dashboard refs AND 0 entity-icon overrides"
+  - name: cover-icon-element
+    id: d56ae1679e1f4233a4b04dc2cf759d38
+    url: /hacsfiles/cover-icon-element/cover-icon-element.js?hacstag=302122266130
+    type: module
+    size_kb: 6
+# total_size_kb: 2133

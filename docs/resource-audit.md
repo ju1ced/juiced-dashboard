@@ -38,8 +38,22 @@ De analyse (T6) markeerde de twee grote iconensets als *mogelijk ongebruikt*, ma
 | `thermal_comfort_icons` (`tc:`) | 28 KB | `cover-icon-element` | 6 KB |
 
 **Totaal veilig verwijderbaar ≈ 2.1 MB** (~11% van de 18.4 MB-bundel). `vehicle-status-card` is
-de enige grote. `tc:` is een icon-prefix; entity-icon-overrides (customize/registry) zijn niet
-uitputtend gecontroleerd — vóór verwijdering nog verifiëren.
+de enige grote.
+
+### Caveat gesloten (2026-08-06)
+
+De eerder open caveat (entity-icon-overrides niet uitputtend gecontroleerd) is nu afgehandeld
+via `ha_eval_template` over álle entity-`icon`-attributen:
+
+- **`tc:` → 0 entity-icon-overrides** en 0 dashboard-refs ⇒ `thermal_comfort_icons` bevestigd ongebruikt.
+- **`kuf:` → 2** en **`phu:` → 7** entity-icon-overrides ⇒ herbevestigt dat de twee grote sets óók
+  buiten dashboards in gebruik zijn (**niet** verwijderen).
+- **Dekking compleet:** alle **5** geregistreerde dashboards gecontroleerd (`lovelace`, `map`,
+  `dashboard-test`, `mcp-test-dashboard`, `kia-ev6`).
+- **`vehicle-status-card`** onafhankelijk herbevestigd via cross-dashboard-search: **0 matches**.
+
+De verwijderlijst met `id` + `url` per resource (rollback-klaar) staat in
+[`resource-removal-manifest.yaml`](resource-removal-manifest.yaml).
 
 ## Wél in gebruik (niet verwijderen) — eerder als kandidaat genoemd
 
