@@ -9,5 +9,6 @@ title: Juiced Dashboard
 decluttering_templates: !include templates/decluttering_templates.yaml
 # Views are wired in with one `!include` each as they are migrated (Fase 3/4).
 views:
+  - !include views/home.yaml
   - !include views/badkamer.yaml
   - !include views/inkomhal.yaml
