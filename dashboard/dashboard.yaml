@@ -12,3 +12,4 @@ views:
   - !include views/home.yaml
   - !include views/badkamer.yaml
   - !include views/inkomhal.yaml
+  - !include views/energy.yaml
