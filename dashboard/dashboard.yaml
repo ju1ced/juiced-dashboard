@@ -14,3 +14,4 @@ views:
   - !include views/inkomhal.yaml
   - !include views/energy.yaml
   - !include views/logeerkamer.yaml
+  - !include views/slaapkamer.yaml
