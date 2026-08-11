@@ -12,6 +12,32 @@ energy:
   grid_import: sensor.example_grid_import
   peak_power: sensor.example_grid_peak_this_month
   charger_daily: sensor.example_charger_energy_daily
+  # energy view (PR-34) — fictional example ids; real serials live in entities.local.yaml
+  zonnepanelen_opbrengst_vermogen: sensor.example_zonnepanelen_opbrengst_vermogen
+  sb5_0_1av_41_154_grid_power: sensor.example_sb5_0_1av_41_154_grid_power
+  grid_power: sensor.example_grid_power
+  dsmr_reading_electricity_currently_returned: sensor.example_dsmr_reading_electricity_currently_returned
+  solcast_pv_forecast_voorspelling_vandaag: sensor.example_solcast_pv_forecast_voorspelling_vandaag
+  solcast_pv_forecast_voorspelling_morgen: sensor.example_solcast_pv_forecast_voorspelling_morgen
+  zonnepanelen_dagelijks: sensor.example_zonnepanelen_dagelijks
+  dsmr_day_consumption_electricity_returned_merged: sensor.example_dsmr_day_consumption_electricity_returned_merged
+  opbrengst_geinjecteerde_stroom: sensor.example_opbrengst_geinjecteerde_stroom
+  zonnepanelen_monthly: sensor.example_zonnepanelen_monthly
+  zonnepanelen_yearly: sensor.example_zonnepanelen_yearly
+  zonnepanelen_totaalopbrengst: sensor.example_zonnepanelen_totaalopbrengst
+  battery_power_charge_total: sensor.example_battery_power_charge_total
+  battery_power_discharge_total: sensor.example_battery_power_discharge_total
+  battery_soc_total: sensor.example_battery_soc_total
+  battery_capacity_total: sensor.example_battery_capacity_total
+  p1_meter_piekverbruik_huidige_maand: sensor.example_p1_meter_piekverbruik_huidige_maand
+  dsmr_reading_electricity_currently_delivered: sensor.example_dsmr_reading_electricity_currently_delivered
+  zonnepanelen_daily: sensor.example_zonnepanelen_daily
+  sb5_0_1av_41_154_daily_yield: sensor.example_sb5_0_1av_41_154_daily_yield
+  daily_yield: sensor.example_daily_yield
+  batterij_laden_daily: sensor.example_batterij_laden_daily
+  batterij_ontladen_daily: sensor.example_batterij_ontladen_daily
+  battery_charge_total: sensor.example_battery_charge_total
+  battery_discharge_total: sensor.example_battery_discharge_total
 badkamer:
   badkamer: light.example_badkamer
   daikin_badkamer_room_temperature: climate.example_daikin_badkamer_room_temperature

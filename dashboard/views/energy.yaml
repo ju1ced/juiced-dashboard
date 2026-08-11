@@ -1,0 +1,760 @@
+# Energy view — migrated to committed YAML (PR-34).
+# Faithful 1:1 lift via scripts/extract_view.py (round-trip deep-equals the
+# default view: 0 diffs). Stable `path: energy` retained — no T4/T7 refactor
+# needed. Custom-heavy (mini-graph / stack-in-card / mushroom / canvas-gauge /
+# radial-gauge / button-card); no card_mod (theme-token pass is PR-38).
+# The hybrid sections+empty cards[]+header shape is preserved verbatim for
+# byte-parity. Real IDs resolve from the git-ignored entities.local.yaml.
+title: energy
+path: energy
+icon: ''
+subview: false
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+type: sections
+sections:
+- type: grid
+  cards:
+  - cards:
+    - name: Zonnepanelen
+      styles:
+        card:
+        - text-transform: uppercase
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 10px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+      type: custom:button-card
+    - type: custom:stack-in-card
+      cards:
+      - decimals: 0
+        entities:
+        - color: green
+          entity: <<energy.zonnepanelen_opbrengst_vermogen>>
+          name: ZP (24h)
+        - color: blue
+          entity: <<energy.sb5_0_1av_41_154_grid_power>>
+          name: ZP dak (24h)
+        - color: orange
+          entity: <<energy.grid_power>>
+          name: ZP bureau (24h)
+        hour24: true
+        hours_to_show: 6
+        points_per_hour: 30
+        line_width: 3
+        font_size: 100
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: true
+          fill: fade
+          average: true
+          extrema: true
+        theme: ios-dark-mode-blue-red
+        type: custom:mini-graph-card
+    - type: vertical-stack
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.zonnepanelen_opbrengst_vermogen>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: ZP totaal (W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 8000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '1000'
+              - '2000'
+              - '3000'
+              - '4000'
+              - '5000'
+              - '6000'
+              - '7000'
+              - '8000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 5000
+                to: 8000
+                color: green
+              - from: 0
+                to: 1000
+                color: red
+              - from: 1000
+                to: 6000
+                color: rgba(151, 222, 175)
+              borders: false
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.dsmr_reading_electricity_currently_returned>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: Teruglevering (W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 8000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '1000'
+              - '2000'
+              - '3000'
+              - '4000'
+              - '5000'
+              - '6000'
+              - '7000'
+              - '8000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 5000
+                to: 8000
+                color: red
+              - from: 0
+                to: 1000
+                color: green
+              - from: 1000
+                to: 6000
+                color: rgba(240, 182, 182)
+              borders: false
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<energy.zonnepanelen_opbrengst_vermogen>>
+          primary_info: state
+          secondary_info: name
+          name: ZP Totaal (W)
+          icon_color: green
+          layout: vertical
+          icon_type: none
+        - type: custom:mushroom-entity-card
+          entity: <<energy.dsmr_reading_electricity_currently_returned>>
+          primary_info: state
+          secondary_info: name
+          name: Teruglevering (W)
+          icon_color: red
+          layout: vertical
+          icon_type: none
+    - type: vertical-stack
+      cards:
+      - type: horizontal-stack
+        cards:
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.sb5_0_1av_41_154_grid_power>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: ZP Dak (W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 5000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '1000'
+              - '2000'
+              - '3000'
+              - '4000'
+              - '5000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 2500
+                to: 5000
+                color: green
+              - from: 0
+                to: 1000
+                color: red
+              - from: 1000
+                to: 2500
+                color: rgba(151, 222, 175)
+              borders: false
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.grid_power>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: ZP Bureau (W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 3000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '500'
+              - '1000'
+              - '1500'
+              - '2000'
+              - '2500'
+              - '3000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 1500
+                to: 3000
+                color: green
+              - from: 0
+                to: 500
+                color: red
+              - from: 500
+                to: 1500
+                color: rgba(151, 222, 175)
+              borders: false
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<energy.sb5_0_1av_41_154_grid_power>>
+          primary_info: state
+          secondary_info: name
+          name: ZP Dak (W)
+          icon_color: blue
+          layout: vertical
+          icon_type: none
+        - type: custom:mushroom-entity-card
+          entity: <<energy.grid_power>>
+          primary_info: state
+          secondary_info: name
+          name: ZP Bureau (W)
+          icon_color: orange
+          layout: vertical
+          icon_type: none
+    - type: vertical-stack
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<energy.solcast_pv_forecast_voorspelling_vandaag>>
+          primary_info: state
+          secondary_info: name
+          name: Voorspelling Vandaag
+          icon_color: blue
+          layout: vertical
+          icon_type: none
+        - type: custom:mushroom-entity-card
+          entity: <<energy.solcast_pv_forecast_voorspelling_morgen>>
+          primary_info: state
+          secondary_info: name
+          name: Voorspelling Morgen
+          icon_color: orange
+          layout: vertical
+          icon_type: none
+    - entities:
+      - entity: <<energy.zonnepanelen_dagelijks>>
+        icon: mdi:solar-power
+        name: Opbrengst vandaag
+      - entity: <<energy.dsmr_day_consumption_electricity_returned_merged>>
+        icon: mdi:transmission-tower-export
+        name: Geinjecteerde electriciteit
+      - entity: <<energy.opbrengst_geinjecteerde_stroom>>
+        name: Opbrengst vandaag
+      - entity: <<energy.zonnepanelen_opbrengst_vermogen>>
+        icon: mdi:solar-panel
+        name: Huidige opbrengst
+        secondary_info: last-updated
+      - entity: <<energy.zonnepanelen_monthly>>
+        name: Maandopbrengst
+        secondary_info: none
+      - entity: <<energy.zonnepanelen_yearly>>
+        name: Jaaropbrengst
+      - entity: <<energy.zonnepanelen_totaalopbrengst>>
+      type: entities
+    type: vertical-stack
+  - type: vertical-stack
+    cards:
+    - name: Batterij
+      styles:
+        card:
+        - text-transform: uppercase
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 10px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+      type: custom:button-card
+    - type: custom:stack-in-card
+      cards:
+      - decimals: 0
+        entities:
+        - color: green
+          entity: <<energy.battery_power_charge_total>>
+          name: Batterij Laden (24h)
+        - color: red
+          entity: <<energy.battery_power_discharge_total>>
+          name: Batterij Ontladen (24h)
+        hour24: true
+        hours_to_show: 6
+        points_per_hour: 60
+        line_width: 3
+        font_size: 100
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: true
+          fill: fade
+          average: true
+          extrema: true
+        theme: ios-dark-mode-blue-red
+        type: custom:mini-graph-card
+    - type: vertical-stack
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.battery_power_charge_total>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: Batterij Laden(W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 5000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '1000'
+              - '2000'
+              - '3000'
+              - '4000'
+              - '5000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 3000
+                to: 5000
+                color: green
+              - from: 0
+                to: 1000
+                color: red
+              - from: 1000
+                to: 3000
+                color: rgba(151, 222, 175)
+              borders: false
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.battery_power_discharge_total>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: Batterij Ontladen (W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 5000
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '1000'
+              - '2000'
+              - '3000'
+              - '4000'
+              - '5000'
+              minorTicks: 2
+              strokeTicks: true
+              highlights:
+              - from: 3000
+                to: 5000
+                color: red
+              - from: 0
+                to: 1000
+                color: green
+              - from: 1000
+                to: 3000
+                color: rgba(240, 182, 182)
+              borders: false
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<energy.battery_power_charge_total>>
+          primary_info: state
+          secondary_info: name
+          name: Batterij Laden (W)
+          icon_color: green
+          icon: mdi:home-battery
+          layout: vertical
+          icon_type: none
+        - type: custom:mushroom-entity-card
+          entity: <<energy.battery_power_discharge_total>>
+          primary_info: state
+          secondary_info: name
+          name: Batterij Ontladen (W)
+          icon_color: red
+          icon: mdi:home-battery-outline
+          icon_type: none
+          layout: vertical
+    - type: vertical-stack
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.battery_soc_total>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: Batterij Laden(W)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 100
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '10'
+              - '20'
+              - '30'
+              - '40'
+              - '50'
+              - '60'
+              - '70'
+              - '80'
+              - '90'
+              - '100'
+              minorTicks: 5
+              strokeTicks: true
+              highlights:
+              - from: 65
+                to: 100
+                color: green
+              - from: 0
+                to: 25
+                color: red
+              - from: 25
+                to: 65
+                color: rgba(151, 222, 175)
+              borders: false
+        - type: custom:stack-in-card
+          cards:
+          - type: custom:canvas-gauge-card
+            entity: <<energy.battery_capacity_total>>
+            card_height: 125
+            gauge:
+              type: radial-gauge
+              title: Batterij SoH (%)
+              width: 220
+              height: 220
+              borderShadowWidth: 0
+              borderOuterWidth: 0
+              borderMiddleWidth: 0
+              borderInnerWidth: 0
+              minValue: 0
+              maxValue: 100
+              startAngle: 90
+              ticksAngle: 180
+              valueBox: false
+              majorTicks:
+              - '0'
+              - '10'
+              - '20'
+              - '30'
+              - '40'
+              - '50'
+              - '60'
+              - '70'
+              - '80'
+              - '90'
+              - '100'
+              minorTicks: 5
+              strokeTicks: true
+              highlights:
+              - from: 0
+                to: 70
+                color: red
+              - from: 90
+                to: 100
+                color: green
+              - from: 70
+                to: 90
+                color: rgba(240, 182, 182)
+              borders: false
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          primary_info: state
+          secondary_info: name
+          name: Batterij SoC (%)
+          icon_color: green
+          icon: mdi:home-battery
+          entity: <<energy.battery_soc_total>>
+          layout: vertical
+          fill_container: false
+          icon_type: none
+        - type: custom:mushroom-entity-card
+          primary_info: state
+          secondary_info: name
+          name: Batterij SoH (%)
+          icon_color: red
+          icon: mdi:home-battery-outline
+          entity: <<energy.battery_capacity_total>>
+          layout: vertical
+          icon_type: none
+    - type: custom:mini-graph-card
+      entities:
+      - entity: <<energy.battery_soc_total>>
+      icon: mdi:battery-charging
+      hours_to_show: 72
+      points_per_hour: 60
+      hour24: true
+      animate: true
+      show:
+        fill: fade
+        points: hover
+        average: true
+        extrema: true
+        name_adaptive_color: true
+        icon_adaptive_color: true
+      name: Thuisbatterij
+      color_thresholds:
+      - value: 25
+        color: '#5e0101'
+      - value: 50
+        color: '#a1320a'
+      - value: 70
+        color: '#9c7805'
+      - value: 90
+        color: '#045e2a'
+  - type: vertical-stack
+    cards:
+    - name: Electriciteit
+      styles:
+        card:
+        - text-transform: uppercase
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 10px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+      type: custom:button-card
+    - type: horizontal-stack
+      cards:
+      - type: gauge
+        entity: <<energy.zonnepanelen_opbrengst_vermogen>>
+        max: 11000
+        severity:
+          green: 0
+          yellow: 3000
+          red: 7500
+        needle: true
+      - type: gauge
+        name: Capaciteitspiek
+        max: 11
+        severity:
+          green: 0
+          yellow: 4.5
+          red: 7.5
+        needle: true
+        entity: <<energy.p1_meter_piekverbruik_huidige_maand>>
+    - type: horizontal-stack
+      cards:
+      - type: gauge
+        entity: <<energy.dsmr_reading_electricity_currently_delivered>>
+        name: Verbruik net
+        max: 11000
+        severity:
+          green: 0
+          yellow: 3000
+          red: 7500
+        needle: true
+      - type: gauge
+        name: Teruglevering
+        needle: true
+        max: 8000
+        severity:
+          green: 4000
+          yellow: 1500
+          red: 0
+        entity: <<energy.dsmr_reading_electricity_currently_returned>>
+    - name: ZP & Batterij
+      styles:
+        card:
+        - text-transform: uppercase
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 10px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+      type: custom:button-card
+    - type: horizontal-stack
+      cards:
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.zonnepanelen_daily>>
+          color: teal
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Dagopbrengst ZP
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.dsmr_day_consumption_electricity_returned_merged>>
+          color: purple
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Daginjectie ZP
+    - type: horizontal-stack
+      cards:
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.sb5_0_1av_41_154_daily_yield>>
+          color: '#154d32'
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: ZP Dak
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.daily_yield>>
+          color: '#093c63'
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: ZP Bureau
+    - type: horizontal-stack
+      cards:
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.batterij_laden_daily>>
+          color: '#154d32'
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Dagladen Batterij
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.batterij_ontladen_daily>>
+          color: '#610b0e'
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Dagontladen Batterij
+    - type: horizontal-stack
+      cards:
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.battery_charge_total>>
+          color: green
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Batterij totaal geladen
+      - aggregate_func: max
+        entities:
+        - entity: <<energy.battery_discharge_total>>
+          color: red
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+        name: Batterij totaal ontladen
+  column_span: 3
+max_columns: 3
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
