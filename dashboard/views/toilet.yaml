@@ -1,0 +1,299 @@
+# toilet & berging view — migrated to committed YAML (PR-13).
+# Inline 1:1 lift via scripts/extract_view.py. Round-trip render deep-equals the
+# default view (0 diffs). Stable `path: toilet` already present -> no T4/T7
+# refactor. No card_mod. Includes an apexcharts-card + area card. Real IDs
+# resolve from the git-ignored entities.local.yaml.
+theme: Backend-selected
+title: toilet & berging
+path: toilet
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: custom:mushroom-template-card
+    primary: Toilet
+    secondary: ''
+    icon: mdi:toilet
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon_color: blue
+    grid_options:
+      columns: full
+      rows: 1
+    fill_container: true
+    layout: horizontal
+  - type: vertical-stack
+    cards:
+    - type: custom:mushroom-light-card
+      entity: <<toilet.licht_toilet>>
+      icon: bha:ceiling-downlight
+      use_light_color: true
+      show_brightness_control: false
+      tap_action:
+        action: toggle
+    - card:
+        cards:
+        - entities:
+          - attribute: battery_percent
+            critical: 25
+            entity: <<toilet.bewegingssensor_toilet_battery>>
+            name: Bewegingssensor
+            type: custom:battery-entity-row
+            unit: '%'
+            warning: 50
+          type: entities
+        type: horizontal-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - card:
+        cards:
+        - entities:
+          - buttons:
+            - entity: <<toilet.bewegingssensor_toilet_occupancy>>
+              layout: icon|state
+              state_icons:
+                'off': mdi:motion-sensor-off
+                'on': mdi:motion-sensor
+              state_styles:
+                'off':
+                  button:
+                    border-radius: 10px
+                    color: green
+                'on':
+                  button:
+                    border-radius: 10px
+                    color: red
+              state_text:
+                'off': Geen beweging
+                'on': beweging gedetecteerd
+            type: custom:paper-buttons-row
+          type: entities
+        - entities:
+          - buttons:
+            - entity: <<toilet.bewegingssensor_toilet_temperature>>
+              layout: icon|state|name
+              name: °C
+              styles:
+                button:
+                  border-radius: 10px
+                  color: green
+            type: custom:paper-buttons-row
+          type: entities
+        type: horizontal-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<toilet.bewegingssensor_toilet_temperature>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+      - type: custom:apexcharts-card
+        apex_config:
+          chart:
+            height: 150px
+          legend:
+            show: false
+        graph_span: 72h
+        header:
+          show: false
+          title: ApexCharts-Card
+          colorize_states: true
+        all_series_config:
+          stroke_width: 3
+          opacity: 0.3
+          type: area
+        series:
+        - entity: <<toilet.bewegingssensor_toilet_temperature>>
+          name: Temperatuur
+          color: '#00bb33'
+          group_by:
+            func: max
+            duration: 30min
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<toilet.bewegingssensor_toilet_illuminance>>
+          primary_info: state
+          secondary_info: name
+          name: Lichtsterkte
+          icon_color: blue
+- type: grid
+  cards:
+  - type: custom:mushroom-template-card
+    primary: Berging
+    secondary: ''
+    icon: hue:room-storage
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon_color: green
+    grid_options:
+      columns: full
+      rows: 1
+    fill_container: true
+    multiline_secondary: false
+    layout: horizontal
+  - type: vertical-stack
+    cards:
+    - type: custom:mushroom-light-card
+      entity: <<toilet.berging>>
+      use_light_color: true
+      show_brightness_control: true
+      collapsible_controls: true
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<toilet.deursensor_berging>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:door-closed
+                  'on': mdi:door-open
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': bergingdeur gesloten
+                  'on': bergingdeur Open
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<toilet.ht_berging_temperatuur>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<toilet.ht_berging_luchtvochtigheid>>
+                layout: icon|state|name
+                name: '%'
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<toilet.deursensor_berging_licht>>
+                layout: icon|state|name
+                icon: mdi:brightness-5
+                name: lux
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<toilet.deursensor_berging_batterij>>
+              name: deursensor
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<toilet.ht_berging_batterij>>
+              name: HT berging
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          columns: 2
+          input_entity: <<toilet.deursensor_berging>>
+          input_name: ''
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<toilet.ht_berging_temperatuur>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<toilet.ht_berging_luchtvochtigheid>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<toilet.ht_berging_temperatuur>>
+          name: Temperatuur
+          color: '#00bb33'
+        - entity: <<toilet.ht_berging_luchtvochtigheid>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          y_axis: secondary
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4

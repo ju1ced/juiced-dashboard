@@ -416,3 +416,16 @@ bureau:
   bureau_person_1: cover.example_bureau_person_1
   bureau_person_1_height: sensor.example_bureau_person_1_height
   bureau_person_1_moving: binary_sensor.example_bureau_person_1_moving
+toilet:
+  licht_toilet: light.example_licht_toilet
+  bewegingssensor_toilet_battery: sensor.example_bewegingssensor_toilet_battery
+  bewegingssensor_toilet_occupancy: binary_sensor.example_bewegingssensor_toilet_occupancy
+  bewegingssensor_toilet_temperature: sensor.example_bewegingssensor_toilet_temperature
+  bewegingssensor_toilet_illuminance: sensor.example_bewegingssensor_toilet_illuminance
+  berging: light.example_berging
+  deursensor_berging: binary_sensor.example_deursensor_berging
+  ht_berging_temperatuur: sensor.example_ht_berging_temperatuur
+  ht_berging_luchtvochtigheid: sensor.example_ht_berging_luchtvochtigheid
+  deursensor_berging_licht: sensor.example_deursensor_berging_licht
+  deursensor_berging_batterij: sensor.example_deursensor_berging_batterij
+  ht_berging_batterij: sensor.example_ht_berging_batterij
