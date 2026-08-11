@@ -1,0 +1,584 @@
+# woonkamer view — migrated to committed YAML (PR-14).
+# Inline 1:1 lift via scripts/extract_view.py. Large living room: 6 lights,
+# covers, 2 thermostats, 2 apexcharts, area cards, restriction/fold/conditional
+# rows, mini-media-player. Stable `path: woonkamer` already present -> no T4/T7.
+# card_mod kept verbatim (theme-token pass is PR-38). PRIVACY: one shared
+# heating-zone key carried household first names; neutralized to a generic token
+# (real ids resolve from the git-ignored local mapping). No visible-label change,
+# so the round-trip is a full 0-diff match with the default.
+theme: Backend-selected
+title: woonkamer
+path: woonkamer
+type: sections
+cards: []
+layout:
+  max_cols: 4
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<woonkamer.schakelaar_woonkamer>>
+        name: Living
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+      - type: custom:mushroom-light-card
+        entity: <<woonkamer.schakelaar_eetkamer>>
+        name: Eetkamer
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+    - type: conditional
+      conditions:
+      - condition: state
+        entity: <<woonkamer.schakelaar_eetkamer_2>>
+        state: 'on'
+      - condition: or
+        conditions:
+        - condition: state
+          entity: <<woonkamer.schakelaar_woonkamer_2>>
+          state: 'on'
+      card:
+        type: horizontal-stack
+        cards:
+        - type: custom:mushroom-light-card
+          entity: <<woonkamer.salontafel>>
+          use_light_color: true
+          show_brightness_control: true
+          collapsible_controls: true
+        - type: custom:mushroom-light-card
+          entity: <<woonkamer.staanlamp>>
+          use_light_color: true
+          show_brightness_control: true
+          collapsible_controls: true
+        - type: custom:mushroom-light-card
+          entity: <<woonkamer.eetkamer>>
+          use_light_color: true
+          show_brightness_control: true
+          collapsible_controls: true
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<woonkamer.smart_plug_kerstboom>>
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+    - type: custom:mushroom-cover-card
+      entity: <<woonkamer.rolluik_living>>
+      show_position_control: true
+      show_buttons_control: true
+      tap_action:
+        action: more-info
+      icon_type: icon
+      fill_container: false
+    - type: vertical-stack
+      cards:
+      - type: custom:mushroom-cover-card
+        entity: <<woonkamer.rolluik_eetkamer>>
+        show_position_control: true
+        show_buttons_control: true
+        tap_action:
+          action: more-info
+        icon_type: icon
+        fill_container: false
+    - type: custom:mini-media-player
+      artwork: cover
+      name: Sonos Living
+      source: icon
+      sound_mode: icon
+      info: scroll
+      speaker_group:
+        platform: sonos
+        show_group_count: true
+        entities:
+        - entity_id: <<woonkamer.keuken>>
+          name: Sonos keuken
+        - entity_id: <<woonkamer.living>>
+          name: Sonos Living
+        - entity_id: <<woonkamer.kantoor>>
+          name: Sonos kantoor
+        - entity_id: <<woonkamer.badkamer>>
+          name: Sonos badkamer
+        - entity_id: <<woonkamer.slaapkamer>>
+          name: Sonos Slaapkamer
+        - entity_id: <<woonkamer.bbq_buitenkeuken>>
+          name: Sonos BBQ buitenkeuken
+        - entity_id: <<woonkamer.tuinhuis>>
+          name: Sonos Tuinhuis
+      entity: <<woonkamer.living>>
+    - card:
+        cards:
+        - entities:
+          - buttons:
+            - entity: <<woonkamer.tx_nr656>>
+              layout: icon_state
+              state_icons:
+                'off': mdi:cast
+                'on': mdi:cast-audio
+              state_styles:
+                'off':
+                  button:
+                    color: teal
+                'on':
+                  button:
+                    color: green
+              state_text:
+                'off': Sonos Lving staat uit
+                'on': Sonos speelt in de living
+              tap_action:
+                action: call-service
+                service: script.sonos_living_on
+            type: custom:paper-buttons-row
+          type: entities
+        - entities:
+          - buttons:
+            - entity: <<woonkamer.tx_nr656_zone_2>>
+              layout: icon_state
+              state_icons:
+                'off': mdi:cast
+                'on': mdi:cast-audio
+              state_styles:
+                'off':
+                  button:
+                    color: teal
+                'on':
+                  button:
+                    color: green
+              state_text:
+                'off': Sonos Terras staat uit
+                'on': Sonos speelt op het terras
+              tap_action:
+                action: call-service
+                service: script.sonos_living_on_2
+            type: custom:paper-buttons-row
+          type: entities
+        type: horizontal-stack
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+      type: custom:mod-card
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<woonkamer.raamsensor_schuifraam_eetkamer_raam>>
+                layout: icon|state
+                state_icons:
+                  'off': phu:sliding-window-door-close
+                  'on': phu:sliding-window-door-open
+                state_styles:
+                  'off':
+                    button:
+                      color: green
+                  'on':
+                    button:
+                      color: red
+                state_text:
+                  'off': Schuifraam gesloten
+                  'on': Schuifraam Open
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<woonkamer.deursensor_garage>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:door-closed
+                  'on': mdi:door-open
+                state_styles:
+                  'off':
+                    button:
+                      color: green
+                  'on':
+                    button:
+                      color: red
+                state_text:
+                  'off': garagedeur gesloten
+                  'on': garagedeur Open
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<woonkamer.raamsensor_schuifraam_eetkamer_batterij>>
+              name: Schuifraam
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<woonkamer.deursensor_garage_batterij>>
+              name: Garagedeur
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          columns: 2
+          input_entity: <<woonkamer.raamsensor_schuifraam_eetkamer_batterij>>
+          input_name: ''
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<woonkamer.ht_woonkamer_lawaai>>
+          primary_info: state
+          secondary_info: name
+          icon: mdi:music
+          name: Geluid
+          icon_color: orange
+        - type: custom:mushroom-entity-card
+          entity: <<woonkamer.ht_woonkamer_atmosferische_druk>>
+          primary_info: state
+          secondary_info: name
+          name: Luchtdruk
+          icon_color: blue
+  - type: vertical-stack
+    cards:
+    - entity: <<woonkamer.household_zone_zone_1_circuit_0_climate>>
+      label:
+        temperature: temperatuur
+      state: true
+      hide:
+        state: false
+        temperature: false
+      layout:
+        mode:
+          headings: false
+          icons: false
+          names: true
+        sensors:
+          labels: true
+        step: row
+      type: custom:simple-thermostat
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<woonkamer.ht_woonkamer_temperatuur>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<woonkamer.ht_woonkamer_luchtvochtigheid>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:apexcharts-card
+        apex_config:
+          chart:
+            height: 150px
+          legend:
+            show: false
+        graph_span: 72h
+        yaxis:
+        - id: first
+          decimals: 0
+          apex_config:
+            tickAmount: 4
+        - id: second
+          opposite: true
+          decimals: 0
+          apex_config:
+            tickAmount: 4
+        header:
+          show: false
+          title: ApexCharts-Card
+          colorize_states: true
+        all_series_config:
+          stroke_width: 3
+          opacity: 0.3
+          type: area
+        series:
+        - entity: <<woonkamer.ht_woonkamer_temperatuur>>
+          name: Temperatuur
+          color: '#00bb33'
+          yaxis_id: first
+          group_by:
+            func: avg
+            duration: 1h
+        - entity: <<woonkamer.ht_woonkamer_luchtvochtigheid>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          yaxis_id: second
+          group_by:
+            func: avg
+            duration: 1h
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<woonkamer.ht_woonkamer_kooldioxide>>
+          primary_info: state
+          secondary_info: name
+          name: luchtkwaliteit
+          icon_color: red
+      - type: custom:apexcharts-card
+        apex_config:
+          chart:
+            height: 150px
+          legend:
+            show: false
+        graph_span: 72h
+        yaxis:
+        - id: first
+          decimals: 0
+          apex_config:
+            tickAmount: 4
+        - id: second
+          opposite: true
+          decimals: 0
+          apex_config:
+            tickAmount: 4
+        header:
+          show: false
+          title: ApexCharts-Card
+          colorize_states: true
+        all_series_config:
+          stroke_width: 3
+          opacity: 0.3
+          type: area
+        series:
+        - entity: <<woonkamer.ht_woonkamer_kooldioxide>>
+          curve: smooth
+          name: luchtkwaliteit
+          color: red
+          yaxis_id: first
+          group_by:
+            func: avg
+            duration: 1h
+  - type: vertical-stack
+    cards:
+    - entities:
+      - card:
+          entity: <<woonkamer.smart_plug_tv>>
+          state_color: true
+        row: true
+        icon: mdi:fireplace
+        type: custom:restriction-card
+      - entity: <<woonkamer.smart_plug_tv_vermogen>>
+        icon: mdi:counter
+        name: Huidig Verbruik
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Meer informatie
+        entities:
+        - entity: <<woonkamer.tv_daily>>
+          name: Dagelijks Verbruik
+        - entity: <<woonkamer.tv_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<woonkamer.tv_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<woonkamer.smart_plug_tv_energie>>
+          name: totaal verbruik
+          icon: mdi:counter
+        - aggregate_func: max
+          entities:
+          - entity: <<woonkamer.tv_daily>>
+            name: Dagelijks verbruik TV
+          group_by: date
+          hours_to_show: 168
+          show:
+            graph: bar
+          type: custom:mini-graph-card
+      state_color: true
+      type: entities
+      title: Smart Plug TV
+      card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+    - entities:
+      - card:
+          entity: <<woonkamer.bioethanol_haard>>
+          state_color: true
+        row: true
+        icon: mdi:fireplace
+        type: custom:restriction-card
+      - entity: <<woonkamer.bioethanol_haard_vermogen>>
+        icon: mdi:counter
+        name: Huidig Verbruik
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Meer informatie
+        entities:
+        - entity: <<woonkamer.sp_haard_daily>>
+          name: Dagelijks Verbruik
+        - entity: <<woonkamer.sp_haard_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<woonkamer.sp_haard_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<woonkamer.bioethanol_haard_energie>>
+          name: totaal verbruik
+          icon: mdi:counter
+        - aggregate_func: max
+          entities:
+          - entity: <<woonkamer.sp_haard_daily>>
+            name: Dagelijks verbruik Haard
+          group_by: date
+          hours_to_show: 168
+          show:
+            graph: bar
+          type: custom:mini-graph-card
+      state_color: true
+      type: entities
+      title: Bioethanol Haard
+      card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+    - control:
+      - hvac
+      - preset
+      - fan
+      - swing
+      entity: <<woonkamer.daikin_keuken_room_temperature>>
+      header:
+        name: Daikin Leefruimte
+      label:
+        temperature: temperatuur
+      hide:
+        state: false
+        temperature: false
+      layout:
+        mode:
+          headings: false
+          icons: true
+          names: true
+        sensors:
+          labels: true
+        step: row
+      type: custom:simple-thermostat
+  - type: vertical-stack
+    cards:
+    - entities:
+      - card:
+          entity: <<woonkamer.smart_plug_tv2>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - entity: <<woonkamer.smart_plug_tv2_vermogen>>
+        icon: mdi:counter
+        name: Huidig Verbruik
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Meer informatie
+        entities:
+        - entity: <<woonkamer.tv2_daily>>
+          name: Dagelijks Verbruik
+        - entity: <<woonkamer.tv2_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<woonkamer.tv2_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<woonkamer.smart_plug_tv2_energie>>
+          name: totaal verbruik
+          icon: mdi:counter
+        - aggregate_func: max
+          entities:
+          - entity: <<woonkamer.tv2_daily>>
+            name: Dagelijks verbruik TV stekkerblok 2
+          group_by: date
+          hours_to_show: 168
+          show:
+            graph: bar
+          type: custom:mini-graph-card
+      state_color: true
+      type: entities
+      title: Power Strip (8) TV
+      card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+    - entities:
+      - card:
+          entity: <<woonkamer.power_strip_tv_socket_1>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - card:
+          entity: <<woonkamer.power_strip_tv_socket_2>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - card:
+          entity: <<woonkamer.power_strip_tv_socket_3>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - card:
+          entity: <<woonkamer.power_strip_tv_socket_4>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - card:
+          entity: <<woonkamer.power_strip_tv_socket_5>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - entity: <<woonkamer.power_strip_tv_vermogen>>
+        icon: mdi:counter
+        name: Huidig Verbruik
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Meer informatie
+        entities:
+        - entity: <<woonkamer.power_strip_tv_daily>>
+          name: Dagelijks Verbruik
+        - entity: <<woonkamer.power_strip_tv_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<woonkamer.power_strip_tv_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<woonkamer.power_strip_tv_energie>>
+          name: totaal verbruik
+          icon: mdi:counter
+        - aggregate_func: max
+          entities:
+          - entity: <<woonkamer.power_strip_tv_daily>>
+            name: Dagelijks verbruik TV stekkerblok
+          group_by: date
+          hours_to_show: 168
+          show:
+            graph: bar
+          type: custom:mini-graph-card
+      state_color: true
+      type: entities
+      title: Power Strip (4+2+2) TV
+      card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+  column_span: 4
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4
