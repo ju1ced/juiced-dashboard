@@ -23,15 +23,15 @@ sections:
       cards:
       - type: custom:mushroom-light-card
         entity: <<slaapkamer.nachtlampje_2>>
-        name: Joost
+        name: Persoon 1
         icon: mdi:lamp-outline
         use_light_color: true
         show_brightness_control: true
         collapsible_controls: true
         fill_container: true
       - type: custom:mushroom-light-card
-        entity: <<slaapkamer.smart_plug_nachtlampje_leen>>
-        name: Leen
+        entity: <<slaapkamer.smart_plug_nachtlampje_person_2>>
+        name: Persoon 2
         icon: mdi:lamp
         collapsible_controls: false
         use_light_color: true
