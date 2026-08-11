@@ -1,0 +1,338 @@
+# kinderkamer view — migrated to committed YAML (PR-11, camera room).
+# Inline 1:1 lift via scripts/extract_view.py. Camera is a lightweight
+# picture-entity (no heavy stream card). Stable `path: kinderkamer` already
+# present -> no T4/T7 refactor. PRIVACY (public repo): the room belongs to a
+# minor, so the personal first name that appears in the raw object-ids has been
+# neutralized to a generic token in every logical key (real ids resolve from the
+# git-ignored local mapping), and the single visible motion-state label has been
+# genericized. That label is the ONLY deliberate render diff vs the default.
+# card_mod/mod-card kept verbatim (theme-token pass is PR-38).
+theme: Backend-selected
+title: kinderkamer
+path: kinderkamer
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - square: false
+      columns: 2
+      type: grid
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<kinderkamer.hanglamp_kind>>
+        icon: bha:ceiling-lamp-plafond
+        fill_container: true
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+        show_color_temp_control: false
+        name: Hanglamp
+      - type: custom:mushroom-light-card
+        entity: <<kinderkamer.staanlamp_kinderkamer>>
+        icon: mdi:floor-lamp-torchiere-variant
+        fill_container: true
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+        name: Staanlamp
+    - control:
+      - hvac
+      - preset
+      - fan
+      - swing
+      entity: <<kinderkamer.daikin_kamer_kind_room_temperature>>
+      header: false
+      label:
+        temperature: temperatuur
+      hide:
+        state: true
+        temperature: false
+      layout:
+        mode:
+          headings: false
+          icons: true
+          names: true
+        sensors:
+          labels: true
+        step: row
+      type: custom:simple-thermostat
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
+                layout: icon|state|name
+                name: '%'
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
+                layout: icon|state|name
+                icon: mdi:molecule-co2
+                name: ppm
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.raamsensor_kamer_kind_licht>>
+                layout: icon|state|name
+                icon: mdi:brightness-5
+                name: lux
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.raamsensor_kamer_kind_raam>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:window-closed
+                  'on': mdi:window-open
+                state_styles:
+                  'off':
+                    button:
+                      color: green
+                  'on':
+                    button:
+                      color: red
+                state_text:
+                  'off': raam gesloten
+                  'on': raam open
+                name: ''
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.raamsensor_kamer_kind_rotation>>
+                layout: icon|state|name
+                name: °
+                icon: mdi:rotate-3d
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.kamer_kind_beweging>>
+                layout: icon_state
+                name: Beweging
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      color: green
+                  'on':
+                    button:
+                      color: red
+                state_text:
+                  'off': Alles is rustig
+                  'on': Beweging in de kinderkamer
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<kinderkamer.smart_plug_babyfoon>>
+                layout: icon_state
+                state_icons:
+                  'off': mdi:baby-face
+                  'on': mdi:baby-face-outline
+                state_styles:
+                  'off':
+                    button:
+                      color: red
+                  'on':
+                    button:
+                      color: green
+                state_text:
+                  'off': Babyfoon uit
+                  'on': Babyfoon aan
+                tap_action:
+                  action: toggle
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<kinderkamer.ht_kamer_kind_batterij>>
+              name: Binnenmodule
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<kinderkamer.raamsensor_kamer_kind_batterij>>
+              name: Binnenmodule
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          columns: 2
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+  - type: vertical-stack
+    cards:
+    - square: false
+      columns: 1
+      type: grid
+      cards:
+      - show_state: true
+        show_name: true
+        camera_view: auto
+        fit_mode: cover
+        type: picture-entity
+        entity: <<kinderkamer.kamer_kind_high_resolution_channel>>
+        image:
+          media_content_id: https://demo.home-assistant.io/stub_config/bedroom.png
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
+          name: Temperatuur
+          color: '#00bb33'
+        - entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          y_axis: secondary
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
+          primary_info: state
+          secondary_info: name
+          name: luchtkwaliteit
+          icon_color: red
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
+          name: luchtkwaliteit
+          color: red
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+  - type: vertical-stack
+    cards:
+    - type: custom:mushroom-cover-card
+      entity: <<kinderkamer.rolluik_kamer_kind>>
+      show_position_control: true
+      show_buttons_control: true
+      show_tilt_position_control: false
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_dagelijks_elektriciteitsverbruik_koelen>>
+          name: Dagelijks Verbruik Koelen
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_dagelijks_elektriciteitsverbruik_verwarmen>>
+          name: Dagelijks Verbruik Verwarmen
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_maandelijks_elektriciteitsverbruik_koelen>>
+          name: Maandelijks Verbruik Koelen
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_maandelijks_elektriciteitsverbruik_verwarmen>>
+          name: Maandelijks Verbruik verwarmen
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen>>
+          name: Jaarlijks Verbruik Koelen
+        - entity: <<kinderkamer.daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen>>
+          name: Jaarlijks Verbruik verwarmen
+        state_color: true
+        title: Airco Kinderkamer
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<kinderkamer.daikin_kamer_kind_climatecontrol_dagelijks_elektriciteitsverbruik_verwarmen>>
+        - <<kinderkamer.daikin_kamer_kind_climatecontrol_maandelijks_elektriciteitsverbruik_koelen>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  column_span: 3
+max_columns: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
