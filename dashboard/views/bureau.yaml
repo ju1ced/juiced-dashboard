@@ -1,0 +1,372 @@
+# bureau view — migrated to committed YAML (PR-12, home office).
+# Inline 1:1 lift via scripts/extract_view.py. Rich room: mushroom lights/covers,
+# a linak-desk-card (sit/stand desk), mini-media-player, restriction/conditional
+# cards. Stable `path: bureau` already present -> no T4/T7 refactor. PRIVACY: the
+# desk keys carried the owner's first name; neutralized to a generic token in the
+# logical keys (real ids resolve from the git-ignored local mapping) and the one
+# visible desk label is genericized -> the ONLY deliberate render diff vs default.
+# card_mod/mod-card kept verbatim (theme-token pass is PR-38).
+theme: Backend-selected
+title: bureau
+path: bureau
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<bureau.bureau_spellenruimte>>
+        use_light_color: true
+        show_brightness_control: true
+        show_color_temp_control: true
+        collapsible_controls: true
+        fill_container: true
+      - type: custom:mushroom-light-card
+        show_color_temp_control: true
+        show_color_control: true
+        collapsible_controls: true
+        fill_container: true
+        show_brightness_control: true
+        use_light_color: true
+        entity: <<bureau.licht_bureau>>
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<bureau.licht_spellentafel>>
+        use_light_color: true
+        fill_container: true
+      - type: custom:mushroom-light-card
+        use_light_color: true
+        show_color_temp_control: true
+        show_brightness_control: true
+        collapsible_controls: true
+        entity: <<bureau.licht_spellenkast>>
+    - type: horizontal-stack
+      cards:
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          state: closed
+        card:
+          type: custom:mushroom-cover-card
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          show_position_control: true
+          show_buttons_control: true
+          show_tilt_position_control: false
+          tap_action:
+            action: call-service
+            service: cover.set_cover_position
+            target:
+              entity_id: <<bureau.luifel_bureau_luifel_bureau>>
+            data:
+              position: 40
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          state: closing
+        card:
+          type: custom:mushroom-cover-card
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          show_position_control: true
+          show_buttons_control: true
+          show_tilt_position_control: false
+          tap_action:
+            action: none
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          state: open
+        card:
+          type: custom:mushroom-cover-card
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          show_position_control: true
+          show_buttons_control: true
+          show_tilt_position_control: false
+          tap_action:
+            action: call-service
+            service: cover.close_cover
+            target:
+              entity_id:
+              - <<bureau.luifel_bureau_luifel_bureau>>
+      - type: conditional
+        conditions:
+        - condition: state
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          state: opening
+        card:
+          type: custom:mushroom-cover-card
+          entity: <<bureau.luifel_bureau_luifel_bureau>>
+          show_position_control: true
+          show_buttons_control: true
+          show_tilt_position_control: false
+          tap_action:
+            action: none
+          hold_action:
+            action: none
+          double_tap_action:
+            action: none
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<bureau.raamsensor_schuifraam_bureau_raam>>
+                layout: icon|state
+                state_icons:
+                  'off': phu:sliding-window-door-close
+                  'on': phu:sliding-window-door-open
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Schuifraam Gesloten
+                  'on': Schuifraam Open
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<bureau.raamsensor_schuifraam_bureau_batterij>>
+              name: Schuifdeur
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          columns: 2
+          input_entity: <<bureau.voordeur_sensor_battery_low>>
+          input_name: ''
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - type: custom:mini-media-player
+      artwork: cover
+      source: icon
+      sound_mode: icon
+      info: scroll
+      speaker_group:
+        platform: sonos
+        show_group_count: true
+        entities:
+        - entity_id: <<bureau.keuken>>
+          name: Sonos keuken
+        - entity_id: <<bureau.living>>
+          name: Sonos Living
+        - entity_id: <<bureau.kantoor>>
+          name: Sonos kantoor
+        - entity_id: <<bureau.badkamer>>
+          name: Sonos badkamer
+        - entity_id: <<bureau.slaapkamer>>
+          name: Sonos Slaapkamer
+        - entity_id: <<bureau.bbq_buitenkeuken>>
+          name: Sonos BBQ buitenkeuken
+        - entity_id: <<bureau.tuinhuis>>
+          name: Sonos Tuinhuis
+      entity: <<bureau.kantoor>>
+  - type: vertical-stack
+    cards:
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<bureau.ht_bureau_temperatuur>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<bureau.ht_bureau_luchtvochtigheid>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<bureau.ht_bureau_temperatuur>>
+          name: Temperatuur
+          color: '#00bb33'
+        - entity: <<bureau.ht_bureau_luchtvochtigheid>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          y_axis: secondary
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+    - control:
+      - hvac
+      - preset
+      - fan
+      - swing
+      entity: <<bureau.daikin_bureau_room_temperature>>
+      header:
+        name: Daikin Bureau
+      label:
+        temperature: temperatuur
+      hide:
+        state: false
+        temperature: false
+      layout:
+        mode:
+          headings: false
+          icons: true
+          names: true
+        sensors:
+          labels: true
+        step: row
+      type: custom:simple-thermostat
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<bureau.smart_plug_bureau_computer>>
+            state_color: true
+          icon: mdi:air-conditioner
+          row: true
+          type: custom:restriction-card
+        - entity: <<bureau.smart_plug_bureau_computer_power>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<bureau.bureau_daily>>
+          name: dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<bureau.bureau_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<bureau.bureau_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<bureau.smart_plug_bureau_computer_energy>>
+            icon: mdi:counter
+            name: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<bureau.bureau_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+      - entities:
+        - card:
+            entity: <<bureau.tv_bureau>>
+            state_color: true
+          icon: mdi:air-conditioner
+          row: true
+          type: custom:restriction-card
+        - entity: <<bureau.tv_bureau_vermogen>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<bureau.tv_bureau_daily>>
+          name: dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<bureau.tv_bureau_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<bureau.tv_bureau_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<bureau.tv_bureau_totaal>>
+            icon: mdi:counter
+            name: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<bureau.tv_bureau_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - entity: <<bureau.daikin_bureau_climatecontrol_dagelijks_elektriciteitsverbruik_koelen>>
+          name: Dagelijks Verbruik Koelen
+        - entity: <<bureau.daikin_bureau_climatecontrol_dagelijks_elektriciteitsverbruik_verwarmen>>
+          name: Dagelijks Verbruik Verwarmen
+        - entity: <<bureau.daikin_bureau_climatecontrol_maandelijks_elektriciteitsverbruik_koelen>>
+          name: Maandelijks Verbruik Koelen
+        - entity: <<bureau.daikin_bureau_climatecontrol_maandelijks_elektriciteitsverbruik_verwarmen>>
+          name: Maandelijks Verbruik verwarmen
+        - entity: <<bureau.daikin_bureau_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen>>
+          name: Jaarlijks Verbruik Koelen
+        - entity: <<bureau.daikin_bureau_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen>>
+          name: Jaarlijks Verbruik verwarmen
+        state_color: true
+        title: Airco Bureau
+        type: entities
+  - type: vertical-stack
+    cards:
+    - connection_sensor: <<bureau.bureau_person_1_connected>>
+      desk: <<bureau.bureau_person_1>>
+      height_sensor: <<bureau.bureau_person_1_height>>
+      min_height: 70
+      max_height: 127
+      moving_sensor: <<bureau.bureau_person_1_moving>>
+      name: Bureau Persoon 1
+      presets:
+      - label: Sit - J
+        target: 85
+      - label: Stand - J
+        target: 127
+      - label: Sit - L
+        target: 71
+      type: custom:linak-desk-card
+  column_span: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4
