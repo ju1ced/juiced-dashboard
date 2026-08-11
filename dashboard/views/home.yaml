@@ -22,7 +22,7 @@ sections:
     - type: horizontal-stack
       cards:
       - type: weather-forecast
-        entity: <<home.tomorrow_io_joost_leen_adriaan_s_home_daily>>
+        entity: <<home.tomorrow_io_household_home_daily>>
         forecast_type: daily
     - type: conditional
       conditions:
@@ -137,7 +137,7 @@ sections:
       cards:
       - type: custom:button-card
         name: ' '
-        entity: <<home.joost_billiet>>
+        entity: <<home.person_1>>
         show_icon: false
         tap_action:
           action: navigate
@@ -146,7 +146,7 @@ sections:
           n:
             card:
               type: custom:mushroom-person-card
-              entity: <<home.joost_billiet>>
+              entity: <<home.person_1>>
               use_entity_picture: true
               hide_name: true
               layout: vertical
@@ -167,13 +167,13 @@ sections:
                   {% else %} #6f6f6f
 
                   {% endif %}'
-                entity: <<home.oneplus_joost_is_charging>>
+                entity: <<home.oneplus_person_1_is_charging>>
                 icon: mdi:power-plug
                 tap_action:
                   action: more-info
               - type: template
-                entity: <<home.oneplus_joost_battery_level>>
-                icon: '{% set bl = states(''<<home.oneplus_joost_battery_level>>'')
+                entity: <<home.oneplus_person_1_battery_level>>
+                icon: '{% set bl = states(''<<home.oneplus_person_1_battery_level>>'')
                   | int(0) %}
 
                   {% if bl < 10 %} mdi:battery-outline
@@ -203,7 +203,7 @@ sections:
                   {% endif %}
 
                   '
-                icon_color: '{% set bl = states(''<<home.oneplus_joost_battery_level>>'')
+                icon_color: '{% set bl = states(''<<home.oneplus_person_1_battery_level>>'')
                   | int(0) %}
 
                   {% if bl < 30 %} red
@@ -218,7 +218,7 @@ sections:
                 tap_action:
                   action: more-info
               - type: template
-                icon_color: '{% set state=states(''<<home.oneplus_watch_2_joost_battery_state>>'')
+                icon_color: '{% set state=states(''<<home.oneplus_watch_2_person_1_battery_state>>'')
                   %}
 
                   {% if state==''charging'' %} green
@@ -226,13 +226,13 @@ sections:
                   {% else %} #6f6f6f
 
                   {% endif %}'
-                entity: <<home.oneplus_watch_2_joost_battery_state>>
+                entity: <<home.oneplus_watch_2_person_1_battery_state>>
                 icon: mdi:watch
                 tap_action:
                   action: more-info
               - type: template
-                entity: <<home.oneplus_watch_2_joost_battery_level>>
-                icon: '{% set bl = states(''<<home.oneplus_watch_2_joost_battery_level>>'')
+                entity: <<home.oneplus_watch_2_person_1_battery_level>>
+                icon: '{% set bl = states(''<<home.oneplus_watch_2_person_1_battery_level>>'')
                   | int(0) %}
 
                   {% if bl < 10 %} mdi:battery-outline
@@ -262,7 +262,7 @@ sections:
                   {% endif %}
 
                   '
-                icon_color: '{% set bl = states(''<<home.oneplus_watch_2_joost_battery_level>>'')
+                icon_color: '{% set bl = states(''<<home.oneplus_watch_2_person_1_battery_level>>'')
                   | int(0) %}
 
                   {% if bl < 30 %} red
@@ -305,7 +305,7 @@ sections:
           - padding: 0px 0px 5px 0px
       - type: custom:button-card
         name: ' '
-        entity: <<home.leen_putman>>
+        entity: <<home.person_2>>
         show_icon: false
         tap_action:
           action: navigate
@@ -315,7 +315,7 @@ sections:
             card:
               type: custom:mushroom-person-card
               alignment: middle
-              entity: <<home.leen_putman>>
+              entity: <<home.person_2>>
               use_entity_picture: true
               hide_name: true
               layout: vertical
@@ -328,17 +328,17 @@ sections:
               alignment: middle
               chips:
               - type: template
-                icon_color: "          {% set state=states('<<home.iphone_van_leen_battery_state>>')\
+                icon_color: "          {% set state=states('<<home.iphone_van_person_2_battery_state>>')\
                   \ %}\n          {% if state=='on' %}\n          green\n        \
                   \  {% elif state=='off' %}\n          #6f6f6f\n         {% endif\
                   \ %}"
-                entity: <<home.iphone_van_leen_battery_state>>
+                entity: <<home.iphone_van_person_2_battery_state>>
                 icon: mdi:power-plug
                 tap_action:
                   action: more-info
               - type: template
-                entity: <<home.iphone_van_leen_battery_level>>
-                icon: "          {% set bl = states('<<home.iphone_van_leen_battery_level>>')\
+                entity: <<home.iphone_van_person_2_battery_level>>
+                icon: "          {% set bl = states('<<home.iphone_van_person_2_battery_level>>')\
                   \ | int(0) %}\n          {% if bl < 10 %} mdi:battery-outline\n\
                   \          {% elif bl < 20 %} mdi:battery-10\n          {% elif\
                   \ bl < 30 %} mdi:battery-20\n          {% elif bl < 40 %} mdi:battery-30\n\
@@ -348,7 +348,7 @@ sections:
                   \ bl < 90 %} mdi:battery-80\n          {% elif bl < 100 %} mdi:battery-90\n\
                   \          {% elif bl == 100 %} mdi:battery\n          {% else %}\
                   \ mdi:battery-unknown\n          {% endif %}\n"
-                icon_color: "          {% set bl = states('<<home.iphone_van_leen_battery_level>>')\
+                icon_color: "          {% set bl = states('<<home.iphone_van_person_2_battery_level>>')\
                   \ | int(0) %}\n          {% if bl < 10 %} red\n          {% elif\
                   \ bl < 20 %} red\n          {% elif bl < 30 %} red\n          {%\
                   \ elif bl < 40 %} orange\n          {% elif bl < 50 %} orange\n\
@@ -2764,7 +2764,7 @@ sections:
                   action: call-service
                   service: cover.set_cover_position
                   service_data:
-                    entity_id: <<home.joost_s_desk>>
+                    entity_id: <<home.person_1_s_desk>>
                     position: 35
                 card_mod:
                   style: "ha-card {\n  /* Set hover and active effects */\n  --chip-box-shadow:\
@@ -2779,7 +2779,7 @@ sections:
                   action: call-service
                   service: cover.set_cover_position
                   service_data:
-                    entity_id: <<home.joost_s_desk>>
+                    entity_id: <<home.person_1_s_desk>>
                     position: 100
                 card_mod:
                   style: "ha-card {\n  /* Set hover and active effects */\n  --chip-box-shadow:\
@@ -2794,7 +2794,7 @@ sections:
                   action: call-service
                   service: cover.set_cover_position
                   service_data:
-                    entity_id: <<home.joost_s_desk>>
+                    entity_id: <<home.person_1_s_desk>>
                     position: 14
                 card_mod:
                   style: "ha-card {\n  /* Set hover and active effects */\n  --chip-box-shadow:\
@@ -3102,11 +3102,11 @@ sections:
               - type: template
                 tap_action:
                   action: toggle
-                entity: <<home.smart_plug_nachtlampje_leen>>
+                entity: <<home.smart_plug_nachtlampje_person_2>>
                 icon: hue:go-portable-table-alt
                 card_mod:
                   style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                    \ 0.8)' if is_state('<<home.smart_plug_nachtlampje_leen>>', 'on')\
+                    \ 0.8)' if is_state('<<home.smart_plug_nachtlampje_person_2>>', 'on')\
                     \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                     \  border-radius: 100px!important;\n}\n"
               - type: template
@@ -3307,8 +3307,8 @@ sections:
           - cursor: initial
           - padding: 0px 0px 5px 0px
       - type: custom:button-card
-        name: Kamer Adriaan
-        entity: <<home.ht_kamer_adriaan_temperatuur>>
+        name: Kinderkamer
+        entity: <<home.ht_kamer_kind_temperatuur>>
         icon: mdi:bed
         show_icon: false
         tap_action:
@@ -3321,17 +3321,17 @@ sections:
               alignment: center
               chips:
               - type: entity
-                entity: <<home.ht_kamer_adriaan_temperatuur>>
+                entity: <<home.ht_kamer_kind_temperatuur>>
                 card_mod:
                   style: "ha-card {\n--chip-background: transparent;\npadding: 0px;\n\
                     border: 0px;                   \n}\n"
               - type: entity
-                entity: <<home.ht_kamer_adriaan_luchtvochtigheid>>
+                entity: <<home.ht_kamer_kind_luchtvochtigheid>>
                 card_mod:
                   style: "ha-card {\n--chip-background: transparent;\npadding: 0px;\n\
                     border: 0px;                   \n}\n"
               - type: entity
-                entity: <<home.ht_kamer_adriaan_kooldioxide>>
+                entity: <<home.ht_kamer_kind_kooldioxide>>
                 card_mod:
                   style: "ha-card {\n--chip-background: transparent;\npadding: 0px;\n\
                     border: 0px;                   \n}\n"
@@ -3343,11 +3343,11 @@ sections:
               - type: template
                 tap_action:
                   action: toggle
-                entity: <<home.hanglamp_adriaan>>
+                entity: <<home.hanglamp_kind>>
                 icon: bha:ceiling-lamp-plafond
                 card_mod:
                   style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                    \ 0.8)' if is_state('<<home.hanglamp_adriaan>>', 'on') else 'var(--main-icon-background-color)'\
+                    \ 0.8)' if is_state('<<home.hanglamp_kind>>', 'on') else 'var(--main-icon-background-color)'\
                     \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                     }\n"
               - type: template
@@ -3371,83 +3371,83 @@ sections:
                     }   \nha-card:hover {\n  background-color: rgba(67, 138, 94, 0.7)\
                     \ !important;\n}\n"
               - type: template
-                entity: <<home.daikin_kamer_adriaan_room_temperature>>
+                entity: <<home.daikin_kamer_kind_room_temperature>>
                 icon: mdi:air-conditioner
                 tap_action:
                   action: more-info
                 card_mod:
-                  style: "ha-card {\n  --chip-background: \n    {% if is_state('<<home.daikin_kamer_adriaan_room_temperature>>',\
+                  style: "ha-card {\n  --chip-background: \n    {% if is_state('<<home.daikin_kamer_kind_room_temperature>>',\
                     \ 'cool') %}\n      rgba(0, 121, 191, 1); /* Blue for cooling\
-                    \ */\n    {% elif is_state('<<home.daikin_kamer_adriaan_room_temperature>>',\
+                    \ */\n    {% elif is_state('<<home.daikin_kamer_kind_room_temperature>>',\
                     \ 'heat') %}\n      rgba(236, 142, 0, 1); /* Orange for heating\
-                    \ */\n    {% elif is_state('<<home.daikin_kamer_adriaan_room_temperature>>',\
+                    \ */\n    {% elif is_state('<<home.daikin_kamer_kind_room_temperature>>',\
                     \ 'heat') %}\n      rgba(246, 238, 0, 1); /* yellow for auto */\n\
-                    \    {% elif is_state('<<home.daikin_kamer_adriaan_room_temperature>>',\
+                    \    {% elif is_state('<<home.daikin_kamer_kind_room_temperature>>',\
                     \ 'heat') %}\n      rgba(102, 0, 204, 1); /* purple for dry */\n\
-                    \    {% elif is_state('<<home.daikin_kamer_adriaan_room_temperature>>',\
+                    \    {% elif is_state('<<home.daikin_kamer_kind_room_temperature>>',\
                     \ 'heat') %}\n      rgba(0, 204, 204, 1); /* teal for fan */\n\
                     \    {% else %}\n      var(--main-icon-background-color); /* Default\
                     \ */\n    {% endif %};\n  padding: 1px!important;\n  border-radius:\
                     \ 100px!important;\n}\nha-card:hover {\n  background-color: rgba(67,\
                     \ 138, 94, 0.7) !important;\n}\n"
               - type: template
-                entity: <<home.kamer_adriaan_beweging>>
+                entity: <<home.kamer_kind_beweging>>
                 tap_action:
                   action: more-info
-                icon: "{% if is_state('<<home.kamer_adriaan_beweging>>', 'on') %}\n\
+                icon: "{% if is_state('<<home.kamer_kind_beweging>>', 'on') %}\n\
                   \  mdi:motion-sensor\n{% else %}\n  mdi:motion-sensor-off\n{% endif\
                   \ %}\n"
                 card_mod:
                   style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94, 0.7)'\
-                    \ if is_state('<<home.kamer_adriaan_beweging>>', 'off') else 'rgba(230,\
+                    \ if is_state('<<home.kamer_kind_beweging>>', 'off') else 'rgba(230,\
                     \ 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n  border-radius:\
                     \ 100px!important;\n}\n"
               - type: entity
-                entity: <<home.raamsensor_kamer_adriaan_raam>>
+                entity: <<home.raamsensor_kamer_kind_raam>>
                 content_info: none
                 card_mod:
                   style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94, 0.7)'\
-                    \ if is_state('<<home.raamsensor_kamer_adriaan_raam>>', 'off')\
+                    \ if is_state('<<home.raamsensor_kamer_kind_raam>>', 'off')\
                     \ else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\
                     \  padding: 1px!important;\n  border-radius: 100px!important;\n\
                     }\n"
               - type: template
-                entity: <<home.rookmelder_kamer_adriaan_rook>>
+                entity: <<home.rookmelder_kamer_kind_rook>>
                 tap_action:
                   action: navigate
                   navigation_path: house
-                icon: "{% if is_state('<<home.rookmelder_kamer_adriaan_rook>>', 'on')\
+                icon: "{% if is_state('<<home.rookmelder_kamer_kind_rook>>', 'on')\
                   \ %}\n  mdi:smoke-detector-alert\n{% else %}\n  mdi:smoke-detector\n\
                   {% endif %}\n"
                 card_mod:
                   style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94, 0.7)'\
-                    \ if is_state('<<home.rookmelder_kamer_adriaan_rook>>', 'off')\
+                    \ if is_state('<<home.rookmelder_kamer_kind_rook>>', 'off')\
                     \ else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\
                     \n  border-radius: 100px!important;\n}\n"
               - type: template
-                entity: <<home.rolluik_kamer_adriaan>>
-                icon: "{% if is_state('<<home.rolluik_kamer_adriaan>>', 'closed')\
-                  \ %}\n  mdi:window-shutter\n{% elif is_state('<<home.rolluik_kamer_adriaan>>',\
-                  \ 'open') %}\n  mdi:window-shutter-open\n{% elif is_state('<<home.rolluik_kamer_adriaan>>',\
-                  \ 'opening') %}\n  mdi:window-shutter-alert\n{% elif is_state('<<home.rolluik_kamer_adriaan>>',\
+                entity: <<home.rolluik_kamer_kind>>
+                icon: "{% if is_state('<<home.rolluik_kamer_kind>>', 'closed')\
+                  \ %}\n  mdi:window-shutter\n{% elif is_state('<<home.rolluik_kamer_kind>>',\
+                  \ 'open') %}\n  mdi:window-shutter-open\n{% elif is_state('<<home.rolluik_kamer_kind>>',\
+                  \ 'opening') %}\n  mdi:window-shutter-alert\n{% elif is_state('<<home.rolluik_kamer_kind>>',\
                   \ 'closing') %}\n  mdi:window-shutter-alert\n{% else %}\n  mdi:window-shutter\n\
                   {% endif %}\n"
                 tap_action:
                   action: toggle
-                content: "{% if state_attr('<<home.rolluik_kamer_adriaan>>', 'position')\
-                  \ is not none %}\n  {{ state_attr('<<home.rolluik_kamer_adriaan>>',\
-                  \ 'position') }}%\n{% elif state_attr('<<home.rolluik_kamer_adriaan>>',\
-                  \ 'current_position') is not none %}\n  {{ state_attr('<<home.rolluik_kamer_adriaan>>',\
+                content: "{% if state_attr('<<home.rolluik_kamer_kind>>', 'position')\
+                  \ is not none %}\n  {{ state_attr('<<home.rolluik_kamer_kind>>',\
+                  \ 'position') }}%\n{% elif state_attr('<<home.rolluik_kamer_kind>>',\
+                  \ 'current_position') is not none %}\n  {{ state_attr('<<home.rolluik_kamer_kind>>',\
                   \ 'current_position') }}%\n{% else %}\n  Position not available\n\
                   {% endif %}\n"
                 card_mod:
                   style: "ha-card {\n\n  /* Set hover and active effects */\n  --chip-box-shadow:\
                     \ 0px 0px 5px 0px rgba(0, 0, 0, 0.2);\n  --chip-background: {{\
-                    \ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_adriaan>>',\
+                    \ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_kind>>',\
                     \ 'closed') else 'rgba(230, 118, 118, 0.7)' }};;\n}\nha-card:active\
-                    \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_adriaan>>',\
+                    \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_kind>>',\
                     \ 'closed') else 'rgba(230, 118, 118, 0.7)' }};;\n}\nha-card:hover\
-                    \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_adriaan>>',\
+                    \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.rolluik_kamer_kind>>',\
                     \ 'open') else 'rgba(230, 118, 118, 0.7)' }};;\n}\n"
         styles:
           grid:
@@ -3883,7 +3883,7 @@ sections:
           cameras:
           - camera_entity: <<home.deurbel_high_resolution_channel>>
           - camera_entity: <<home.garage_high_resolution_channel>>
-          - camera_entity: <<home.kamer_adriaan_high_resolution_channel>>
+          - camera_entity: <<home.kamer_kind_high_resolution_channel>>
           - camera_entity: <<home.serverroom_high_resolution_channel>>
           - camera_entity: <<home.tuin_high_resolution_channel>>
           - camera_entity: <<home.tuinhuis_high_resolution_channel>>
@@ -4144,7 +4144,7 @@ sections:
         - type: conditional
           conditions:
           - condition: numeric_state
-            entity: <<home.joost_billiet_load_joost_billiet_1>>
+            entity: <<home.person_1_load_person_1_1>>
             above: 5
           card:
             type: gauge
@@ -4154,12 +4154,12 @@ sections:
               green: 0
               yellow: 3500
               red: 5000
-            entity: <<home.joost_billiet_load_joost_billiet_1>>
+            entity: <<home.person_1_load_person_1_1>>
             max: 7400
         - type: conditional
           conditions:
           - condition: numeric_state
-            entity: <<home.dekra_joost_billiet_load_joost_billiet_1>>
+            entity: <<home.dekra_person_1_load_person_1_1>>
             above: 5
           card:
             type: gauge

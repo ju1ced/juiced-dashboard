@@ -87,16 +87,16 @@ inkomhal:
   bthome_batterij: sensor.example_inkomhal_bthome_batterij
   deurbel_camera: camera.example_inkomhal_deurbel
 home:
-  tomorrow_io_joost_leen_adriaan_s_home_daily: weather.example_home_tomorrow_io_joost_leen_adriaan_s_home_daily
-  joost_billiet: person.example_home_joost_billiet
+  tomorrow_io_household_home_daily: weather.example_home_tomorrow_io_household_home_daily
+  person_1: person.example_home_person_1
   in2023_is_charging: binary_sensor.example_home_in2023_is_charging
-  oneplus_joost_is_charging: binary_sensor.example_home_oneplus_joost_is_charging
-  oneplus_joost_battery_level: sensor.example_home_oneplus_joost_battery_level
-  oneplus_watch_2_joost_battery_state: sensor.example_home_oneplus_watch_2_joost_battery_state
-  oneplus_watch_2_joost_battery_level: sensor.example_home_oneplus_watch_2_joost_battery_level
-  leen_putman: person.example_home_leen_putman
-  iphone_van_leen_battery_state: sensor.example_home_iphone_van_leen_battery_state
-  iphone_van_leen_battery_level: sensor.example_home_iphone_van_leen_battery_level
+  oneplus_person_1_is_charging: binary_sensor.example_home_oneplus_person_1_is_charging
+  oneplus_person_1_battery_level: sensor.example_home_oneplus_person_1_battery_level
+  oneplus_watch_2_person_1_battery_state: sensor.example_home_oneplus_watch_2_person_1_battery_state
+  oneplus_watch_2_person_1_battery_level: sensor.example_home_oneplus_watch_2_person_1_battery_level
+  person_2: person.example_home_person_2
+  iphone_van_person_2_battery_state: sensor.example_home_iphone_van_person_2_battery_state
+  iphone_van_person_2_battery_level: sensor.example_home_iphone_van_person_2_battery_level
   restafval_timestamp: sensor.example_home_restafval_timestamp
   pmd_timestamp: sensor.example_home_pmd_timestamp
   karton_timestamp: sensor.example_home_karton_timestamp
@@ -225,7 +225,7 @@ home:
   daikin_bureau_room_temperature: climate.example_home_daikin_bureau_room_temperature
   luifel_bureau_luifel_bureau: cover.example_home_luifel_bureau_luifel_bureau
   schuifraam_bureau: binary_sensor.example_home_schuifraam_bureau
-  joost_s_desk: cover.example_home_joost_s_desk
+  person_1_s_desk: cover.example_home_person_1_s_desk
   desk_height_2: sensor.example_home_desk_height_2
   tv_backlight_3_lite_dreamview: switch.example_home_tv_backlight_3_lite_dreamview
   rookmelder_bureau_rook: binary_sensor.example_home_rookmelder_bureau_rook
@@ -245,7 +245,7 @@ home:
   ht_slaapkamer_kooldioxide: sensor.example_home_ht_slaapkamer_kooldioxide
   schakelaar_slaapkamer_l2: light.example_home_schakelaar_slaapkamer_l2
   nachtlampje_2: light.example_home_nachtlampje_2
-  smart_plug_nachtlampje_leen: light.example_home_smart_plug_nachtlampje_leen
+  smart_plug_nachtlampje_person_2: light.example_home_smart_plug_nachtlampje_person_2
   dressing: light.example_home_dressing
   daikin_slaapkamer_room_temperature: climate.example_home_daikin_slaapkamer_room_temperature
   bewegingsmelder_slaapkamer_beweging: binary_sensor.example_home_bewegingsmelder_slaapkamer_beweging
@@ -254,17 +254,17 @@ home:
   rookmelder_slaapkamer_rook: binary_sensor.example_home_rookmelder_slaapkamer_rook
   rolluik_slaapkamer_links: cover.example_home_rolluik_slaapkamer_links
   rolluik_slaapkamer_rechts: cover.example_home_rolluik_slaapkamer_rechts
-  ht_kamer_adriaan_temperatuur: sensor.example_home_ht_kamer_adriaan_temperatuur
-  ht_kamer_adriaan_luchtvochtigheid: sensor.example_home_ht_kamer_adriaan_luchtvochtigheid
-  ht_kamer_adriaan_kooldioxide: sensor.example_home_ht_kamer_adriaan_kooldioxide
-  hanglamp_adriaan: light.example_home_hanglamp_adriaan
+  ht_kamer_kind_temperatuur: sensor.example_home_ht_kamer_kind_temperatuur
+  ht_kamer_kind_luchtvochtigheid: sensor.example_home_ht_kamer_kind_luchtvochtigheid
+  ht_kamer_kind_kooldioxide: sensor.example_home_ht_kamer_kind_kooldioxide
+  hanglamp_kind: light.example_home_hanglamp_kind
   staanlamp_kinderkamer: light.example_home_staanlamp_kinderkamer
   g3_instant_high: camera.example_home_g3_instant_high
-  daikin_kamer_adriaan_room_temperature: climate.example_home_daikin_kamer_adriaan_room_temperature
-  kamer_adriaan_beweging: binary_sensor.example_home_kamer_adriaan_beweging
-  raamsensor_kamer_adriaan_raam: binary_sensor.example_home_raamsensor_kamer_adriaan_raam
-  rookmelder_kamer_adriaan_rook: binary_sensor.example_home_rookmelder_kamer_adriaan_rook
-  rolluik_kamer_adriaan: cover.example_home_rolluik_kamer_adriaan
+  daikin_kamer_kind_room_temperature: climate.example_home_daikin_kamer_kind_room_temperature
+  kamer_kind_beweging: binary_sensor.example_home_kamer_kind_beweging
+  raamsensor_kamer_kind_raam: binary_sensor.example_home_raamsensor_kamer_kind_raam
+  rookmelder_kamer_kind_rook: binary_sensor.example_home_rookmelder_kamer_kind_rook
+  rolluik_kamer_kind: cover.example_home_rolluik_kamer_kind
   ht_badkamer_temperatuur: sensor.example_home_ht_badkamer_temperatuur
   ht_badkamer_luchtvochtigheid: sensor.example_home_ht_badkamer_luchtvochtigheid
   raamsensor_badkamer_illuminance: sensor.example_home_raamsensor_badkamer_illuminance
@@ -284,7 +284,7 @@ home:
   rookmelder_logeerkamer_rook: binary_sensor.example_home_rookmelder_logeerkamer_rook
   rolluik_logeerkamer: cover.example_home_rolluik_logeerkamer
   garage_high_resolution_channel: camera.example_home_garage_high_resolution_channel
-  kamer_adriaan_high_resolution_channel: camera.example_home_kamer_adriaan_high_resolution_channel
+  kamer_kind_high_resolution_channel: camera.example_home_kamer_kind_high_resolution_channel
   serverroom_high_resolution_channel: camera.example_home_serverroom_high_resolution_channel
   tuin_privacymodus: switch.example_home_tuin_privacymodus
   tuinhuis_privacymodus: switch.example_home_tuinhuis_privacymodus
@@ -297,8 +297,8 @@ home:
   battery_soc_total: sensor.example_home_battery_soc_total
   battery_power_charge_total: sensor.example_home_battery_power_charge_total
   battery_power_discharge_total: sensor.example_home_battery_power_discharge_total
-  joost_billiet_load_joost_billiet_1: sensor.example_home_joost_billiet_load_joost_billiet_1
-  dekra_joost_billiet_load_joost_billiet_1: sensor.example_home_dekra_joost_billiet_load_joost_billiet_1
+  person_1_load_person_1_1: sensor.example_home_person_1_load_person_1_1
+  dekra_person_1_load_person_1_1: sensor.example_home_dekra_person_1_load_person_1_1
   oprit_nebula_ev_battery_level: sensor.example_home_oprit_nebula_ev_battery_level
   p1_meter_spanning_fase_1: sensor.example_home_p1_meter_spanning_fase_1
   p1_meter_spanning_fase_2: sensor.example_home_p1_meter_spanning_fase_2
@@ -323,7 +323,7 @@ logeerkamer:
   raamsensor_logeerkamer_batterij: sensor.example_raamsensor_logeerkamer_batterij
 slaapkamer:
   nachtlampje_2: light.example_nachtlampje_2
-  smart_plug_nachtlampje_leen: light.example_smart_plug_nachtlampje_leen
+  smart_plug_nachtlampje_person_2: light.example_smart_plug_nachtlampje_person_2
   dressing: light.example_dressing
   daikin_slaapkamer_room_temperature: climate.example_daikin_slaapkamer_room_temperature
   ht_slaapkamer_temperatuur: sensor.example_ht_slaapkamer_temperatuur
