@@ -1,0 +1,774 @@
+# serverroom view — migrated to committed YAML (PR-18).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: serverroom` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: serverroom
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<serverroom.licht_serverroom>>
+        icon: mdi:ceiling-light
+        fill_container: true
+      - type: custom:mushroom-light-card
+        entity: <<serverroom.ledstrip_serverroom_beneden>>
+        icon: mdi:led-strip
+        use_light_color: true
+        show_color_control: true
+        show_brightness_control: true
+        show_color_temp_control: true
+      - type: custom:mushroom-light-card
+        entity: <<serverroom.ledstrip_serverroom_1>>
+        icon: mdi:led-strip
+        use_light_color: true
+        show_color_control: true
+        show_brightness_control: true
+        show_color_temp_control: true
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<serverroom.serverroom_beweging>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen beweging
+                  'on': beweging gedetecteerd
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<serverroom.multisensor_serverroom_new_temperature>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<serverroom.multisensor_serverroom_new_humidity>>
+                layout: icon|state|name
+                name: '%'
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<serverroom.multisensor_serverroom_new_battery>>
+              name: Multisensor
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          columns: 2
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - square: false
+      columns: 1
+      type: grid
+      cards:
+      - show_state: true
+        show_name: true
+        camera_view: auto
+        fit_mode: cover
+        type: picture-entity
+        image:
+          media_content_id: https://demo.home-assistant.io/stub_config/bedroom.png
+        entity: <<serverroom.serverroom_high_resolution_channel>>
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.multisensor_serverroom_new_temperature>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.multisensor_serverroom_new_humidity>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<serverroom.multisensor_serverroom_new_temperature>>
+          name: Temperatuur
+          color: '#00bb33'
+        - entity: <<serverroom.multisensor_serverroom_new_humidity>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          y_axis: secondary
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-chips-card
+        chips:
+        - type: template
+          icon: mdi:information
+          icon_color: blue
+          content: '
+
+            {{states(''<<serverroom.anycubic_kobra_s1_current_status>>'')}} / {{states(''<<serverroom.anycubic_kobra_s1_job_state>>'')}}'
+          tap_action:
+            action: more-info
+          entity: <<serverroom.anycubic_kobra_s1_current_status>>
+        - type: entity
+          entity: <<serverroom.anycubic_kobra_s1_vermogen>>
+          icon_color: blue
+          tap_action:
+            action: more-info
+        - type: template
+          tap_action:
+            action: more-info
+          entity: <<serverroom.anycubic_kobra_s1_hotbed_temperature>>
+          icon: mdi:train-car-flatbed
+          icon_color: blue
+          content: '
+
+            {{states(''<<serverroom.anycubic_kobra_s1_hotbed_temperature>>'')}}° / {{states(''<<serverroom.anycubic_kobra_s1_target_hotbed_temperature>>'')}}°'
+        - type: template
+          tap_action:
+            action: more-info
+          entity: <<serverroom.anycubic_kobra_s1_nozzle_temperature>>
+          icon: mdi:printer-3d-nozzle-heat
+          icon_color: blue
+          content: '
+
+            {{states(''<<serverroom.anycubic_kobra_s1_nozzle_temperature>>'')}}° / {{states(''<<serverroom.anycubic_kobra_s1_target_nozzle_temperature>>'')}}°'
+    - type: custom:anycubic-card
+      printer_id: 1a3fcce1a5e381e258925e19cbf667f5
+      monitoredStats:
+      - Status
+      - ETA
+      - Elapsed
+      - Remaining
+      slotColors: []
+      powerEntityId: <<serverroom.anycubic_kobra_s1>>
+      cameraEntityId: <<serverroom.kobra_s1_webcam>>
+      alwaysShow: true
+      showSettingsButton: true
+      lightEntityId: <<serverroom.ledstrip_serverroom_beneden>>
+    - type: vertical-stack
+      cards:
+      - type: markdown
+        content: <ha-icon icon="mdi:file"></ha-icon> {{states('<<serverroom.anycubic_kobra_s1_job_name>>')}}
+      - square: false
+        type: grid
+        cards:
+        - type: custom:mushroom-template-card
+          primary: '{{states(''<<serverroom.anycubic_kobra_s1_job_current_layer>>'')}}/{{states(''<<serverroom.anycubic_kobra_s1_job_total_layers>>'')}}'
+          icon: mdi:layers
+          color: blue
+          features_position: bottom
+        - type: tile
+          entity: <<serverroom.anycubic_kobra_s1_job_progress>>
+          features_position: bottom
+          vertical: false
+          icon: mdi:progress-download
+          color: blue
+          name: Progress
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.anycubic_kobra_s1_ace_current_temperature>>
+          primary_info: state
+          secondary_info: name
+          icon: kuf:temp_temperature
+          name: ACE temp
+        - type: custom:mushroom-template-card
+          icon: mdi:clock
+          primary: "{% set eta_time = as_timestamp(states('<<serverroom.anycubic_kobra_s1_job_eta>>'))\
+            \ %}\n{% if eta_time | timestamp_custom('%Y-%m-%d') == now().strftime('%Y-%m-%d') %}\n  {{eta_time\
+            \ | timestamp_custom('%H:%M')}}\n{% else %}\n  {{eta_time | timestamp_custom('%d/%m %H:%M')}}\n\
+            {% endif %}"
+          color: blue
+          features_position: bottom
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_kobra_s1_temperatuur>>
+          name: Kobra S1 Temp
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_kobra_s1_luchtvochtigheid>>
+          icon_color: blue
+          name: 'Kobra S1 Humidity '
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_ace_pro_bottom_temperatuur>>
+          name: ACE Pro Bottom Temp
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_ace_pro_bottom_luchtvochtigheid>>
+          icon_color: blue
+          name: 'ACE Pro Bottom Humidity '
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_ace_pro_top_temperatuur>>
+          name: ACE Pro Top Temp
+        - type: custom:mushroom-entity-card
+          entity: <<serverroom.ht_ace_pro_top_luchtvochtigheid>>
+          icon_color: blue
+          name: 'ACE Pro Top Humidity '
+        columns: 2
+      - type: picture
+        image:
+          media_content_id: https://demo.home-assistant.io/stub_config/t-shirt-promo.png
+        image_entity: <<serverroom.anycubic_kobra_s1_job_preview>>
+  - type: vertical-stack
+    cards:
+    - card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+      entities:
+      - card:
+          entity: <<serverroom.smart_plug_serverroom>>
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - entity: <<serverroom.smart_plug_serverroom_power>>
+        icon: mdi:counter
+        name: Huidig verbruik
+      - entity: <<serverroom.ups_apc_daily>>
+        name: Dagelijks verbruik
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Meer informatie
+        entities:
+        - entity: <<serverroom.ups_apc_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<serverroom.ups_apc_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<serverroom.smart_plug_serverroom_energy>>
+          icon: mdi:counter
+          name: Totaal verbruik
+        - aggregate_func: max
+          entities:
+          - <<serverroom.ups_apc_daily>>
+          group_by: date
+          hours_to_show: 168
+          show:
+            graph: bar
+          type: custom:mini-graph-card
+          name: ' '
+        - entity: <<serverroom.ups_batterijlading>>
+        - entity: <<serverroom.ups_werklast>>
+        - entity: <<serverroom.ups_status>>
+        - entity: <<serverroom.ups_nominaal_werkelijk_vermogen>>
+        - entity: <<serverroom.ups_low_battery_setpoint>>
+        - entity: <<serverroom.ups_batterijduur>>
+      state_color: true
+      type: entities
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.smart_plug_ups_bluetti>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.smart_plug_ups_bluetti_power>>
+          icon: mdi:counter
+        - entity: <<serverroom.ups_bluetti_daily>>
+          icon: mdi:counter
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.ups_bluetti_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.ups_bluetti_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.smart_plug_ups_bluetti_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.ups_bluetti_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.anycubic_kobra_s1>>
+            state_color: true
+            icon: mdi:printer-3d
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.anycubic_kobra_s1_vermogen>>
+          icon: mdi:counter
+        - entity: <<serverroom.anycubic_kobra_s1_daily>>
+          icon: mdi:counter
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.anycubic_kobra_s1_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.anycubic_kobra_s1_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.anycubic_kobra_s1_totaal>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.anycubic_kobra_s1_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.ace_pro_bottom>>
+            name: Anycubic ACE Pro Bottom
+            state_color: true
+            icon: mdi:printer-3d
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.ace_pro_bottom_vermogen>>
+          name: vermogen
+          icon: mdi:counter
+        - entity: <<serverroom.ace_pro_bottom_daily>>
+          icon: mdi:counter
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.ace_pro_bottom_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.ace_pro_bottom_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.ace_pro_bottom_totaal>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.ace_pro_bottom_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.ace_pro_top>>
+            name: Anycubic ACE Pro Top
+            state_color: true
+            icon: mdi:printer-3d
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.ace_pro_top_vermogen>>
+          icon: mdi:counter
+        - entity: <<serverroom.ace_pro_top_daily>>
+          icon: mdi:counter
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.ace_pro_top_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.ace_pro_top_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.ace_pro_top_totaal>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.ace_pro_top_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.smart_plug_proxmox01>>
+            state_color: true
+          row: true
+          name: UPS P2
+          type: custom:restriction-card
+        - entity: <<serverroom.smart_plug_proxmox01_power>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.proxmox01_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.proxmox01_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.proxmox01_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.smart_plug_proxmox01_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.proxmox01_daily>>
+            group_by: date
+            hours_to_show: 168
+            name: ' '
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.smart_plug_proxmox02>>
+            state_color: true
+          row: true
+          name: UPS P2
+          type: custom:restriction-card
+        - entity: <<serverroom.smart_plug_proxmox02_power>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.proxmox02_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.proxmox02_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.proxmox02_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.smart_plug_proxmox02_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.proxmox02_daily>>
+            group_by: date
+            hours_to_show: 168
+            name: ' '
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.smart_plug_truenas>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.smart_plug_truenas_power>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.truenas_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<serverroom.truenas_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<serverroom.truenas_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<serverroom.smart_plug_truenas_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<serverroom.truenas_daily>>
+            group_by: date
+            hours_to_show: 168
+            name: ' '
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.canon_printer>>
+            icon: mdi:printer
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.canon_printer_vermogen>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.canon_printer_energie>>
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.filament_dryer>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.filament_dryer_vermogen>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.filament_dryer_energie>>
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.soldeerbout>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<serverroom.soldeerbout_vermogen>>
+          icon: mdi:counter
+          name: huidig verbruik
+        - entity: <<serverroom.soldeerbout_energie>>
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<serverroom.led_strip_boven>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - card:
+            entity: <<serverroom.led_strip_onder>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+  - type: vertical-stack
+    cards:
+    - type: custom:expander-card
+      title-card-clickable: true
+      expanded: true
+      min-width-expanded: 1024
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: PLA / PLA+
+      title-card:
+        name: PLA / PLA+
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:auto-entities
+        filter:
+          include:
+          - integration: '*spoolman*'
+            attributes:
+              archived: false
+              filament_material: PLA
+            options:
+              type: custom:mushroom-template-card
+              vertical: false
+              icon_color: '#{{ state_attr(entity, ''filament_color_hex'') }}'
+              icon: mdi:printer-3d-nozzle
+              badge_icon: "{% if state_attr(entity, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(entity,\
+                \ 'klipper_active_spool') == true %}\n  mdi:check-circle\n{% endif %}\n"
+              badge_color: "{% if state_attr(entity, 'archived') == true %}\n  orange\n{% elif state_attr(entity,\
+                \ 'klipper_active_spool') == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+              primary: "{% set location = state_attr(entity, 'location') %}\n{% if location %}\n  {{ state_attr(entity,\
+                \ 'filament_name') }} ({{ location }})\n{% else %}\n  {{ state_attr(entity, 'filament_material')\
+                \ }} - {{ state_attr(entity, 'filament_name') }}\n{% endif %}\n"
+              secondary: '{{ (state_attr(entity, ''remaining_weight'') | float(0))  | round(2) }} g'
+              tap_action:
+                action: more-info
+        sort:
+          method: attribute
+          attribute: filament_name
+        card:
+          type: grid
+          columns: 2
+          square: false
+        card_param: cards
+    - type: custom:expander-card
+      title-card-clickable: true
+      expanded: false
+      min-width-expanded: 1024
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: PETG, ASA, TPU
+      title-card:
+        name: PETG, ASA, TPU
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:auto-entities
+        filter:
+          include:
+          - integration: '*spoolman*'
+            attributes:
+              archived: false
+            options:
+              type: custom:mushroom-template-card
+              vertical: false
+              icon_color: '#{{ state_attr(entity, ''filament_color_hex'') }}'
+              icon: mdi:printer-3d-nozzle
+              badge_icon: "{% if state_attr(entity, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(entity,\
+                \ 'klipper_active_spool') == true %}\n  mdi:check-circle\n{% endif %}\n"
+              badge_color: "{% if state_attr(entity, 'archived') == true %}\n  orange\n{% elif state_attr(entity,\
+                \ 'klipper_active_spool') == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+              primary: "{% set location = state_attr(entity, 'location') %}\n{% if location %}\n  {{ state_attr(entity,\
+                \ 'filament_name') }} ({{ location }})\n{% else %}\n  {{ state_attr(entity, 'filament_material')\
+                \ }} - {{ state_attr(entity, 'filament_name') }}\n{% endif %}\n"
+              secondary: '{{ (state_attr(entity, ''remaining_weight'') | float(0))  | round(2) }} g'
+              tap_action:
+                action: more-info
+          exclude:
+          - attributes:
+              filament_material: PLA
+        sort:
+          method: attribute
+          attribute: filament_material
+        card:
+          type: grid
+          columns: 2
+          square: false
+        card_param: cards
+  column_span: 5
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 5
+path: serverroom
