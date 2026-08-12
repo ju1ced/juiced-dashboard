@@ -20,3 +20,4 @@ views:
   - !include views/toilet.yaml
   - !include views/woonkamer.yaml
   - !include views/oprit.yaml
+  - !include views/keuken.yaml
