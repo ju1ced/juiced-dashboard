@@ -27,3 +27,4 @@ views:
   - !include views/net.yaml
   - !include views/valliant.yaml
   - !include views/hainfo.yaml
+  - !include views/water.yaml
