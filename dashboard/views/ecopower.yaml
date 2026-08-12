@@ -1,0 +1,296 @@
+# ecopower view — migrated to committed YAML (PR-26).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: ecopower` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+title: ecopower
+path: ecopower
+icon: ''
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+type: sections
+layout:
+  grid-template-columns: 25% 25% 25% 25%
+  grid-template-areas: '"col1 col2 col3 col4"
+
+    '
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - name: EcoPower Maandprijs Electriciteit
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: entities
+      entities:
+      - entity: <<ecopower.ecopower_energiekost_januari>>
+        name: Januari
+      - entity: <<ecopower.ecopower_energiekost_februari>>
+        name: Februari
+      - entity: <<ecopower.ecopower_energiekost_maart>>
+        name: Maart
+      - entity: <<ecopower.ecopower_energiekost_april>>
+        name: April
+      - entity: <<ecopower.ecopower_energiekost_mei>>
+        name: Mei
+      - entity: <<ecopower.ecopower_energiekost_juni>>
+        name: Juni
+      - entity: <<ecopower.ecopower_energiekost_juli>>
+        name: Juli
+      - entity: <<ecopower.ecopower_energiekost_augustus>>
+        name: Augustus
+      - entity: <<ecopower.ecopower_energiekost_september>>
+        name: September
+      - entity: <<ecopower.ecopower_energiekost_oktober>>
+        name: Oktober
+      - entity: <<ecopower.ecopower_energiekost_november>>
+        name: November
+      - entity: <<ecopower.ecopower_energiekost_december>>
+        name: December
+    - name: EcoPower Terugleververgoeding
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: entities
+      entities:
+      - entity: <<ecopower.ecopower_terugleververgoeding>>
+  - type: vertical-stack
+    cards:
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: back
+      - type: entity
+        entity: input_button.home
+        tap_action:
+          action: navigate
+          navigation_path: home
+        name: Home
+        icon: ''
+        content_info: name
+        use_entity_picture: true
+      - type: entity
+        entity: input_button.energy
+        tap_action:
+          action: navigate
+          navigation_path: energy
+        name: Energy
+        content_info: name
+      - type: entity
+        entity: input_button.dsmr
+        name: DSMR
+        tap_action:
+          action: navigate
+          navigation_path: dsmr
+        use_entity_picture: false
+        content_info: name
+    - name: EcoPower Gemiddelde Jaarprijs
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: entity
+      entity: <<ecopower.ecopower_gemiddelde_jaarprijs>>
+      state_color: false
+    - name: EcoPower Energiekosten
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: entity
+      entity: <<ecopower.nettarieven_gsc_wkk>>
+    - type: entity
+      entity: <<ecopower.ecopower_energiekost_algemeen>>
+    - type: entity
+      entity: <<ecopower.ecopower_totale_kost>>
+    - type: entity
+      entity: <<ecopower.ecopower_daily_cost_captar_7kw_databeheer>>
+    - name: EcoPower Nettarieven & kosten invul
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: entities
+      entities:
+      - entity: <<ecopower.nettarieven_gsc_wkk>>
+      - entity: <<ecopower.ecopower_energiekost_algemeen>>
+  - type: vertical-stack
+    cards:
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: back
+      - type: entity
+        entity: input_button.home
+        tap_action:
+          action: navigate
+          navigation_path: home
+        name: Home
+        icon: ''
+        content_info: name
+        use_entity_picture: true
+      - type: entity
+        entity: input_button.energy
+        tap_action:
+          action: navigate
+          navigation_path: energy
+        name: Energy
+        content_info: name
+      - type: entity
+        entity: input_button.dsmr
+        name: DSMR
+        tap_action:
+          action: navigate
+          navigation_path: dsmr
+        use_entity_picture: false
+        content_info: name
+    - name: EcoPower grafieken
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    - type: custom:apexcharts-card
+      apex_config:
+        chart:
+          height: 300px
+        xaxis:
+          labels:
+            format: MM
+            show: true
+            showAlways: true
+      experimental:
+        color_threshold: true
+      header:
+        show: true
+        title: Evolutie gemiddelde jaarprijs
+        show_states: true
+        colorize_states: true
+      graph_span: 1 year
+      span:
+        end: month
+      series:
+      - entity: <<ecopower.ecopower_gemiddelde_jaarprijs>>
+        float_precision: 4
+        type: column
+        group_by:
+          func: last
+          duration: 1month
+      - entity: <<ecopower.ecopower_terugleververgoeding>>
+        float_precision: 4
+        type: column
+        color: green
+        group_by:
+          func: last
+          duration: 1month
+      yaxis:
+      - min: 0
+        decimals: 2
+    - type: custom:bar-card
+      title: Piekvermogen per maand
+      height: 40px
+      columns: 1
+      positions:
+        name: outside
+        value: outside
+        indicator: 'off'
+      min: 0
+      max: 11
+      severity:
+      - color: '#43a047'
+        from: 0
+        to: 5.5
+      - color: '#fb8c00'
+        from: 5.5
+        to: 6.5
+      - color: '#e53935'
+        from: 6.5
+        to: 11
+      entities:
+      - entity: <<ecopower.gemiddelde_piekvermogen_12_maanden>>
+        name: ⌀ Gemiddelde 12 maanden
+        color: '#5c6bc0'
+      - entity: <<ecopower.p1_meter_piekverbruik_huidige_maand>>
+        name: → Live piek huidige maand
+        color: '#ff6f00'
+      - entity: <<ecopower.piekvermogen_januari>>
+        name: Januari 2026
+      - entity: <<ecopower.piekvermogen_februari>>
+        name: Februari 2026
+      - entity: <<ecopower.piekvermogen_maart>>
+        name: Maart 2026
+      - entity: <<ecopower.piekvermogen_april>>
+        name: April 2025
+      - entity: <<ecopower.piekvermogen_mei>>
+        name: Mei 2025
+      - entity: <<ecopower.piekvermogen_juni>>
+        name: Juni 2025
+      - entity: <<ecopower.piekvermogen_juli>>
+        name: Juli 2025
+      - entity: <<ecopower.piekvermogen_augustus>>
+        name: Augustus 2025
+      - entity: <<ecopower.piekvermogen_september>>
+        name: September 2025
+      - entity: <<ecopower.piekvermogen_oktober>>
+        name: Oktober 2025
+      - entity: <<ecopower.piekvermogen_november>>
+        name: November 2025
+      - entity: <<ecopower.piekvermogen_december>>
+        name: December 2025
+  column_span: 3
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 3
