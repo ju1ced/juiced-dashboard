@@ -1,0 +1,524 @@
+# anycubic view — migrated to committed YAML (PR-28).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: anycubic` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+type: sections
+max_columns: 4
+title: anycubic
+path: anycubic
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-chips-card
+        chips:
+        - type: template
+          icon: mdi:information
+          icon_color: blue
+          content: '
+
+            {{states(''<<anycubic.anycubic_kobra_s1_current_status>>'')}} / {{states(''<<anycubic.anycubic_kobra_s1_job_state>>'')}}'
+          tap_action:
+            action: more-info
+          entity: <<anycubic.anycubic_kobra_s1_current_status>>
+        - type: entity
+          entity: <<anycubic.anycubic_kobra_s1_vermogen>>
+          icon_color: blue
+          tap_action:
+            action: more-info
+        - type: template
+          tap_action:
+            action: more-info
+          entity: <<anycubic.anycubic_kobra_s1_hotbed_temperature>>
+          icon: mdi:train-car-flatbed
+          icon_color: blue
+          content: '
+
+            {{states(''<<anycubic.anycubic_kobra_s1_hotbed_temperature>>'')}}° / {{states(''<<anycubic.anycubic_kobra_s1_target_hotbed_temperature>>'')}}°'
+        - type: template
+          tap_action:
+            action: more-info
+          entity: <<anycubic.anycubic_kobra_s1_nozzle_temperature>>
+          icon: mdi:printer-3d-nozzle-heat
+          icon_color: blue
+          content: '
+
+            {{states(''<<anycubic.anycubic_kobra_s1_nozzle_temperature>>'')}}° / {{states(''<<anycubic.anycubic_kobra_s1_target_nozzle_temperature>>'')}}°'
+    - type: custom:anycubic-card
+      printer_id: 1a3fcce1a5e381e258925e19cbf667f5
+      alwaysShow: true
+      monitoredStats:
+      - Status
+      - ETA
+      - Elapsed
+      - Remaining
+      slotColors: []
+      showSettingsButton: true
+      scaleFactor: 0.75
+      powerEntityId: <<anycubic.anycubic_kobra_s1>>
+      lightEntityId: <<anycubic.kobra_s1_chamber_light>>
+      cameraEntityId: <<anycubic.kobra_s1_webcam>>
+    - entities:
+      - animation:
+          state: 'on'
+        entity: <<anycubic.kobra_s1_bed_temperature>>
+        entity_row: true
+        name: ' '
+        min: 0
+        max: 120
+        positions:
+          name: inside
+          value: inside
+        severity:
+        - color: green
+          from: 0
+          to: 40
+        - color: orange
+          from: 40
+          to: 70
+        - color: red
+          from: 80
+          to: 120
+        style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+          \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator  \
+          \ {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+          \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+          \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+          \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+          \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+          \ 5px;\n}\n"
+        type: custom:bar-card
+      - animation:
+          state: 'on'
+        entity: <<anycubic.anycubic_kobra_s1_nozzle_temperature>>
+        entity_row: true
+        layout:
+          column: 1
+        name: ' '
+        min: 0
+        max: 320
+        positions:
+          name: inside
+          value: inside
+        severity:
+        - color: green
+          from: 0
+          to: 60
+        - color: orange
+          from: 60
+          to: 250
+        - color: red
+          from: 250
+          to: 320
+        style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+          \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator  \
+          \ {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+          \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+          \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+          \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+          \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+          \ 5px;\n}\n"
+        type: custom:bar-card
+      style: 'ha-card { box-shadow: none;
+
+        '
+      title: Bed & Nozzle temp
+      type: entities
+    - entities:
+      - animation:
+          state: 'on'
+        entity: <<anycubic.kobra_s1_box_fan>>
+        entity_row: true
+        layout:
+          column: 1
+        name: ' '
+        positions:
+          name: inside
+          value: inside
+        severity:
+        - color: green
+          from: 0
+          to: 100
+        style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+          \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  \n  padding-right: 5px;\n}\nbar-card-indicator\
+          \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+          \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+          \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+          \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+          \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+          \ 5px;\n}\n"
+        type: custom:bar-card
+      - animation:
+          state: 'on'
+        entity: <<anycubic.kobra_s1_air_filter_fan>>
+        entity_row: true
+        layout:
+          column: 1
+        name: ' '
+        positions:
+          name: inside
+          value: inside
+        severity:
+        - color: green
+          from: 0
+          to: 100
+        style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+          \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  \n  padding-right: 5px;\n}\nbar-card-indicator\
+          \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+          \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+          \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+          \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+          \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+          \ 5px;\n}\n"
+        type: custom:bar-card
+      style: 'ha-card { box-shadow: none;
+
+        '
+      type: entities
+      title: Fans
+    - type: entities
+      entities:
+      - entity: <<anycubic.kobra_s1_totals_jobs>>
+      - entity: <<anycubic.kobra_s1_totals_filament_used>>
+      - entity: <<anycubic.kobra_s1_totals_print_time>>
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: picture
+      image:
+        media_content_id: https://demo.home-assistant.io/stub_config/t-shirt-promo.png
+      image_entity: <<anycubic.anycubic_kobra_s1_job_preview>>
+    - type: markdown
+      content: <ha-icon icon="mdi:file"></ha-icon> {{states('<<anycubic.anycubic_kobra_s1_job_name>>')}}
+    - square: false
+      type: grid
+      cards:
+      - type: custom:mushroom-template-card
+        primary: '{{states(''<<anycubic.anycubic_kobra_s1_job_current_layer>>'')}}/{{states(''<<anycubic.anycubic_kobra_s1_job_total_layers>>'')}}'
+        icon: mdi:layers
+        color: blue
+        features_position: bottom
+      - type: tile
+        entity: <<anycubic.anycubic_kobra_s1_job_progress>>
+        features_position: bottom
+        vertical: false
+        icon: mdi:progress-download
+        color: blue
+        name: Progress
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.anycubic_kobra_s1_ace_current_temperature>>
+        primary_info: state
+        secondary_info: name
+        icon: kuf:temp_temperature
+        name: ACE temp
+      - type: custom:mushroom-template-card
+        icon: mdi:clock
+        primary: "{% set eta_time = as_timestamp(states('<<anycubic.anycubic_kobra_s1_job_eta>>')) %}\n\
+          {% if eta_time | timestamp_custom('%Y-%m-%d') == now().strftime('%Y-%m-%d') %}\n  {{eta_time\
+          \ | timestamp_custom('%H:%M')}}\n{% else %}\n  {{eta_time | timestamp_custom('%d/%m %H:%M')}}\n\
+          {% endif %}"
+        color: blue
+        features_position: bottom
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_kobra_s1_temperatuur>>
+        name: Kobra S1 Temp
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_kobra_s1_luchtvochtigheid>>
+        icon_color: blue
+        name: 'Kobra S1 Humidity '
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_ace_pro_bottom_temperatuur>>
+        name: ACE Pro Bottom Temp
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_ace_pro_bottom_luchtvochtigheid>>
+        icon_color: blue
+        name: 'ACE Pro Bottom Humidity '
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_ace_pro_top_temperatuur>>
+        name: ACE Pro Top Temp
+      - type: custom:mushroom-entity-card
+        entity: <<anycubic.ht_ace_pro_top_luchtvochtigheid>>
+        icon_color: blue
+        name: 'ACE Pro Top Humidity '
+      columns: 2
+- type: grid
+  cards:
+  - type: custom:expander-card
+    title-card-clickable: true
+    expanded: true
+    min-width-expanded: 1024
+    title-card-button-overlay: true
+    expanded-gap: 1em
+    padding: 0px
+    child-margin-top: 0.5em
+    expander-card-background: transparent
+    expander-card-background-expanded: transparent
+    title: ACE Pro 1
+    title-card:
+      name: ACE Pro 1
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    cards:
+    - type: custom:auto-entities
+      filter:
+        include:
+        - entity_id: <<anycubic.spoolman_spool>>*_location
+          state: ACE Pro 1
+          options:
+            type: custom:mushroom-template-card
+            vertical: false
+            icon_color: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''')
+              %}#{{ state_attr(se, ''filament_color_hex'') }}'
+            icon: mdi:printer-3d-nozzle
+            badge_icon: "{% set se = 'sensor.' + entity.split('.')[1].replace('_location', '') %}{% if\
+              \ state_attr(se, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(se, 'klipper_active_spool')\
+              \ == true %}\n  mdi:check-circle\n{% endif %}\n"
+            badge_color: "{% set se = 'sensor.' + entity.split('.')[1].replace('_location', '') %}{% if\
+              \ state_attr(se, 'archived') == true %}\n  orange\n{% elif state_attr(se, 'klipper_active_spool')\
+              \ == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+            primary: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''') %}{{
+              state_attr(se, ''filament_name'') }}'
+            secondary: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''')
+              %}{{ (state_attr(se, ''remaining_weight'') | float(0)) | round(2) }} g'
+            tap_action:
+              action: more-info
+      sort:
+        method: friendly_name
+      card:
+        type: grid
+        columns: 2
+        square: false
+      card_param: cards
+  - type: custom:expander-card
+    title-card-clickable: true
+    expanded: true
+    min-width-expanded: 1024
+    title-card-button-overlay: true
+    expanded-gap: 1em
+    padding: 0px
+    child-margin-top: 0.5em
+    expander-card-background: transparent
+    expander-card-background-expanded: transparent
+    title: PLA / PLA+
+    title-card:
+      name: PLA / PLA+
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    cards:
+    - type: custom:auto-entities
+      filter:
+        include:
+        - integration: '*spoolman*'
+          attributes:
+            archived: false
+            filament_material: PLA
+          options:
+            type: custom:mushroom-template-card
+            vertical: false
+            icon_color: '#{{ state_attr(entity, ''filament_color_hex'') }}'
+            icon: mdi:printer-3d-nozzle
+            badge_icon: "{% if state_attr(entity, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(entity,\
+              \ 'klipper_active_spool') == true %}\n  mdi:check-circle\n{% endif %}\n"
+            badge_color: "{% if state_attr(entity, 'archived') == true %}\n  orange\n{% elif state_attr(entity,\
+              \ 'klipper_active_spool') == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+            primary: "{% set location = state_attr(entity, 'location') %}\n{% if location %}\n  {{ state_attr(entity,\
+              \ 'filament_name') }} ({{ location }})\n{% else %}\n  {{ state_attr(entity, 'filament_material')\
+              \ }} - {{ state_attr(entity, 'filament_name') }}\n{% endif %}\n"
+            secondary: '{{ (state_attr(entity, ''remaining_weight'') | float(0))  | round(2) }} g'
+            tap_action:
+              action: more-info
+      sort:
+        method: attribute
+        attribute: filament_name
+      card:
+        type: grid
+        columns: 2
+        square: false
+      card_param: cards
+- type: grid
+  cards:
+  - type: custom:expander-card
+    title-card-clickable: true
+    expanded: true
+    min-width-expanded: 1024
+    title-card-button-overlay: true
+    expanded-gap: 1em
+    padding: 0px
+    child-margin-top: 0.5em
+    expander-card-background: transparent
+    expander-card-background-expanded: transparent
+    title: ACE Pro 2
+    title-card:
+      name: ACE Pro 2
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    cards:
+    - type: custom:auto-entities
+      filter:
+        include:
+        - entity_id: <<anycubic.spoolman_spool>>*_location
+          state: ACE Pro 2
+          options:
+            type: custom:mushroom-template-card
+            vertical: false
+            icon_color: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''')
+              %}#{{ state_attr(se, ''filament_color_hex'') }}'
+            icon: mdi:printer-3d-nozzle
+            badge_icon: "{% set se = 'sensor.' + entity.split('.')[1].replace('_location', '') %}{% if\
+              \ state_attr(se, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(se, 'klipper_active_spool')\
+              \ == true %}\n  mdi:check-circle\n{% endif %}\n"
+            badge_color: "{% set se = 'sensor.' + entity.split('.')[1].replace('_location', '') %}{% if\
+              \ state_attr(se, 'archived') == true %}\n  orange\n{% elif state_attr(se, 'klipper_active_spool')\
+              \ == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+            primary: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''') %}{{
+              state_attr(se, ''filament_name'') }}'
+            secondary: '{% set se = ''sensor.'' + entity.split(''.'')[1].replace(''_location'', '''')
+              %}{{ (state_attr(se, ''remaining_weight'') | float(0)) | round(2) }} g'
+            tap_action:
+              action: more-info
+      sort:
+        method: friendly_name
+      card:
+        type: grid
+        columns: 2
+        square: false
+      card_param: cards
+  - type: custom:expander-card
+    title-card-clickable: true
+    expanded: false
+    min-width-expanded: 1024
+    title-card-button-overlay: true
+    expanded-gap: 1em
+    padding: 0px
+    child-margin-top: 0.5em
+    expander-card-background: transparent
+    expander-card-background-expanded: transparent
+    title: PETG, ASA, TPU
+    title-card:
+      name: PETG, ASA, TPU
+      styles:
+        card:
+        - padding: 2% 0px
+        - font-size: 125%
+        - border-radius: 0%
+        - font-weight: 100
+        - letter-spacing: 3px
+        - --mdc-ripple-press-opacity: 0
+        - cursor: initial
+        name:
+        - font-weight: 900
+      type: custom:button-card
+    cards:
+    - type: custom:auto-entities
+      filter:
+        include:
+        - options:
+            type: custom:mushroom-template-card
+            vertical: false
+            icon_color: '#{{ state_attr(entity, ''filament_color_hex'') }}'
+            icon: mdi:printer-3d-nozzle
+            badge_icon: "{% if state_attr(entity, 'archived') == true %}\n  mdi:archive\n{% elif state_attr(entity,\
+              \ 'klipper_active_spool') == true %}\n  mdi:check-circle\n{% endif %}\n"
+            badge_color: "{% if state_attr(entity, 'archived') == true %}\n  orange\n{% elif state_attr(entity,\
+              \ 'klipper_active_spool') == true %}\n  green\n{% else %}\n  default_color\n{% endif %}\n"
+            primary: "{% set location = state_attr(entity, 'location') %}\n{% if location %}\n  {{ state_attr(entity,\
+              \ 'filament_name') }} ({{ location }})\n{% else %}\n  {{ state_attr(entity, 'filament_material')\
+              \ }} - {{ state_attr(entity, 'filament_name') }}\n{% endif %}\n"
+            secondary: '{{ (state_attr(entity, ''remaining_weight'') | float(0))  | round(2) }} g'
+            tap_action:
+              action: more-info
+          integration: '*spoolman*'
+          attributes:
+            archived: false
+        exclude:
+        - options: {}
+          attributes:
+            filament_material: PLA
+      sort:
+        method: attribute
+        attribute: filament_material
+      card:
+        type: grid
+        columns: 2
+        square: false
+      card_param: cards
+- type: grid
+  cards: []
+- type: grid
+  cards: []
+cards: []
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+- type: custom:mushroom-chips-card
+  chips:
+  - type: template
+    icon: mdi:information
+    icon_color: blue
+    content: '
+
+      {{states(''<<anycubic.anycubic_kobra_s1_current_status>>'')}} / {{states(''<<anycubic.anycubic_kobra_s1_job_state>>'')}}'
+    tap_action:
+      action: more-info
+    entity: <<anycubic.anycubic_kobra_s1_current_status>>
+  - type: entity
+    entity: <<anycubic.anycubic_kobra_s1_vermogen>>
+    icon_color: blue
+    tap_action:
+      action: more-info
+  - type: entity
+    entity: <<anycubic.anycubic_ace_pro_power>>
+    icon_color: blue
+  - type: template
+    tap_action:
+      action: more-info
+    entity: <<anycubic.anycubic_kobra_s1_hotbed_temperature>>
+    icon: mdi:train-car-flatbed
+    icon_color: blue
+    content: '
+
+      {{states(''<<anycubic.anycubic_kobra_s1_hotbed_temperature>>'')}}° / {{states(''<<anycubic.anycubic_kobra_s1_target_hotbed_temperature>>'')}}°'
+  - type: template
+    tap_action:
+      action: more-info
+    entity: <<anycubic.anycubic_kobra_s1_nozzle_temperature>>
+    icon: mdi:printer-3d-nozzle-heat
+    icon_color: blue
+    content: '
+
+      {{states(''<<anycubic.anycubic_kobra_s1_nozzle_temperature>>'')}}° / {{states(''<<anycubic.anycubic_kobra_s1_target_nozzle_temperature>>'')}}°'

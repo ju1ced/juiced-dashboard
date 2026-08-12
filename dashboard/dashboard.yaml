@@ -31,3 +31,4 @@ views:
   - !include views/person.yaml
   - !include views/ecopower.yaml
   - !include views/batteries1.yaml
+  - !include views/anycubic.yaml
