@@ -33,3 +33,4 @@ views:
   - !include views/batteries1.yaml
   - !include views/anycubic.yaml
   - !include views/zwembad.yaml
+  - !include views/house.yaml
