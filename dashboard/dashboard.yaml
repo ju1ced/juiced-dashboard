@@ -34,3 +34,5 @@ views:
   - !include views/anycubic.yaml
   - !include views/zwembad.yaml
   - !include views/house.yaml
+  - !include views/car.yaml
+  - !include views/garden.yaml

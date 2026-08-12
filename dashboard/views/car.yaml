@@ -1,0 +1,145 @@
+# EV6 view — migrated to committed YAML (PR-32).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: car` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+type: sections
+layout:
+  max_cols: 4
+title: EV6
+icon: ''
+path: car
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+sections:
+- type: grid
+  column_span: 4
+  cards:
+  - type: custom:kia-dashboard-card
+    title: Kia EV6
+    subtitle: GT-Line RWD
+    asset_base: /local/vehicles/
+    map_zoom: 16
+    charger_controls: true
+    charger_resume_via_mode: true
+    confirm_actions: true
+    entities:
+      vin: <<car.oprit_nebula_vehicle_identification_number>>
+      vehicle_data: <<car.oprit_nebula_data>>
+      odometer: <<car.oprit_nebula_odometer>>
+      location: <<car.oprit_nebula_location>>
+      last_updated: <<car.oprit_nebula_laatste_scan>>
+      battery_level: <<car.oprit_nebula_ev_battery_level>>
+      battery_range: <<car.oprit_nebula_ev_range>>
+      charging_state: <<car.oprit_nebula_ev_battery_charge>>
+      plug_connected: <<car.oprit_nebula_ev_battery_plug>>
+      charge_port: <<car.oprit_nebula_ev_charge_port>>
+      charging_limit: <<car.oprit_nebula_ac_charging_limit>>
+      dc_charging_limit: <<car.oprit_nebula_dc_charging_limit>>
+      battery_state_of_health: <<car.oprit_nebula_ev_state_of_health_battery>>
+      battery_capacity: <<car.oprit_nebula_ev_battery_capacity>>
+      battery_remaining_energy: <<car.oprit_nebula_ev_battery_remaining_energy>>
+      battery_pack_voltage: <<car.oprit_nebula_ev_battery_pack_voltage>>
+      battery_temperature_min: <<car.oprit_nebula_ev_battery_temperature_min>>
+      battery_temperature_max: <<car.oprit_nebula_ev_battery_temperature_max>>
+      battery_water_temperature: <<car.oprit_nebula_ev_battery_water_temperature>>
+      battery_heating: <<car.oprit_nebula_ev_battery_heating>>
+      battery_heater_power: <<car.oprit_nebula_ev_power_consumption_battery_heater>>
+      battery_precondition: <<car.oprit_nebula_ev_battery_precondition>>
+      battery_winter_mode: <<car.oprit_nebula_ev_battery_winter_mode>>
+      battery_12v_level: <<car.oprit_nebula_car_battery_level>>
+      battery_12v_fault: <<car.oprit_nebula_12v_battery_fault>>
+      smart_key_battery_warning: <<car.oprit_nebula_smart_key_battery_warning>>
+      estimated_charge_duration: <<car.oprit_nebula_estimated_charge_duration>>
+      average_energy_consumption: <<car.oprit_nebula_average_energy_consumption>>
+      energy_consumption_90d: <<car.oprit_nebula_90_day_energy_consumption>>
+      charging_power: <<car.oprit_nebula_ev_charging_power>>
+      climate: <<car.oprit_nebula_climate_control>>
+      start_climate: <<car.oprit_nebula_climate>>
+      stop_climate: <<car.oprit_nebula_climate>>
+      defrost: <<car.oprit_nebula_defrost>>
+      steering_wheel_heater: <<car.oprit_nebula_steering_wheel_heater>>
+      set_temperature: <<car.oprit_nebula_set_temperature>>
+      vent_windows: <<car.oprit_nebula_vent_all_windows>>
+      front_left_window_open: <<car.oprit_nebula_front_left_window>>
+      front_left_window_close: <<car.oprit_nebula_front_left_window>>
+      front_right_window_open: <<car.oprit_nebula_front_right_window>>
+      front_right_window_close: <<car.oprit_nebula_front_right_window>>
+      rear_left_window_open: <<car.oprit_nebula_back_left_window>>
+      rear_left_window_close: <<car.oprit_nebula_back_left_window>>
+      rear_right_window_open: <<car.oprit_nebula_back_right_window>>
+      rear_right_window_close: <<car.oprit_nebula_back_right_window>>
+      door_lock: <<car.oprit_nebula_door_lock>>
+      trunk: <<car.oprit_nebula_trunk>>
+      hood: <<car.oprit_nebula_hood>>
+      lights: <<car.oprit_nebula_headlamp_status>>
+      front_left_door: <<car.oprit_nebula_front_left_door>>
+      front_right_door: <<car.oprit_nebula_front_right_door>>
+      rear_left_door: <<car.oprit_nebula_back_left_door>>
+      rear_right_door: <<car.oprit_nebula_back_right_door>>
+      front_left_window: <<car.oprit_nebula_front_left_window_2>>
+      front_right_window: <<car.oprit_nebula_front_right_window_2>>
+      rear_left_window: <<car.oprit_nebula_back_left_window_2>>
+      rear_right_window: <<car.oprit_nebula_back_right_window_2>>
+      tire_front_left: <<car.oprit_nebula_tire_pressure_front_left>>
+      tire_front_right: <<car.oprit_nebula_tire_pressure_front_right>>
+      tire_rear_left: <<car.oprit_nebula_tire_pressure_rear_left>>
+      tire_rear_right: <<car.oprit_nebula_tire_pressure_rear_right>>
+      refresh: <<car.oprit_nebula_force_refresh>>
+      start_charging: <<car.oprit_nebula_ev_charging>>
+      stop_charging: <<car.oprit_nebula_ev_charging>>
+      last_climate_result: <<car.oprit_nebula_climate>>
+      last_charging_result: <<car.oprit_nebula_ev_charging>>
+      charger_online: <<car.smappee_ev_5130024234_mqtt_connected>>
+      charger_status: <<car.smappee_ev_6200006198_status_current_1>>
+      charger_mode: <<car.smappee_ev_6200006198_charging_mode_1>>
+      charger_power: <<car.smappee_ev_6200006198_power_total_1>>
+      charger_current: <<car.smappee_ev_6200006198_current_total_1>>
+      charger_current_limit: <<car.smappee_ev_6200006198_current_1>>
+      charger_session_energy: <<car.smappee_ev_6200006198_session_energy_1>>
+      charger_total_energy: <<car.smappee_ev_6200006198_energy_import_kwh_1>>
+      charger_grid_support: <<car.smappee_ev_6200006198_support_grid_1>>
+      charger_pv_power: <<car.smappee_ev_5130024234_pv_power>>
+      charger_house_power: <<car.smappee_ev_5130024234_house_consumption_power>>
+      charger_grid_power: <<car.smappee_ev_5130024234_grid_power>>
+      charger_start: <<car.smappee_ev_6200006198_start_charging_1>>
+      charger_pause: <<car.smappee_ev_6200006198_pause_charging_1>>
+      charger_resume: <<car.smappee_ev_6200006198_resume_charging_1>>
+      charger_stop: <<car.smappee_ev_6200006198_stop_charging_1>>
+      charger_energy_price: <<car.ecopower_gemiddelde_jaarprijs>>
+      charger_energy_today: <<car.kia_charger_energy_today>>
+      charger_energy_week: <<car.kia_charger_energy_week>>
+      charger_energy_month: <<car.kia_charger_energy_month>>
+      rear_window_heater: <<car.oprit_nebula_back_window_heater>>
+      driver_seat: <<car.oprit_nebula_front_left_seat>>
+      passenger_seat: <<car.oprit_nebula_front_right_seat>>
+      rear_left_seat: <<car.oprit_nebula_rear_left_seat>>
+      rear_right_seat: <<car.oprit_nebula_rear_right_seat>>
+      climate_schedule_1: <<car.oprit_nebula_ev_scheduled_departure_1>>
+      climate_departure_time_1: <<car.oprit_nebula_ev_first_scheduled_departure_time>>
+      climate_departure_days_1: <<car.oprit_nebula_first_departure_days>>
+      climate_schedule_2: <<car.oprit_nebula_ev_scheduled_departure_2>>
+      climate_departure_time_2: <<car.oprit_nebula_ev_second_scheduled_departure_time>>
+      daily_driving_stats: <<car.oprit_nebula_daily_driving_stats>>
+      today_driving_stats: <<car.oprit_nebula_today_s_daily_driving_stats>>
+      total_energy_regeneration: <<car.oprit_nebula_total_energy_regeneration>>
+      drive_mode: <<car.oprit_nebula_drive_mode>>
+      engine: <<car.oprit_nebula_engine>>
+      ignition: <<car.oprit_nebula_ign3>>
+      trip_calendar: <<car.nebula_ritten>>
+    images:
+      normal: ev6_front_right.png
+      charging: ev6_charging.png
+      climate: ev6_climate.png
+      map_marker: ev6_top.png
+    layout_options:
+      grid_columns: full
+      grid_rows: auto
+    trip_calendar_start: '2026-01-01'
+    trip_calendar_limit: 500
+max_columns: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: scroll

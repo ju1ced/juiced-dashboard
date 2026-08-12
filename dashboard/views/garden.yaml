@@ -1,0 +1,89 @@
+# garden view — migrated to committed YAML (PR-32).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: garden` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+type: sections
+max_columns: 4
+title: garden
+path: garden
+sections:
+- type: grid
+  cards:
+  - type: custom:garden-dashboard-card
+    title: Tuin
+    subtitle: Bodem en bewatering
+    confirm_actions: true
+    battery_warning: 20
+    linkquality_warning: 20
+    zones:
+    - name: Mandarijnplant
+      icon: mdi:fruit-citrus
+      moisture:
+        entity: <<garden.grondsensor_mandarijnplant_soil_moisture>>
+        dry_below: 30
+        wet_above: 70
+      entities:
+        temperature: <<garden.grondsensor_mandarijnplant_temperature>>
+        humidity: <<garden.grondsensor_mandarijnplant_humidity>>
+        illuminance: <<garden.grondsensor_mandarijnplant_illuminance>>
+        conductivity: <<garden.grondsensor_mandarijnplant_soil_fertility>>
+        battery: <<garden.grondsensor_mandarijnplant_battery>>
+        linkquality: <<garden.grondsensor_mandarijnplant_linkquality>>
+    - name: Moestuin links
+      icon: mdi:sprout
+      moisture:
+        entity: <<garden.grondsensor_moestuin_links_soil_moisture>>
+        dry_below: 30
+        wet_above: 75
+      entities:
+        temperature: <<garden.grondsensor_moestuin_links_temperature>>
+        humidity: <<garden.grondsensor_moestuin_links_humidity>>
+        illuminance: <<garden.grondsensor_moestuin_links_illuminance>>
+        conductivity: <<garden.grondsensor_moestuin_links_soil_fertility>>
+        battery: <<garden.grondsensor_moestuin_links_battery>>
+        linkquality: <<garden.grondsensor_moestuin_links_linkquality>>
+    - name: Moestuin rechts
+      icon: mdi:sprout-outline
+      moisture:
+        entity: <<garden.grondsensor_moestuin_rechts_soil_moisture>>
+        dry_below: 30
+        wet_above: 75
+      entities:
+        temperature: <<garden.grondsensor_moestuin_rechts_temperature>>
+        humidity: <<garden.grondsensor_moestuin_rechts_humidity>>
+        illuminance: <<garden.grondsensor_moestuin_rechts_illuminance>>
+        conductivity: <<garden.grondsensor_moestuin_rechts_soil_fertility>>
+        battery: <<garden.grondsensor_moestuin_rechts_battery>>
+        linkquality: <<garden.grondsensor_moestuin_rechts_linkquality>>
+    - name: Plantenbak
+      icon: mdi:flower-pot-outline
+      moisture:
+        entity: <<garden.grondsensor_plantenbak_soil_moisture>>
+        dry_below: 30
+        wet_above: 75
+      entities:
+        temperature: <<garden.grondsensor_plantenbak_temperature>>
+        humidity: <<garden.grondsensor_plantenbak_humidity>>
+        illuminance: <<garden.grondsensor_plantenbak_illuminance>>
+        conductivity: <<garden.grondsensor_plantenbak_soil_fertility>>
+        battery: <<garden.grondsensor_plantenbak_battery>>
+        linkquality: <<garden.grondsensor_plantenbak_linkquality>>
+    irrigation:
+    - name: Moestuin watersysteem
+      icon: mdi:water
+      entities:
+        valve: <<garden.moestuin_watersysteem>>
+        remaining: <<garden.moestuin_watersysteem_real_time_irrigation_duration>>
+        volume: <<garden.moestuin_watersysteem_real_time_irrigation_volume>>
+        error: <<garden.moestuin_watersysteem_valve_abnormal_state>>
+        battery: <<garden.moestuin_watersysteem_battery>>
+        linkquality: <<garden.0xa4c13814507cffff_linkquality>>
+        settings: <<garden.moestuin_watersysteem_manual_default_settings>>
+    layout_options:
+      grid_columns: full
+      grid_rows: auto
+  column_span: 4
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
