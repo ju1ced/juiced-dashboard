@@ -18,3 +18,4 @@ views:
   - !include views/kinderkamer.yaml
   - !include views/bureau.yaml
   - !include views/toilet.yaml
+  - !include views/woonkamer.yaml
