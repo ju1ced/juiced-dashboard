@@ -952,3 +952,23 @@ water:
   waterverbruik_monthly: sensor.example_waterverbruik_monthly
   waterverbruik_quarterly: sensor.example_waterverbruik_quarterly
   waterverbruik_yearly: sensor.example_waterverbruik_yearly
+person:
+  person_1: person.example_person_1
+  person_2: person.example_person_2
+  oneplus_person_1: device_tracker.example_oneplus_person_1
+  oneplus_person_1_battery_level: sensor.example_oneplus_person_1_battery_level
+  ipad_van_person_1_2: device_tracker.example_ipad_van_person_1_2
+  ipad_van_person_1_2_battery_level: sensor.example_ipad_van_person_1_2_battery_level
+  oneplus_watch_2_person_1: device_tracker.example_oneplus_watch_2_person_1
+  oneplus_watch_2_person_1_battery_level: sensor.example_oneplus_watch_2_person_1_battery_level
+  iphone_van_person_2: device_tracker.example_iphone_van_person_2
+  iphone_van_person_2_battery_level: sensor.example_iphone_van_person_2_battery_level
+  nightshade_position: device_tracker.example_nightshade_position
+  nightshade_battery_level: sensor.example_nightshade_battery_level
+  nightshade_electric_range: sensor.example_nightshade_electric_range
+  person_1_to_home: sensor.example_person_1_to_home
+  person_2_to_home: sensor.example_person_2_to_home
+  person_2_to_person_1: sensor.example_person_2_to_person_1
+  person_1_to_work: sensor.example_person_1_to_work
+  person_2_to_work: sensor.example_person_2_to_work
+  person_1_to_school_kind: sensor.example_person_1_to_school_kind
