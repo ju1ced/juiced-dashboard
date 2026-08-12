@@ -1,0 +1,600 @@
+# huis view — migrated to committed YAML (PR-30).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: house` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: huis
+path: house
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+layout:
+  width: 375
+  max_cols: 4
+sections:
+- type: grid
+  cards:
+  - type: custom:mushroom-template-card
+    primary: Weer & Boodschapen
+    secondary: ''
+    icon: mdi:cart
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon_color: orange
+    grid_options:
+      columns: 12
+      rows: 1
+  - type: vertical-stack
+    cards:
+    - show_current: true
+      show_forecast: true
+      type: weather-forecast
+      entity: <<house.vichte>>
+      forecast_type: daily
+    - display_order: none
+      type: shopping-list
+      title: Winkellijst
+      entity: <<house.shopping_list>>
+  column_span: 1
+- type: grid
+  cards:
+  - type: custom:mushroom-template-card
+    primary: Rook, Hitte & CO melders
+    secondary: ''
+    icon: mdi:fire-alert
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon_color: red
+    grid_options:
+      columns: 12
+      rows: 1
+  - type: vertical-stack
+    cards:
+    - square: false
+      type: grid
+      cards:
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_hal_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_hal_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Inkomhal
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_hal_batterij>>'')}} %    '
+        icon_color: ''
+        features_position: bottom
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_hal_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.combinatiealarm_living_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.combinatiealarm_living_rook>>', 'on') %}\n  mdi:\n{% else %}\n\
+          \  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: CO² & Rook Living
+        badge_color: ''
+        secondary: '{{states(''<<house.combinatiealarm_living_batterij>>'')}} %    '
+        features_position: bottom
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.combinatiealarm_living_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.hittemelder_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.hittemelder_keuken_rook>>', 'on') %}\n  mdi:smoke-detector-variant-alert\n\
+          {% else %}\n  mdi:smoke-detector-variant\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Hitte Keuken
+        badge_color: ''
+        secondary: '{{states(''<<house.hittemelder_batterij>>'')}} %    '
+        features_position: bottom
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.hittemelder_keuken_alarm_status>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_keuken_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_keuken_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Keuken
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_keuken_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_keuken_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_bureau_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_bureau_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Bureau
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_bureau_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_bureau_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_serverroom_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_serverroom_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Serverroom
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_serverroom_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_serverroom_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_slaapkamer_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_slaapkamer_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Slaapkamer
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_slaapkamer_batterij>>'')}} %    '
+        features_position: bottom
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_slaapkamer_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_kamer_kind_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_kamer_kind_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Kinderkamer
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_kamer_kind_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_kamer_kind_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_logeerkamer_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_logeerkamer_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Logeerkamer
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_logeerkamer_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_logeerkamer_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      - type: custom:mushroom-template-card
+        entity: <<house.rookmelder_garage_rook>>
+        tap_action:
+          action: more-info
+        icon: "{% if is_state('<<house.rookmelder_garage_rook>>', 'on') %}\n  mdi:smoke-detector-alert\n\
+          {% else %}\n  mdi:smoke-detector\n{% endif %}\n"
+        multiline_secondary: true
+        primary: Garage
+        badge_color: ''
+        secondary: '{{states(''<<house.rookmelder_garage_batterij>>'')}} %    '
+        card_mod:
+          style:
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_garage_rook>>',\
+              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+      columns: 2
+    - type: custom:mushroom-template-card
+      primary: X-Sense Security Base station
+      secondary: ''
+      icon: mdi:security
+      tap_action:
+        action: none
+      hold_action:
+        action: none
+      double_tap_action:
+        action: none
+      icon_color: green
+    - square: false
+      type: grid
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_alarm_volume>>
+        icon_color: primary
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_voice_volume>>
+        icon_color: primary
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_software_version>>
+        icon_color: teal
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_ip_address>>
+        icon_color: teal
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_ssid>>
+        icon_color: teal
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_signaalsterkte>>
+        icon_color: teal
+      - type: custom:mushroom-entity-card
+        entity: <<house.basisstation_connected>>
+        icon_color: green
+      columns: 2
+- type: grid
+  cards:
+  - type: custom:mushroom-template-card
+    primary: Verwarming & Airco
+    secondary: ''
+    icon: mdi:heat-pump
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon_color: blue
+    grid_options:
+      columns: 12
+      rows: 1
+  - type: vertical-stack
+    cards:
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Vloerverwarming
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        control:
+        - hvac
+        entity: <<house.household_zone_zone_1_circuit_0_climate>>
+        header: {}
+        label:
+          temperature: Currently
+        state: true
+        hide:
+          state: false
+          temperature: false
+        layout:
+          mode:
+            headings: false
+            icons: false
+            names: true
+          sensors:
+            labels: true
+          step: row
+        sensors:
+        - entity: <<house.woonkamer_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Keuken & Woonkamer
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        entity: <<house.daikin_keuken_room_temperature>>
+        name: Daikin Bureau
+        label:
+          temperature: Temp Airco
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: row
+        sensors:
+        - entity: <<house.shellyht_441793210b65_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Bureau
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        entity: <<house.daikin_bureau_room_temperature>>
+        name: Daikin Bureau
+        label:
+          temperature: Temp Airco
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: row
+        sensors:
+        - entity: <<house.shellyht_441793210b65_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Slaapkamer
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        entity: <<house.daikin_slaapkamer_room_temperature>>
+        hide:
+          state: false
+          temperature: false
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: column
+        sensors:
+        - entity: <<house.slaapkamer_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Kinderkamer
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        entity: <<house.daikin_kamer_kind_room_temperature>>
+        hide:
+          state: false
+          temperature: false
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: column
+        sensors:
+        - entity: <<house.kamer_kind_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Badkamer
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        entity: <<house.daikin_badkamer_room_temperature>>
+        header: {}
+        label:
+          temperature: Temp Daikin
+        hide:
+          state: hide
+          temperature: false
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: row
+        sensors:
+        - entity: <<house.bewegingssensor_badkamer_temperature>>
+          name: Temperatuur
+    - type: custom:expander-card
+      title-card-clickable: false
+      expanded: false
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: null
+      title-card:
+        name: Logeerkamer
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - type: custom:simple-thermostat
+        control:
+        - hvac
+        - preset
+        - fan
+        - swing
+        entity: <<house.daikin_logeerkamer_room_temperature>>
+        header: {}
+        label:
+          temperature: Temp Daikin
+        hide:
+          state: true
+          temperature: false
+        layout:
+          mode:
+            headings: false
+            icons: true
+            names: true
+          sensors:
+            labels: true
+          step: row
+        sensors:
+        - entity: <<house.logeerkamer_temperature>>
+          name: Temperatuur
+max_columns: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
