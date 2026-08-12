@@ -1,0 +1,644 @@
+# garage view — migrated to committed YAML (PR-17).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: garage` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: garage
+path: garage
+type: sections
+cards: []
+layout:
+  max_cols: 4
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<garage.licht_garage>>
+        use_light_color: true
+        show_color_temp_control: false
+        show_color_control: false
+        fill_container: true
+      - card:
+          entities:
+          - buttons:
+            - entity: <<garage.garagepoort_open_state>>
+              layout: icon|state
+              state_icons:
+                'off': mdi:garage
+                'on': mdi:garage-open
+              state_styles:
+                'off':
+                  button:
+                    color: green
+                'on':
+                  button:
+                    color: red
+              state_text:
+                'off': Garagepoort
+                'on': Garagepoort
+              tap_action:
+                action: call-service
+                service: switch.toggle
+                service_data:
+                  entity_id: <<garage.garagepoort>>
+            type: custom:paper-buttons-row
+          type: entities
+        type: custom:mod-card
+        style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+          \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+          \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px\
+          \ rgba(0, 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<garage.deursensor_garage>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:door-closed
+                  'on': mdi:door-open
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Garagedeur gesloten
+                  'on': Garagedeur Open
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.garage_beweging>>
+                layout: icon|state
+                state_icons:
+                  'off': mdi:motion-sensor-off
+                  'on': mdi:motion-sensor
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen beweging
+                  'on': beweging gedetecteerd
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.ht_garage_temperatuur>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.ht_garage_luchtvochtigheid>>
+                layout: icon|state|name
+                name: '%'
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<garage.deursensor_garage_batterij>>
+              name: Garagedeur
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          - entities:
+            - attribute: battery_percent
+              critical: 25
+              entity: <<garage.ht_garage_batterij>>
+              name: HT garage
+              type: custom:battery-entity-row
+              unit: '%'
+              warning: 50
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.afval_morgen>>
+                layout: icon|state
+                state_text:
+                  nee: geen afvalophaling morgen
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.afval_vandaag>>
+                layout: icon|state
+                state_text:
+                  'off': geen afvalophaling vandaag
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: red
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.restafval>>
+                layout: icon|state
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: teal
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.pmd>>
+                layout: icon|state
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: teal
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.papier_karton>>
+                layout: icon|state
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: teal
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.gf_t_keukenafval>>
+                layout: icon|state
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: teal
+              type: custom:paper-buttons-row
+            type: entities
+          columns: 2
+          input_entity: <<garage.voordeur_sensor_battery_low>>
+          input_name: ''
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+    - square: false
+      columns: 1
+      type: grid
+      cards:
+      - show_state: true
+        show_name: true
+        camera_view: auto
+        fit_mode: cover
+        type: picture-entity
+        image:
+          media_content_id: https://demo.home-assistant.io/stub_config/bedroom.png
+        name: Garage
+        entity: <<garage.garage_high_resolution_channel>>
+    - type: custom:stack-in-card
+      cards:
+      - type: grid
+        square: false
+        columns: 2
+        cards:
+        - type: custom:mushroom-entity-card
+          entity: <<garage.ht_garage_temperatuur>>
+          primary_info: state
+          secondary_info: name
+          name: Temperatuur
+          icon_color: green
+        - type: custom:mushroom-entity-card
+          entity: <<garage.ht_garage_luchtvochtigheid>>
+          primary_info: state
+          secondary_info: name
+          name: Vochtigheidsgraad
+          icon_color: blue
+      - type: custom:mini-graph-card
+        entities:
+        - entity: <<garage.ht_garage_temperatuur>>
+          name: Temperatuur
+          color: '#00bb33'
+        - entity: <<garage.ht_garage_luchtvochtigheid>>
+          name: Vochtigheidsgraad
+          color: '#2196f3'
+          y_axis: secondary
+        hours_to_show: 72
+        line_width: 3
+        font_size: 50
+        animate: true
+        show:
+          name: false
+          icon: false
+          state: false
+          legend: false
+          fill: fade
+    - card:
+        cards:
+        - cards:
+          - entities:
+            - buttons:
+              - entity: <<garage.shelly_flood_keuken_temperature>>
+                layout: name
+                name: Shelly Flood sensor
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.shellyflood_c8c9a316e68d_flood>>
+                layout: icon|state
+                name: Flood
+                state_icons:
+                  'off': mdi:water-off
+                  'on': mdi:water-alert
+                state_styles:
+                  'off':
+                    button:
+                      border-radius: 10px
+                      color: green
+                  'on':
+                    button:
+                      border-radius: 10px
+                      color: red
+                state_text:
+                  'off': Geen water detectie
+                  'on': Water gedetecteerd!
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          - entities:
+            - buttons:
+              - entity: <<garage.shellyflood_c8c9a316e68d_temperature>>
+                layout: icon|state|name
+                name: °C
+                styles:
+                  button:
+                    border-radius: 10px
+                    color: green
+              type: custom:paper-buttons-row
+            type: entities
+          input_entity: <<garage.voordeur_sensor_battery_low>>
+          input_name: ''
+          square: false
+          type: grid
+        type: vertical-stack
+      type: custom:mod-card
+      style: "ha-card {\n  background: var( --ha-card-background, var(--card-background-color, white)\
+        \ );\n  border-radius: var(--ha-card-border-radius, 4px);\n  box-shadow: var( --ha-card-box-shadow,\
+        \ 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0,\
+        \ 0, 0, 0.12) );\n}\nh1 {\n  color: red !important;\n}\n"
+  - type: vertical-stack
+    cards:
+    - type: custom:power-flow-card-plus
+      entities:
+        battery:
+          consumption: <<garage.battery_power_charge_total>>
+          production: <<garage.battery_power_charge_total>>
+        battery_charge: <<garage.battery_soc_total>>
+        grid:
+          entity:
+            consumption: dsmr_reading_electricity_currently_delivered
+            production: dsmr_reading_electricity_currently_returned
+        kw_decimals: 2
+        max_flow_rate: 10
+        solar:
+          entity: <<garage.zonnepanelen_opbrengst_vermogen>>
+    - animation: slide
+      center:
+        content:
+        - bar_color: Green
+          entity: <<garage.battery_soc_total>>
+          name: Batterij
+          preset: custom
+        type: bars
+      entities:
+      - decimals: 2
+        display_abs: true
+        entity: <<garage.dsmr_reading_electricity_currently_delivered>>
+        icon: mdi:transmission-tower
+        icon_color: {}
+        invert_value: false
+        name: grid
+        preset: grid
+        unit_of_display: W
+      - decimals: 2
+        display_abs: true
+        entity: <<garage.zonnepanelen_opbrengst_vermogen>>
+        icon: mdi:solar-power
+        name: Solar
+        preset: solar
+        producer: true
+        unit_of_display: W
+      - consumer: true
+        decimals: 2
+        display_abs: true
+        entity: <<garage.elektriciteit_verbruik_combined>>
+        icon: mdi:power-plug
+        name: consumer
+        preset: consumer
+        unit_of_display: W
+      - decimals: '2'
+        display_abs: true
+        entity: <<garage.dsmr_reading_electricity_currently_returned>>
+        icon: mdi:lightning-bolt-outline
+        icon_color:
+          bigger: ''
+          equal: ''
+          smaller: ''
+        name: producer
+        preset: producer
+        producer: true
+        unit_of_display: W
+      - consumer: true
+        decimals: 2
+        display_abs: true
+        entity: <<garage.battery_power_charge_total>>
+        icon: mdi:battery-charging
+        name: battery
+        preset: battery
+        producer: true
+        unit_of_display: W
+      - consumer: true
+        decimals: 2
+        display_abs: true
+        entity: <<garage.battery_power_discharge_total>>
+        icon: mdi:home-battery-outline
+        name: battery
+        preset: battery
+        producer: true
+        unit_of_display: W
+      - calc_excluded: true
+        decimals: 2
+        display_abs: true
+        entity: <<garage.sb5_0_1av_41_154_grid_power>>
+        icon: mdi:solar-power
+        name: ZP1
+        preset: solar
+        producer: true
+        unit_of_display: W
+      - calc_excluded: true
+        decimals: 2
+        display_abs: true
+        entity: <<garage.grid_power>>
+        icon: mdi:solar-power
+        name: ZP2
+        preset: solar
+        producer: true
+        unit_of_display: W
+      title: Electriciteitsgegevens
+      type: custom:power-distribution-card
+    - entities:
+      - entity: <<garage.dsmr_day_consumption_electricity_merged>>
+      - entity: <<garage.dsmr_day_consumption_electricity_returned_merged>>
+      - entity: <<garage.dsmr_day_consumption_electricity_cost_merged>>
+        name: Dagelijkse kost
+      title: Dagelijkse Elektriciteit
+      type: glance
+    - entities:
+      - entity: <<garage.sb5_0_1av_41_154_grid_power>>
+        name: Actueel vermogen
+      - entity: <<garage.sb5_0_1av_41_154_daily_yield>>
+        name: dagelijkse opbrengst
+      - entity: <<garage.sb5_0_1av_41_154_total_yield>>
+        name: totale opbrengst
+      title: Zonnepanelen
+      type: glance
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<garage.smart_plug_waterpomp>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<garage.smart_plug_waterpomp_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<garage.waterpomp_daily>>
+          name: Dagelijks verbruik
+        - entity: <<garage.waterpomp_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<garage.waterpomp_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<garage.smart_plug_waterpomp_energy>>
+          icon: mdi:counter
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<garage.waterpomp_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<garage.smart_plug_patchkast>>
+            state_color: true
+          icon: mdi:console-network
+          row: true
+          type: custom:restriction-card
+        - entity: <<garage.smart_plug_patchkast_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<garage.patchkast_daily>>
+          name: Dagelijks verbruik
+        - entity: <<garage.patchkast_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<garage.patchkast_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<garage.smart_plug_patchkast_energy>>
+          icon: mdi:counter
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<garage.patchkast_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<garage.smart_plug_fietsoplaadpunt>>
+            state_color: true
+          icon: mdi:bicycle-electric
+          row: true
+          type: custom:restriction-card
+        - entity: <<garage.smart_plug_fietsoplaadpunt_power>>
+          icon: mdi:counter
+          name: Fietslaadpunt huidig verbruik
+        - entity: <<garage.fietsoplaadpunt_daily>>
+          icon: mdi:counter
+          name: Dagelijks Verbruik
+        - entity: <<garage.fietsoplaadpunt_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<garage.fietsoplaadpunt_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<garage.smart_plug_fietsoplaadpunt_energy>>
+          icon: mdi:counter
+        state_color: true
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<garage.fietsoplaadpunt_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        title: Power Strip Garage
+        entities:
+        - card:
+            entity: <<garage.power_strip_garage_socket_1>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - card:
+            entity: <<garage.power_strip_garage_socket_2>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - card:
+            entity: <<garage.power_strip_garage_socket_3>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - card:
+            entity: <<garage.power_strip_garage_socket_4>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - card:
+            entity: <<garage.power_strip_garage_socket_5>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<garage.power_strip_garage_vermogen>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<garage.power_strip_garage_daily>>
+          name: Dagelijks verbruik
+        - entity: <<garage.power_strip_garage_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<garage.power_strip_garage_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<garage.power_strip_garage_energie>>
+          icon: mdi:counter
+          name: Totaal verbruik
+        state_color: true
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<garage.power_strip_garage_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<garage.smart_plug_fietslader_2>>
+            state_color: true
+          icon: mdi:bicycle-electric
+          row: true
+          type: custom:restriction-card
+        - entity: <<garage.smart_plug_fietslader_2_vermogen>>
+          icon: mdi:counter
+          name: Fietslaadpunt huidig verbruik
+        - entity: <<garage.fietsoplaadpunt2_daily>>
+          icon: mdi:counter
+          name: Dagelijks Verbruik
+        - entity: <<garage.fietsoplaadpunt2_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<garage.fietsoplaadpunt2_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<garage.smart_plug_fietslader_2_energie>>
+          icon: mdi:counter
+        state_color: true
+        type: entities
+      - aggregate_func: max
+        entities:
+        - <<garage.smart_plug_fietslader_2_vermogen>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  column_span: 4
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4

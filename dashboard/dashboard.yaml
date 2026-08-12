@@ -21,3 +21,4 @@ views:
   - !include views/woonkamer.yaml
   - !include views/oprit.yaml
   - !include views/keuken.yaml
+  - !include views/garage.yaml
