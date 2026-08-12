@@ -1,0 +1,227 @@
+# zwembad view — migrated to committed YAML (PR-29).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: zwembad` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+type: sections
+max_columns: 4
+title: zwembad
+path: zwembad
+icon: mdi:pool
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<zwembad.smart_plug_zwembad_filter>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<zwembad.smart_plug_zwembad_filter_vermogen>>
+          icon: mdi:counter
+        - entity: <<zwembad.smart_plug_zwembad_filter_zwembad_filter_pomp_daily>>
+          icon: mdi:counter
+          name: Dagelijks Verbruik
+        - entity: <<zwembad.smart_plug_zwembad_filter_zwembad_filter_pomp_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<zwembad.smart_plug_zwembad_filter_zwembad_filter_pomp_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<zwembad.smart_plug_zwembad_filter_energie>>
+          icon: mdi:counter
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+      - aggregate_func: max
+        entities:
+        - <<zwembad.smart_plug_zwembad_filter_zwembad_filter_pomp_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<zwembad.smart_plug_warmtepomp_zwembad>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<zwembad.smart_plug_warmtepomp_zwembad_vermogen>>
+          icon: mdi:counter
+        - entity: <<zwembad.zwembad_warmtepomp_daily>>
+          icon: mdi:counter
+          name: Dagelijks Verbruik
+        - entity: <<zwembad.zwembad_warmtepomp_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<zwembad.zwembad_warmtepomp_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<zwembad.smart_plug_warmtepomp_zwembad_energie>>
+          icon: mdi:counter
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+      - aggregate_func: max
+        entities:
+        - <<zwembad.zwembad_warmtepomp_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<zwembad.zwembad_zoutsysteem>>
+            state_color: true
+          row: true
+          type: custom:restriction-card
+        - entity: <<zwembad.zwembad_zoutsysteem_vermogen>>
+          icon: mdi:counter
+        - entity: <<zwembad.zwembad_zoutsysteem_daily>>
+          icon: mdi:counter
+          name: Dagelijks Verbruik
+        - entity: <<zwembad.zwembad_zoutsysteem_monthly>>
+          name: Maandelijks verbruik
+        - entity: <<zwembad.zwembad_zoutsysteem_yearly>>
+          name: Jaarlijks verbruik
+        - entity: <<zwembad.zwembad_zoutsysteem_energie>>
+          icon: mdi:counter
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+      - aggregate_func: max
+        entities:
+        - <<zwembad.zwembad_zoutsysteem_daily>>
+        group_by: date
+        hours_to_show: 168
+        show:
+          graph: bar
+        type: custom:mini-graph-card
+  - type: entities
+    entities:
+    - entity: <<zwembad.zwembadpomp_uren_vandaag>>
+    - entity: <<zwembad.zwembad_zwemmodus>>
+    - entity: <<zwembad.zwembad_filter_inhaalmodus>>
+    - entity: <<zwembad.zwembad_filter_gelopen_uren>>
+    - entity: <<zwembad.zwembad_filter_doeluren>>
+    grid_options:
+      rows: auto
+      columns: 12
+    title: Zwembad informatie
+    show_header_toggle: false
+  - type: custom:sensor-monitor-card
+    title: Pool Water Quality
+    sensors:
+      temperature:
+        entity: <<zwembad.tuin_terras_pool_heatpump_proxy_outlet_water_temperature>>
+        name: Water Temperature
+        unit: °C
+        setpoint: 29.5
+        step: 0.5
+        icon: mdi:pool-thermometer
+      ph:
+        entity: <<zwembad.chlorinator_ph>>
+        name: pH
+        unit: pH
+        setpoint: 7.4
+        step: 0.2
+        icon: mdi:ph
+      orp:
+        entity: <<zwembad.chlorinator_orp>>
+        name: ORP
+        unit: mV
+        setpoint: 700
+        step: 50
+        icon: mdi:flash
+      salinity:
+        entity: <<zwembad.chlorinator_salinity>>
+        name: Salinity
+        unit: g/L
+        setpoint: 4
+        step: 0.5
+        icon: mdi:waves
+    display:
+      compact: false
+      show_names: true
+      show_labels: true
+      show_last_updated: false
+      show_icons: true
+      show_units: true
+      gradient: true
+      language: en
+    colors:
+      low: '#fdcb6e'
+      warn: '#e17055'
+      normal: '#00b894'
+      cool: '#00BFFF'
+      marker: '#000000'
+      hi_low: '#00000099'
+    grid_options:
+      columns: 24
+      rows: 8
+  - type: entities
+    entities:
+    - entity: <<zwembad.chlorinator_device_information>>
+    - entity: <<zwembad.chlorinator_boost_mode>>
+    - entity: <<zwembad.chlorinator_chlorination_level>>
+    - entity: <<zwembad.chlorinator_mode>>
+    - entity: <<zwembad.chlorinator_orp_setpoint>>
+    - entity: <<zwembad.chlorinator_ph_setpoint>>
+    title: Zodiac GenSalt OE iq Evo
+  - type: vertical-stack
+    cards:
+    - type: entities
+      title: Penguin Heat Pump
+      show_header_toggle: false
+      state_color: true
+      entities:
+      - entity: <<zwembad.pool_heater_power>>
+        icon: mdi:toggle-switch-variant
+      - entity: <<zwembad.pool_target_temperature>>
+      - entity: <<zwembad.pool_heater_mode>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_inlet_water_temperature>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_outlet_water_temperature>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_coil_temperature>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_ambient_temperature>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_exhaust_temperature>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_unit_running>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_has_error>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_error_description>>
+      - type: section
+        label: Diagnostics
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_compressor>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_circulate_pump>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_high_fan>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_4_way_valve>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_circulating_pump_mode>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_defrost_type>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_heating_set_temp_r01>>
+      - entity: <<zwembad.tuin_terras_pool_heatpump_proxy_error_code>>
+      - type: section
+        label: Proxy
+      - entity: <<zwembad.pool_proxy_pool_proxy_status>>
+      - entity: <<zwembad.pool_proxy_pool_proxy_cpu_temperature>>
+  column_span: 4
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
