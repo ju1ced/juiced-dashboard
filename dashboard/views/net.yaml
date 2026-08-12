@@ -1,0 +1,921 @@
+# net view — migrated to committed YAML (PR-21).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: net` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: net
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: custom:vertical-stack-in-card
+      cards:
+      - content: '<img width="125" src="https://brands.home-assistant.io/unifi/logo.png"/><br/>
+
+          '
+        style: "ha-card { box-shadow: none; \nha-markdown { padding-bottom: 1px !important; }\n"
+        type: markdown
+      - icon: mdi:web
+        name: UniFi Controller
+        show_state: false
+        styles:
+          card:
+          - border-radius: 10px
+          - box-shadow: none
+          - width: 250px
+          - margin-left: 10px
+          - padding-top: 10px
+          - padding-bottom: 10px
+          - margin-bottom: 5px
+          grid:
+          - grid-template-areas: '"i n" "i n" "i n"'
+          - grid-template-columns: 25% 75%
+          - grid-template-rows: min-content min-content
+          label:
+          - padding-top: 0px
+          - padding-bottom: 0px
+          - font-size: 12px
+          - justify-self: start
+          name:
+          - font-size: 15px
+          - font-weight: bold
+          - justify-self: start
+          state:
+          - justify-self: start
+          - font-size: 13px
+        tap_action:
+          action: url
+          url_path: https://unifi.ui.com
+        type: custom:button-card
+      - cards:
+        - content: '**UniFi Dream Machine SE**
+
+            '
+          style: "ha-card { box-shadow: none; \n\nha-markdown { padding-bottom: 1px !important; }\n"
+          type: markdown
+        - entities:
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_cpu_utilization>>
+            entity_row: true
+            icon: mdi:cpu-64-bit
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 29
+            - color: orange
+              from: 30
+              to: 79
+            - color: red
+              from: 80
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  \n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_vichte_network_cpu_temperature>>
+            entity_row: true
+            icon: mdi:temperature-celsius
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 65
+            - color: orange
+              from: 65
+              to: 79
+            - color: red
+              from: 80
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_memory_utilization>>
+            entity_row: true
+            icon: mdi:memory
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 50
+            - color: orange
+              from: 50
+              to: 90
+            - color: red
+              from: 90
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_google_wan_latency>>
+            entity_row: true
+            icon: mdi:google
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 29
+            - color: orange
+              from: 30
+              to: 79
+            - color: red
+              from: 80
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_cloudflare_wan_latency>>
+            entity_row: true
+            icon: mdi:cloud
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 29
+            - color: orange
+              from: 30
+              to: 79
+            - color: red
+              from: 80
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          - animation:
+              state: 'on'
+            entity: <<net.vichte_network_microsoft_wan_latency>>
+            entity_row: true
+            icon: mdi:microsoft
+            name: ' '
+            positions:
+              name: inside
+              value: inside
+            severity:
+            - color: green
+              from: 0
+              to: 29
+            - color: orange
+              from: 30
+              to: 79
+            - color: red
+              from: 80
+              to: 100
+            style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n \
+              \ height: 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+              \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+              \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+              \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+              \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+              \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+              \ 5px;\n}\n"
+            type: custom:bar-card
+          style: 'ha-card { box-shadow: none;
+
+            '
+          type: entities
+        type: vertical-stack
+  - type: vertical-stack
+    cards:
+    - type: entities
+      title: LAN – Switches
+      entities:
+      - type: custom:template-entity-row
+        entity: <<net.main_switch_uptime>>
+        name: Main Switch
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.main_switch_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.main_switch_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.main_switch_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.main_poe_switch_uptime>>
+        name: Main POE Switch
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.main_poe_switch_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.main_poe_switch_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.main_poe_switch_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.poe_switch_garage_uptime>>
+        name: POE Switch Garage
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.poe_switch_garage_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.poe_switch_garage_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.poe_switch_garage_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.mini_switch_tv_uptime>>
+        name: Mini Switch TV
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.mini_switch_tv_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.mini_switch_tv_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.mini_switch_tv_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.mini_switch_tv_bureau_uptime>>
+        name: Mini Switch TV Bureau
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.mini_switch_tv_bureau_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.mini_switch_tv_bureau_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.mini_switch_tv_bureau_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.mini_switch_garage_1_uptime>>
+        name: Mini Switch Garage 1
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.mini_switch_garage_1_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.mini_switch_garage_1_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.mini_switch_garage_1_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.mini_switch_garage_2_uptime>>
+        name: Mini Switch Garage 2
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.mini_switch_garage_2_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.mini_switch_garage_2_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.mini_switch_garage_2_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+      - type: custom:template-entity-row
+        entity: <<net.mini_switch_tuinhuis_uptime>>
+        name: Mini Switch Tuinhuis
+        icon: mdi:ethernet
+        state: '{{ states(''<<net.mini_switch_tuinhuis_uptime>>'') | as_timestamp | timestamp_custom(''%d/%m/%y'')
+          }}
+
+          '
+      - type: custom:bar-card
+        stack: horizontal
+        columns: 2
+        height: 18
+        show_icon: false
+        icon: none
+        entities:
+        - entity: <<net.mini_switch_tuinhuis_cpu_utilization>>
+          name: CPU
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+        - entity: <<net.mini_switch_tuinhuis_memory_utilization>>
+          name: MEM
+          decimal: 0
+          severity:
+          - from: 0
+            to: 60
+            color: '#43a047'
+          - from: 60
+            to: 80
+            color: '#fb8c00'
+          - from: 80
+            to: 100
+            color: '#e53935'
+  - type: entities
+    title: WLAN – Access Points
+    entities:
+    - type: custom:template-entity-row
+      entity: <<net.ap_buiten_uptime>>
+      name: AP Buiten
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_buiten_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_buiten_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_buiten_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_bbq_buitenkeuken_uptime>>
+      name: AP BBQ Buitenkeuken
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_bbq_buitenkeuken_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_bbq_buitenkeuken_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_bbq_buitenkeuken_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_oprit_uptime>>
+      name: AP Oprit
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_oprit_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_oprit_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_oprit_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_boven_uptime>>
+      name: AP Garage
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_boven_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_boven_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_boven_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_keuken_uptime>>
+      name: AP Keuken
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_keuken_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_keuken_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_keuken_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_serverroom_uptime>>
+      name: AP Serverroom
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_serverroom_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_serverroom_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_serverroom_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_slaapkamer_uptime>>
+      name: AP Slaapkamer
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_slaapkamer_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_slaapkamer_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_slaapkamer_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+    - type: custom:template-entity-row
+      entity: <<net.ap_logeerkamer_uptime>>
+      name: AP Logeerkamer
+      icon: mdi:wifi
+      state: "{{ states('<<net.ap_logeerkamer_uptime>>')\n   | as_timestamp\n   | timestamp_custom('%d/%m/%y')\
+        \ }}\n"
+    - type: custom:bar-card
+      stack: horizontal
+      columns: 2
+      height: 18
+      show_icon: false
+      icon: none
+      entities:
+      - entity: <<net.ap_logeerkamer_cpu_utilization>>
+        name: CPU
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+      - entity: <<net.ap_logeerkamer_memory_utilization>>
+        name: MEM
+        decimal: 0
+        severity:
+        - from: 0
+          to: 60
+          color: '#43a047'
+        - from: 60
+          to: 80
+          color: '#fb8c00'
+        - from: 80
+          to: 100
+          color: '#e53935'
+  - type: vertical-stack
+    cards:
+    - type: custom:vertical-stack-in-card
+      cards:
+      - type: custom:auto-entities
+        card:
+          type: entities
+          title: Firmware Upgradable
+          style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n.card-header {\n  padding:\
+            \ 5px 16px;\n  font-size: 18px;\n  font-weight: 700 !important;\n}\n#states {\n  padding-top:\
+            \ 0px !important;\n  padding-bottom: 0px !important;\n}\n"
+        filter:
+          include:
+          - options: {}
+            entity_id: <<net.vichte_network>>
+          - options: {}
+            entity_id: <<net.main>>*
+          - options: {}
+            entity_id: <<net.poe>>*
+          - options: {}
+            entity_id: <<net.usw>>*
+          - options: {}
+            entity_id: <<net.mini_switch>>*
+          - entity_id: <<net.ap>>*
+            options:
+              icon: mdi:database-plus
+        sort:
+          method: name
+  column_span: 4
+- type: grid
+  cards: []
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4
+path: net
