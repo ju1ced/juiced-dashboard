@@ -29,3 +29,4 @@ views:
   - !include views/hainfo.yaml
   - !include views/water.yaml
   - !include views/person.yaml
+  - !include views/ecopower.yaml
