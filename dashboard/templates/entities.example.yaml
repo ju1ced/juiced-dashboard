@@ -1005,3 +1005,7 @@ ecopower:
   piekvermogen_oktober: input_number.example_piekvermogen_oktober
   piekvermogen_november: input_number.example_piekvermogen_november
   piekvermogen_december: input_number.example_piekvermogen_december
+batteries1:
+  ht_badkamer_battery_plus: sensor.example_ht_badkamer_battery_plus
+  ht_bureau_battery_plus: sensor.example_ht_bureau_battery_plus
+  ht_eetkamer_keuken_battery_plus: sensor.example_ht_eetkamer_keuken_battery_plus

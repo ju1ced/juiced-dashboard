@@ -1,0 +1,520 @@
+# batteries1 view — migrated to committed YAML (PR-27).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: batteries1` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+title: batteries1
+path: batteries1
+icon: ''
+layout:
+  width: 375
+  max_cols: 4
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: custom:auto-entities
+      card:
+        type: entities
+        title: 🏃 Bewegingsmelders
+        show_header_toggle: false
+        state_color: false
+        card_mod:
+          style: "#states > * {\n  overflow: visible !important;\n}\n"
+      filter:
+        include:
+        - entity_id: '*motion*battery_plus*'
+          options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+        - entity_id: '*beweging*battery_plus*'
+          options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+        exclude:
+        - entity_id: '*_battery'
+        - entity_id: '*_batterij'
+        - entity_id: '*_battery_type*'
+        - entity_id: '*_low*'
+        - entity_id: '*_last_replaced*'
+        - state: unknown
+        - state: unavailable
+      sort:
+        method: state
+        numeric: true
+    - type: custom:auto-entities
+      card:
+        type: custom:battery-state-card
+        title: 🔥 Rookmelders
+      filter:
+        include:
+        - options: {}
+          entity_id: '*smoke*batter*'
+        - options: {}
+          entity_id: '*rook*batter*'
+        - options: {}
+          entity_id: '*hitte*batter*'
+        - options: {}
+          entity_id: '*combi*batter*'
+        exclude:
+        - options: {}
+          entity_id: '*_battery_type*'
+        - options: {}
+          entity_id: '*_battery_plus*'
+        - options: {}
+          entity_id: '*_low_battery*'
+        - options: {}
+          entity_id: '*_lage_batterij*'
+        - options: {}
+          entity_id: '*_battery_last_replaced*'
+        - options: {}
+          entity_id: '*_battery_replace*'
+        - options: {}
+          state: unknown
+        - options: {}
+          state: unavailable
+        - options: {}
+          state: 'Off'
+        - options: {}
+          state: 'on'
+      color:
+        gradient: true
+  - type: vertical-stack
+    cards:
+    - type: custom:auto-entities
+      card:
+        type: entities
+        title: 🚪 Deur & Raam
+        show_header_toggle: false
+        state_color: false
+        card_mod:
+          style: "#states > * {\n  overflow: visible !important;\n}\n"
+      filter:
+        include:
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*brievenbus*battery_plus*'
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*raam*battery_plus*'
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*deur*battery_plus'
+        exclude:
+        - options: {}
+          entity_id: '*_battery'
+        - options: {}
+          entity_id: '*_batterij'
+        - options: {}
+          entity_id: '*_battery_type*'
+        - options: {}
+          entity_id: '*_low*'
+        - options: {}
+          entity_id: '*_last_replaced*'
+        - options: {}
+          state: unknown
+        - options: {}
+          state: unavailable
+      sort:
+        method: state
+        numeric: true
+  - type: vertical-stack
+    cards:
+    - type: custom:auto-entities
+      card:
+        type: entities
+        title: 🌡️ H&T Sensoren
+        show_header_toggle: false
+        state_color: false
+        card_mod:
+          style: "#states > * {\n  overflow: visible !important;\n}\n"
+      filter:
+        include:
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*multi*battery_plus*'
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*ht*battery_plus*'
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*regen*battery_plus*'
+        - options:
+            type: custom:template-entity-row
+            name: '{{ state_attr(config.entity, ''friendly_name'') | replace('' Batterij+'', '''') | replace(''
+              Batterij'', '''') }}
+
+              '
+            state: '{{ states(config.entity) }} %'
+            icon: '{% set battery = states(config.entity) | int(0) %} {% if battery > 95 %} mdi:battery
+              {% elif battery > 85 %} mdi:battery-90 {% elif battery > 75 %} mdi:battery-80 {% elif battery
+              > 65 %} mdi:battery-70 {% elif battery > 55 %} mdi:battery-60 {% elif battery > 45 %} mdi:battery-50
+              {% elif battery > 35 %} mdi:battery-40 {% elif battery > 25 %} mdi:battery-30 {% elif battery
+              > 15 %} mdi:battery-20 {% elif battery > 5 %} mdi:battery-10 {% else %} mdi:battery-alert
+              {% endif %}
+
+              '
+            secondary: "{% set type = state_attr(config.entity, 'battery_type_and_quantity') %} {% set\
+              \ date_raw = state_attr(config.entity, 'battery_last_replaced') %} {% if date_raw %}\n \
+              \ {% set date_ts = as_timestamp(date_raw) %}\n  {% set dag = date_ts | timestamp_custom('%d',\
+              \ true) | int(0) %}\n  {% set maand_num = date_ts | timestamp_custom('%m', true) | int(0)\
+              \ %}\n  {% set jaar = date_ts | timestamp_custom('%Y', true) %}\n  {% set maanden = ['januari',\
+              \ 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober',\
+              \ 'november', 'december'] %}\n  Type: {{ type }} | {{ dag }} {{ maanden[maand_num - 1] }}\
+              \ {{ jaar }}\n{% else %}\n  Type: {{ type }}\n{% endif %}\n"
+            card_mod:
+              style: ":host {\n  {% set battery = states(config.entity) | int(0) %}\n  {% if battery <=\
+                \ 10 %}\n    --card-mod-icon-color: #cc0000;\n  {% elif battery <= 20 %}\n    --card-mod-icon-color:\
+                \ #dd3300;\n  {% elif battery <= 30 %}\n    --card-mod-icon-color: #ee5500;\n  {% elif\
+                \ battery <= 40 %}\n    --card-mod-icon-color: #ff7700;\n  {% elif battery <= 50 %}\n\
+                \    --card-mod-icon-color: #ff9900;\n  {% elif battery <= 60 %}\n    --card-mod-icon-color:\
+                \ #ffbb00;\n  {% elif battery <= 70 %}\n    --card-mod-icon-color: #cccc00;\n  {% elif\
+                \ battery <= 80 %}\n    --card-mod-icon-color: #99bb00;\n  {% elif battery <= 90 %}\n\
+                \    --card-mod-icon-color: #66aa00;\n  {% else %}\n    --card-mod-icon-color: #339900;\n\
+                \  {% endif %}\n}\nha-icon {\n  {% set battery = states(config.entity) | int(0) %}\n \
+                \ {% if battery <= 10 %}\n    color: #cc0000 !important;\n  {% elif battery <= 20 %}\n\
+                \    color: #dd3300 !important;\n  {% elif battery <= 30 %}\n    color: #ee5500 !important;\n\
+                \  {% elif battery <= 40 %}\n    color: #ff7700 !important;\n  {% elif battery <= 50 %}\n\
+                \    color: #ff9900 !important;\n  {% elif battery <= 60 %}\n    color: #ffbb00 !important;\n\
+                \  {% elif battery <= 70 %}\n    color: #cccc00 !important;\n  {% elif battery <= 80 %}\n\
+                \    color: #99bb00 !important;\n  {% elif battery <= 90 %}\n    color: #66aa00 !important;\n\
+                \  {% else %}\n    color: #339900 !important;\n  {% endif %}\n}\n"
+          entity_id: '*wind*battery_plus*'
+        exclude:
+        - options: {}
+          entity_id: '*_battery'
+        - options: {}
+          entity_id: '*_batterij'
+        - options: {}
+          entity_id: '*_battery_type*'
+        - options: {}
+          entity_id: '*_low*'
+        - options: {}
+          entity_id: '*_last_replaced*'
+        - options: {}
+          state: unknown
+        - options: {}
+          state: unavailable
+        - options: {}
+          entity_id: <<batteries1.ht_badkamer_battery_plus>>
+        - options: {}
+          entity_id: <<batteries1.ht_bureau_battery_plus>>
+        - options: {}
+          entity_id: <<batteries1.ht_eetkamer_keuken_battery_plus>>
+      sort:
+        method: state
+        numeric: true
+  column_span: 3
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 3
