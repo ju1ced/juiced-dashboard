@@ -22,3 +22,4 @@ views:
   - !include views/oprit.yaml
   - !include views/keuken.yaml
   - !include views/garage.yaml
+  - !include views/serverroom.yaml
