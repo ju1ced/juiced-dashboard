@@ -1,0 +1,175 @@
+# valliant view — migrated to committed YAML (PR-22).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: valliant` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: valliant
+icon: ''
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - content: '<center><img width="125" src="/local/images/vaillant_logo.png"/><br/>
+
+          **Verbruiksgegevens warmtepomp en Boiler**</center>
+
+          '
+        style: "ha-card { box-shadow: none; \nha-markdown { padding-bottom: 1px !important; }\n"
+        type: markdown
+      - entities:
+        - animation:
+            state: 'on'
+          entity: <<valliant.em_warmtepomp_buitenunit_vermogen>>
+          entity_row: true
+          icon: mdi:hvac
+          name: ' '
+          positions:
+            name: inside
+            value: inside
+          severity:
+          - color: green
+            from: 3
+            to: 5
+          - color: orange
+            from: 1.5
+            to: 3
+          - color: red
+            from: 0
+            to: 1.5
+          style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+            \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+            \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+            \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+            \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+            \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+            \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+            \ 5px;\n}\n"
+          type: custom:bar-card
+        - animation:
+            state: 'on'
+          entity: <<valliant.em_warmtepomp_binnenunit_vermogen>>
+          entity_row: true
+          icon: mdi:lightning-bolt-circle
+          layout:
+            column: 1
+          name: ' '
+          positions:
+            name: inside
+            value: inside
+          severity:
+          - color: green
+            from: 0
+            to: 10
+          - color: orange
+            from: 10
+            to: 30
+          - color: red
+            from: 30
+            to: 60
+          style: "ha-card {\n  --paper-item-icon-color: rgb(47,186,229);\n  border-radius: 10px;\n  height:\
+            \ 40px;\n}\nha-icon  {\n  margin-top: -7px;\n  padding-right: 5px;\n}\nbar-card-indicator\
+            \   {\n  margin-top: -12px;\n  padding-right: 5px;\n}\nbar-card-name  {\n  margin-top: -4.5px;\n\
+            \  padding-left: 5px;\n}\nbar-card-backgroundbar   {\n  margin-top: -3.5px;\n  border-radius:\
+            \ 10px;\n}\nbar-card-currentbar  {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetbar\
+            \   {\n  margin-top: -3.5px;\n  border-radius: 10px;\n}\nbar-card-targetmarker  {\n  margin-top:\
+            \ -3.5px;\n  border-radius: 10px;\n}\nbar-card-value   {\n  margin-top: -4.5px;\n  padding-left:\
+            \ 5px;\n}\n"
+          type: custom:bar-card
+        style: 'ha-card { box-shadow: none;
+
+          '
+        type: entities
+      - entities:
+        - entity: <<valliant.household_outdoor_temperature>>
+          icon: mdi:home-thermometer-outline
+          name: Buitentemperatuur
+        - entity: <<valliant.household_circuit_0_current_flow_temperature>>
+          icon: mdi:thermometer
+          name: Aanvoertemperatuur
+        - entity: <<valliant.household_system_water_pressure>>
+          icon: mdi:gauge
+          name: Waterdruk
+        - entity: <<valliant.household_online_status>>
+          name: Systeemstatus
+        - entity: <<valliant.household_trouble_codes>>
+          name: Errors
+        style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n\n.card-header {\n  padding:\
+          \ 5px 16px;\n  font-size: 18px;\n  font-weight: 700 !important;\n}\n.card-content div {\n  \
+          \  margin: 0 !important;\n}\n#states {\n  padding-top: 0px !important;\n  padding-bottom: 0px\
+          \ !important;\n}\n.secondary {\n  color: darkgray !important;\n  margin-left: 2px !important;\n\
+          }\n"
+        title: Details
+        type: entities
+      - align_state: center
+        entities:
+        - entity: <<valliant.household_heating_energy_efficiency>>
+          name: COP Warmtepomp
+        font_size: 70
+        height: 50
+        hours_to_show: 168
+        line_width: 2
+        name: COP Warmtepomp
+        points_per_hour: 1
+        show:
+          fill: fade
+        style: "ha-card {\n  border-radius: 10px;\n}\n"
+        type: custom:mini-graph-card
+  - type: vertical-stack
+    cards:
+    - cards:
+      - content: "<center><img width=\"125\" src=\"/local/images/vwl55-3.png\"/></center><br/>   \n"
+        style: "ha-card { box-shadow: none; \nha-markdown { padding-bottom: 1px !important; }\n"
+        type: markdown
+      - control: false
+        entity: <<valliant.household_zone_zone_1_circuit_0_climate>>
+        header: {}
+        layout:
+          mode:
+            headings: true
+            icons: false
+            names: false
+        type: custom:simple-thermostat
+      - type: entities
+        entities:
+        - entity: <<valliant.warmtepomp_binnenunit_daily>>
+        - entity: <<valliant.warmtepomp_buitenunit_daily>>
+        - entity: <<valliant.warmtepomp_binnenunit_monthly>>
+        - entity: <<valliant.warmtepomp_buitenunit_monthly>>
+        - entity: <<valliant.warmtepomp_binnenunit_yearly>>
+        - entity: <<valliant.warmtepomp_buitenunit_yearly>>
+      - type: entities
+        entities:
+        - entity: <<valliant.em_warmtepomp_buitenunit_energie>>
+        - entity: <<valliant.em_warmtepomp_buitenunit_energy_returned>>
+        - entity: <<valliant.em_warmtepomp_binnenunit_energie>>
+        - entity: <<valliant.em_warmtepomp_binnenunit_energy_returned>>
+      type: vertical-stack
+  - type: vertical-stack
+    cards:
+    - cards:
+      - content: '<center><img width="125" src="/local/images/unistor_styled.png"/></center><br/>
+
+          '
+        style: "ha-card { box-shadow: none; \nha-markdown { padding-bottom: 1px !important; }\n"
+        type: markdown
+      - control: false
+        entity: <<valliant.household_domestic_hot_water_0>>
+        header: null
+        type: custom:simple-thermostat
+      type: vertical-stack
+  column_span: 3
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 4
+path: valliant
