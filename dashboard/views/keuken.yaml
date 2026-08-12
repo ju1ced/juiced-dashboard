@@ -1,0 +1,739 @@
+# keuken view — migrated to committed YAML (PR-16).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: keuken` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+type: sections
+max_columns: 4
+title: keuken
+path: keuken
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<keuken.ledstrip_keukeneiland_1>>
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+        name: keukeneiland
+      - type: custom:mushroom-light-card
+        entity: <<keuken.ledstrip_keuken_1>>
+        name: keukenkasten
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-light-card
+        entity: <<keuken.ledstrip_koffiezet_1>>
+        use_light_color: true
+        show_brightness_control: true
+        collapsible_controls: true
+        name: Koffienis
+      - type: custom:mushroom-light-card
+        entity: <<keuken.licht_bijkeuken>>
+        use_light_color: true
+        fill_container: true
+        name: Bijkeuken
+    - type: custom:mushroom-cover-card
+      entity: <<keuken.rolluik_keuken>>
+      show_position_control: true
+      show_tilt_position_control: false
+      show_buttons_control: true
+      tap_action:
+        action: more-info
+    - type: custom:mini-media-player
+      entity: <<keuken.keuken>>
+      group: false
+      volume_stateless: false
+      toggle_power: true
+      source: icon
+      artwork: cover
+      sound_mode: icon
+      info: scroll
+      speaker_group:
+        platform: sonos
+        show_group_count: true
+        entities:
+        - entity_id: <<keuken.keuken>>
+          name: Sonos keuken
+        - entity_id: <<keuken.living>>
+          name: Sonos Living
+        - entity_id: <<keuken.kantoor>>
+          name: Sonos kantoor
+        - entity_id: <<keuken.badkamer>>
+          name: Sonos badkamer
+        - entity_id: <<keuken.slaapkamer>>
+          name: Sonos Slaapkamer
+        - entity_id: <<keuken.bbq_buitenkeuken>>
+          name: Sonos BBQ buitenkeuken
+        - entity_id: <<keuken.tuinhuis>>
+          name: Sonos Tuinhuis
+    - type: custom:expander-card
+      title-card-clickable: true
+      expanded: true
+      min-width-expanded: 1024
+      title-card-button-overlay: true
+      expanded-gap: 1em
+      padding: 0px
+      child-margin-top: 0.5em
+      expander-card-background: transparent
+      expander-card-background-expanded: transparent
+      title: Buiten
+      title-card:
+        name: We Earth 2.0
+        styles:
+          card:
+          - padding: 2% 0px
+          - font-size: 125%
+          - border-radius: 0%
+          - font-weight: 100
+          - letter-spacing: 3px
+          - --mdc-ripple-press-opacity: 0
+          - cursor: initial
+          name:
+          - font-weight: 900
+        type: custom:button-card
+      cards:
+      - square: false
+        type: grid
+        cards:
+        - type: picture
+          image:
+            media_content_id: media-source://media_source/local/weearth.jpg
+            media_content_type: image/jpeg
+            metadata:
+              title: weearth.jpg
+              thumbnail: null
+              media_class: image
+              children_media_class: null
+              navigateIds:
+              - {}
+              - media_content_type: app
+                media_content_id: media-source://media_source
+        - type: custom:restriction-card
+          card:
+            type: custom:mushroom-entity-card
+            entity: <<keuken.weearth>>
+            name: We Earth 2.0
+            icon_color: primary
+            icon: mdi:compost
+            layout: vertical
+            fill_container: true
+          restrictions:
+            lock: true
+        - type: custom:mushroom-entity-card
+          icon_color: primary
+          icon: mdi:compost
+          layout: vertical
+          entity: <<keuken.weearth_actief>>
+          fill_container: true
+        columns: 3
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 80%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.stopcontact_amerikaanse_frigo>>
+            state_color: true
+            name: Amerikaanse koelkast
+            icon: mdi:fridge-variant
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.stopcontact_amerikaanse_frigo_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.amerikaanse_frigo_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.amerikaanse_frigo_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.amerikaanse_frigo_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.stopcontact_amerikaanse_frigo_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - entity: <<keuken.amerikaanse_frigo_daily>>
+            group_by: date
+            hours_to_show: 168
+            name: Amerikaanse koelkast verbruik vandaag
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+        state_color: true
+        type: entities
+      - type: vertical-stack
+        cards:
+        - card_mod:
+            style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+              \ #13269e\n}\n"
+          entities:
+          - card:
+              entity: <<keuken.smart_plug_bierfrigo>>
+              state_color: true
+              icon: mdi:fridge
+            row: true
+            type: custom:restriction-card
+          - entity: <<keuken.smart_plug_bierfrigo_vermogen>>
+            icon: mdi:counter
+            name: Huidig Verbruik
+          - entity: <<keuken.bierfrigo_daily>>
+            name: Dagelijks Verbruik
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Meer informatie
+            entities:
+            - entity: <<keuken.bierfrigo_monthly>>
+              name: Maandelijks verbruik
+            - entity: <<keuken.bierfrigo_yearly>>
+              name: Jaarlijks verbruik
+            - entity: <<keuken.smart_plug_bierfrigo_energie>>
+              icon: mdi:counter
+              name: Totaal Verbruik
+            - aggregate_func: max
+              entities:
+              - <<keuken.bierfrigo_daily>>
+              group_by: date
+              hours_to_show: 168
+              show:
+                graph: bar
+              type: custom:mini-graph-card
+              name: ' '
+          state_color: true
+          type: entities
+      - type: vertical-stack
+        cards:
+        - entities:
+          - card:
+              entity: <<keuken.stopcontact_nespresso_vertuo>>
+              state_color: true
+              icon: mdi:coffee-maker
+              name: Nespresso Vertuo
+            row: true
+            type: custom:restriction-card
+          - entity: <<keuken.stopcontact_nespresso_vertuo_power>>
+            icon: mdi:counter
+          - entity: <<keuken.nespresso_vertuo_daily>>
+            icon: mdi:counter
+            name: Dagelijks Verbruik
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Meer informatie
+            entities:
+            - entity: <<keuken.nespresso_vertuo_monthly>>
+              name: Maandelijks verbruik
+            - entity: <<keuken.nespresso_vertuo_yearly>>
+              name: Jaarlijks verbruik
+            - entity: <<keuken.stopcontact_nespresso_vertuo_energy>>
+              icon: mdi:counter
+            - aggregate_func: max
+              entities:
+              - <<keuken.nespresso_vertuo_daily>>
+              group_by: date
+              hours_to_show: 168
+              show:
+                graph: bar
+              type: custom:mini-graph-card
+          state_color: true
+          type: entities
+          card_mod:
+            style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+              \ #13269e\n}\n"
+      - type: vertical-stack
+        cards:
+        - card_mod:
+            style: "ha-card {\n  --restriction-lock-row-margin-left: 80%;\n  --restriction-regular-lock-color:\
+              \ #13269e\n}\n"
+          entities:
+          - card:
+              entity: <<keuken.stopcontact_airfryer>>
+              state_color: true
+              icon: mdi:french-fries
+              name: Airfryer
+            row: true
+            type: custom:restriction-card
+          - entity: <<keuken.stopcontact_airfryer_power>>
+            icon: mdi:counter
+            name: Huidig verbruik
+          - entity: <<keuken.airfryer_daily>>
+            name: Dagelijks verbruik
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Meer informatie
+            entities:
+            - entity: <<keuken.airfryer_monthly>>
+              name: Maandelijks verbruik
+            - entity: <<keuken.airfryer_yearly>>
+              name: Jaarlijks verbruik
+            - entity: <<keuken.stopcontact_airfryer_energy>>
+              icon: mdi:counter
+              name: Totaal verbruik
+            - aggregate_func: max
+              entities:
+              - entity: <<keuken.airfryer_daily>>
+              group_by: date
+              hours_to_show: 168
+              name: Airfryer verbruik dagelijks
+              show:
+                graph: bar
+              type: custom:mini-graph-card
+          state_color: true
+          type: entities
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - entities:
+        - card:
+            entity: <<keuken.stopcontact_oven>>
+            state_color: true
+            name: Oven
+            icon: mdi:stove
+          name: Microgolf
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.stopcontact_oven_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.oven_daily>>
+          name: Dagelijks verbruik
+        - entity: <<keuken.stopcontact_oven_voltage>>
+          name: Voltage
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.oven_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.oven_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.stopcontact_oven_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.oven_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+        card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.stopcontact_microgolfoven>>
+            state_color: true
+            name: Microgolf
+            icon: mdi:microwave
+          name: Microgolf
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.stopcontact_microgolfoven_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.microgolfoven_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.microgolfoven_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.microgolfoven_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.stopcontact_microgolfoven_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.microgolfoven_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.stopcontact_microgolfoven>>
+            state_color: true
+            name: Wijnklimaatkast
+            icon: mdi:bottle-wine
+          name: Wijnklimaatkast
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.wijnklimaatkast_vermogen>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.wijnklimaatkast_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.wijnklimaatkast_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.wijnklimaatkast_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.wijnklimaatkast_energie>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.wijnklimaatkast_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.stopcontact_vaatwas>>
+            state_color: true
+            name: Vaatwas
+            icon: mdi:dishwasher
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.stopcontact_vaatwas_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.vaatwas_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.vaatwas_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.vaatwas_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.stopcontact_vaatwas_energy>>
+            icon: mdi:counter
+            name: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.vaatwas_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.smart_plug_breadmaker>>
+            state_color: true
+            icon: mdi:bread-slice
+            name: Broodbakmachine
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.smart_plug_breadmaker_power>>
+          name: Huidig verbruik
+        - entity: <<keuken.breadmaker_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.breadmaker_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.breadmaker_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.smart_plug_breadmaker_energy>>
+            icon: mdi:counter
+            name: Totaal verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.breadmaker_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.weearth>>
+            name: We Earth 2.0
+            state_color: true
+          icon: mdi:compost
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.weearth_vermogen>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.weearth_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.weearth_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.weearth_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.weearth_energie>>
+            icon: mdi:counter
+            name: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.weearth_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.smart_plug_wasmachine>>
+            state_color: true
+          icon: mdi:washing-machine
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.stopcontact_wasmachine_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.wasmachine_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.wasmachine_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.wasmachine_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.stopcontact_wasmachine_energy>>
+            icon: mdi:counter
+            name: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.wasmachine_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: vertical-stack
+      cards:
+      - card_mod:
+          style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+            \ #13269e\n}\n"
+        entities:
+        - card:
+            entity: <<keuken.smart_plug_droogkast>>
+            state_color: true
+          icon: mdi:tumble-dryer
+          row: true
+          type: custom:restriction-card
+        - entity: <<keuken.smart_plug_droogkast_power>>
+          icon: mdi:counter
+          name: Huidig verbruik
+        - entity: <<keuken.droogkast_daily>>
+          name: Dagelijks verbruik
+        - type: custom:fold-entity-row
+          head:
+            type: section
+            label: Meer informatie
+          entities:
+          - entity: <<keuken.droogkast_monthly>>
+            name: Maandelijks verbruik
+          - entity: <<keuken.droogkast_yearly>>
+            name: Jaarlijks verbruik
+          - entity: <<keuken.smart_plug_droogkast_energy>>
+            icon: mdi:counter
+            naam: Totaal Verbruik
+          - aggregate_func: max
+            entities:
+            - <<keuken.droogkast_daily>>
+            group_by: date
+            hours_to_show: 168
+            show:
+              graph: bar
+            type: custom:mini-graph-card
+            name: ' '
+        state_color: true
+        type: entities
+    - type: conditional
+      conditions:
+      - condition: state
+        entity: <<keuken.droger_huidige_status>>
+        state: Drying
+      card:
+        type: vertical-stack
+        cards:
+        - type: picture-elements
+          elements:
+          - type: image
+            entity: <<keuken.droger_huidige_status>>
+            image: /local/lg-icons/dry.png
+            state_image:
+              Drogen: /local/lg-icons/dry-on.png
+            style:
+              top: 33%
+              left: 69%
+              width: 20%
+              image-rendering: crisp
+          - type: image
+            entity: <<keuken.droger_huidige_status>>
+            image: /local/lg-icons/cool.png
+            state_image:
+              Koelen: /local/lg-icons/cool-on.png
+            style:
+              top: 33%
+              left: 87%
+              width: 20%
+              image-rendering: crisp
+          - type: image
+            entity: <<keuken.droger_huidige_status>>
+            image: /local/lg-icons/wifi.png
+            state_image:
+              'on': /local/lg-icons/wifi-on.png
+            style:
+              top: 73%
+              left: 40%
+              width: 10%
+              image-rendering: crisp
+          - type: state-label
+            entity: <<keuken.blank>>
+            prefix: 18:88
+            style:
+              color: '#555'
+              font-family: segment7
+              font-size: 50px
+              left: 95%
+              top: 74%
+              transform: translate(-100%,-50%)
+          - type: state-label
+            entity: <<keuken.droger_resterende_tijd>>
+            style:
+              color: '#8df427'
+              font-family: segment7
+              font-size: 50px
+              left: 95%
+              top: 74%
+              transform: translate(-100%,-50%)
+          image: /local/hass-dryer-card-bg.png
+    - card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+      entities:
+      - card:
+          entity: <<keuken.smart_plug_toestelnis_links>>
+          name: Toestelnis Links
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - entity: <<keuken.smart_plug_toestelnis_links_vermogen>>
+        icon: mdi:counter
+        name: Huidig verbruik
+      - entity: <<keuken.smart_plug_toestelnis_links_energie>>
+        name: Totaal Verbruik
+      state_color: true
+      type: entities
+    - card_mod:
+        style: "ha-card {\n  --restriction-lock-row-margin-left: 82%;\n  --restriction-regular-lock-color:\
+          \ #13269e\n}\n"
+      entities:
+      - card:
+          entity: <<keuken.smart_plug_toestelnis_rechts>>
+          name: Toestelnis rechts
+          state_color: true
+        row: true
+        type: custom:restriction-card
+      - entity: <<keuken.smart_plug_toestelnis_rechts_vermogen>>
+        icon: mdi:counter
+        name: Huidig verbruik
+      - entity: <<keuken.smart_plug_toestelnis_rechts_energie>>
+        name: Totaal Verbruik
+      state_color: true
+      type: entities
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
