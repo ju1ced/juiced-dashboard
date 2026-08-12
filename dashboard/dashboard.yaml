@@ -23,3 +23,4 @@ views:
   - !include views/keuken.yaml
   - !include views/garage.yaml
   - !include views/serverroom.yaml
+  - !include views/terras.yaml

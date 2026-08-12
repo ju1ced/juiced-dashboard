@@ -772,3 +772,51 @@ serverroom:
   soldeerbout_energie: sensor.example_soldeerbout_energie
   led_strip_boven: switch.example_led_strip_boven
   led_strip_onder: switch.example_led_strip_onder
+terras:
+  licht_terrasspot: light.example_licht_terrasspot
+  terraslichtjes_3: light.example_terraslichtjes_3
+  licht_bbq_buitenkeuken: light.example_licht_bbq_buitenkeuken
+  bbq_buitenkeuken_lichtjes: light.example_bbq_buitenkeuken_lichtjes
+  tuinhuislichtjes_lichtjes_tuinhuis: light.example_tuinhuislichtjes_lichtjes_tuinhuis
+  licht_tuinhuis: light.example_licht_tuinhuis
+  terraslichtjes_kleur: light.example_terraslichtjes_kleur
+  licht_boom: light.example_licht_boom
+  luifel_terras: cover.example_luifel_terras
+  luifel_bureau_luifel_bureau: cover.example_luifel_bureau_luifel_bureau
+  keuken: media_player.example_keuken
+  living: media_player.example_living
+  kantoor: media_player.example_kantoor
+  badkamer: media_player.example_badkamer
+  slaapkamer: media_player.example_slaapkamer
+  bbq_buitenkeuken: media_player.example_bbq_buitenkeuken
+  tuinhuis: media_player.example_tuinhuis
+  tx_nr656: media_player.example_tx_nr656
+  tx_nr656_zone_2: media_player.example_tx_nr656_zone_2
+  ht_buitenkeuken_temperatuur: sensor.example_ht_buitenkeuken_temperatuur
+  ht_buitenkeuken_luchtvochtigheid: sensor.example_ht_buitenkeuken_luchtvochtigheid
+  bewegingssensor_terras_temperature: sensor.example_bewegingssensor_terras_temperature
+  bewegingssensor_tuinhuis_temperature: sensor.example_bewegingssensor_tuinhuis_temperature
+  ht_terraskast_temperatuur: sensor.example_ht_terraskast_temperatuur
+  ht_terraskast_luchtvochtigheid: sensor.example_ht_terraskast_luchtvochtigheid
+  tuin_high_resolution_channel: camera.example_tuin_high_resolution_channel
+  tuinhuis_high_resolution_channel: camera.example_tuinhuis_high_resolution_channel
+  bewegingssensor_terras_occupancy: binary_sensor.example_bewegingssensor_terras_occupancy
+  bewegingssensor_terras_battery: sensor.example_bewegingssensor_terras_battery
+  bewegingssensor_tuinhuis_occupancy: binary_sensor.example_bewegingssensor_tuinhuis_occupancy
+  bewegingssensor_tuinhuis_battery: sensor.example_bewegingssensor_tuinhuis_battery
+  tomorrow_io_temperatuur: sensor.example_tomorrow_io_temperatuur
+  tomorrow_io_windsnelheid: sensor.example_tomorrow_io_windsnelheid
+  tomorrow_io_vochtigheidsgraad: sensor.example_tomorrow_io_vochtigheidsgraad
+  tomorrow_io_household_home_cloud_cover: sensor.example_tomorrow_io_household_home_cloud_cover
+  buienradar: camera.example_buienradar
+  regenmodule_neerslag: sensor.example_regenmodule_neerslag
+  regenmodule_neerslag_vandaag: sensor.example_regenmodule_neerslag_vandaag
+  windmeter_windsnelheid: sensor.example_windmeter_windsnelheid
+  windmeter_windstoot_sterkte: sensor.example_windmeter_windstoot_sterkte
+  windmeter_windstoot_hoek: sensor.example_windmeter_windstoot_hoek
+  bbq_buitenkeuken_zwembad: switch.example_bbq_buitenkeuken_zwembad
+  bbq_buitenkeuken_zwembad_vermogen: sensor.example_bbq_buitenkeuken_zwembad_vermogen
+  buitenkeuken_daily: sensor.example_buitenkeuken_daily
+  buitenkeuken_monthly: sensor.example_buitenkeuken_monthly
+  buitenkeuken_yearly: sensor.example_buitenkeuken_yearly
+  bbq_buitenkeuken_zwembad_energie: sensor.example_bbq_buitenkeuken_zwembad_energie
