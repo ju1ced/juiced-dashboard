@@ -932,3 +932,23 @@ hainfo:
   slzb_mr5u_core_uptime: sensor.example_slzb_mr5u_core_uptime
   slzb_mr5u_zigbee_type: sensor.example_slzb_mr5u_zigbee_type
   slzb_mr5u_zigbee_type_2: sensor.example_slzb_mr5u_zigbee_type_2
+water:
+  watermeter_water_usage: sensor.example_watermeter_water_usage
+  watermeter_total_water_usage: sensor.example_watermeter_total_water_usage
+  waterverbruik_daily: sensor.example_waterverbruik_daily
+  kosten_waterverbruik_vandaag: sensor.example_kosten_waterverbruik_vandaag
+  kosten_waterverbruik_deze_week: sensor.example_kosten_waterverbruik_deze_week
+  kosten_waterverbruik_deze_maand: sensor.example_kosten_waterverbruik_deze_maand
+  kosten_waterverbruik_dit_kwartaal: sensor.example_kosten_waterverbruik_dit_kwartaal
+  kosten_waterverbruik_dit_jaar: sensor.example_kosten_waterverbruik_dit_jaar
+  waterverbruik_gisteren: sensor.example_waterverbruik_gisteren
+  waterverbruik_vorige_week: sensor.example_waterverbruik_vorige_week
+  waterverbruik_vorige_maand: sensor.example_waterverbruik_vorige_maand
+  waterverbruik_vorig_jaar: sensor.example_waterverbruik_vorig_jaar
+  waterverbruik_totaal_per_liter: sensor.example_waterverbruik_totaal_per_liter
+  waterverbruik_kwartier: sensor.example_waterverbruik_kwartier
+  waterverbruik_uur: sensor.example_waterverbruik_uur
+  waterverbruik_weekly: sensor.example_waterverbruik_weekly
+  waterverbruik_monthly: sensor.example_waterverbruik_monthly
+  waterverbruik_quarterly: sensor.example_waterverbruik_quarterly
+  waterverbruik_yearly: sensor.example_waterverbruik_yearly

@@ -1,0 +1,136 @@
+# water view — migrated to committed YAML (PR-24).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: water` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: water
+icon: ''
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+type: sections
+max_columns: 3
+sections:
+- type: grid
+  cards:
+  - type: vertical-stack
+    cards:
+    - type: entity
+      entity: <<water.watermeter_water_usage>>
+    - type: entity
+      entity: <<water.watermeter_total_water_usage>>
+    - type: gauge
+      entity: <<water.watermeter_water_usage>>
+      min: 0
+      name: Waterverbruik per minuut
+      severity:
+        green: 0
+        yellow: 5
+        red: 15
+      unit: L
+      max: 25
+      needle: true
+    - type: gauge
+      entity: <<water.waterverbruik_daily>>
+      min: 0
+      name: Waterverbruik vandaag
+      severity:
+        green: 0
+        yellow: 100
+        red: 300
+      unit: L
+      max: 500
+      needle: true
+  - type: vertical-stack
+    cards:
+    - type: custom:apexcharts-card
+      graph_span: 24h
+      header:
+        show: true
+        title: Waterverbruik laatste 24 uur
+      apex_config:
+        yaxis:
+        - id: first
+          forceNiceScale: true
+          decimalsInFloat: 0
+          opposite: false
+          name: Water
+      series:
+      - entity: <<water.watermeter_water_usage>>
+        unit: liter
+        type: column
+        name: waterverbruik
+        color: '#0099CC'
+        group_by:
+          func: avg
+        show:
+          datalabels: false
+          extremas: false
+    - type: entities
+      entities:
+      - entity: <<water.kosten_waterverbruik_vandaag>>
+      - entity: <<water.kosten_waterverbruik_deze_week>>
+      - entity: <<water.kosten_waterverbruik_deze_maand>>
+      - entity: <<water.kosten_waterverbruik_dit_kwartaal>>
+      - entity: <<water.kosten_waterverbruik_dit_jaar>>
+    - type: entities
+      entities:
+      - entity: <<water.waterverbruik_gisteren>>
+      - entity: <<water.waterverbruik_vorige_week>>
+      - entity: <<water.waterverbruik_vorige_maand>>
+      - entity: <<water.waterverbruik_vorig_jaar>>
+  - type: vertical-stack
+    cards:
+    - type: custom:apexcharts-card
+      graph_span: 7d
+      header:
+        show: true
+        title: Waterverbruik laatste week
+      apex_config:
+        yaxis:
+        - id: first
+          forceNiceScale: true
+          decimalsInFloat: 0
+          opposite: false
+          name: Water
+      series:
+      - entity: <<water.waterverbruik_daily>>
+        unit: liter
+        type: column
+        name: waterverbruik
+        color: '#0099CC'
+        group_by:
+          func: avg
+        show:
+          datalabels: false
+          extremas: false
+    - type: entity
+      entity: <<water.waterverbruik_totaal_per_liter>>
+      name: Huidige Watermeterstand
+      state_color: false
+      unit: liter
+    - type: entity
+      entity: <<water.watermeter_total_water_usage>>
+      name: Huidige Watermeterstand
+      unit: m³
+      state_color: false
+    - type: entities
+      entities:
+      - entity: <<water.waterverbruik_kwartier>>
+      - entity: <<water.waterverbruik_uur>>
+      - entity: <<water.waterverbruik_daily>>
+      - entity: <<water.waterverbruik_weekly>>
+      - entity: <<water.waterverbruik_monthly>>
+      - entity: <<water.waterverbruik_quarterly>>
+      - entity: <<water.waterverbruik_yearly>>
+      title: Watermeter standen
+      state_color: false
+      show_header_toggle: false
+  column_span: 3
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+path: water
