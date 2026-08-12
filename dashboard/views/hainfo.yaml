@@ -1,0 +1,405 @@
+# System and update info view — migrated to committed YAML (PR-23).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: hainfo` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+path: hainfo
+title: System and update info
+icon: ''
+type: sections
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+sections:
+- type: grid
+  cards:
+  - cards:
+    - cards:
+      - title: Speedtest
+        type: custom:mushroom-title-card
+      - entities:
+        - <<hainfo.speedtest_ping>>
+        font_size: 70
+        height: 30
+        hours_to_show: 168
+        icon: mdi:pulse
+        line_color: var(--primary-color)
+        line_width: 2
+        name: Ping
+        points_per_hour: 1
+        show:
+          fill: true
+          graph: bar
+        type: custom:mini-graph-card
+      - cards:
+        - entities:
+          - entity: <<hainfo.speedtest_download>>
+            show_points: false
+          font_size: 70
+          hours_to_show: 168
+          icon: mdi:arrow-down-bold
+          line_color: var(--primary-color)
+          line_width: 2
+          name: Download
+          show:
+            extrema: true
+            labels: false
+          type: custom:mini-graph-card
+        - entities:
+          - entity: <<hainfo.speedtest_upload>>
+            show_points: false
+          font_size: 70
+          hours_to_show: 168
+          icon: mdi:arrow-up-bold
+          line_color: var(--primary-color)
+          line_width: 2
+          name: Upload
+          show:
+            extrema: true
+            labels: false
+          type: custom:mini-graph-card
+        type: horizontal-stack
+      item_classes: col-xs-12 col-sm-6
+      type: vertical-stack
+    - cards:
+      - title: System
+        type: custom:mushroom-title-card
+      - cards:
+        - entity: <<hainfo.system_monitor_ipv4_adres_enp6s18>>
+          name: Ip Address
+          type: custom:mushroom-entity-card
+        - entity: <<hainfo.system_monitor_last_boot>>
+          name: Last boot
+          type: custom:mushroom-entity-card
+        type: horizontal-stack
+      - bar_style:
+          border-radius: 5px
+          padding-left: 4px
+          text-align: left
+        columns: 2
+        entities:
+        - entity: <<hainfo.system_monitor_processor_use>>
+        - entity: <<hainfo.system_monitor_geheugengebruik>>
+          icon: mdi:memory
+        - entity: <<hainfo.system_monitor_schijfgebruik>>
+          icon: mdi:harddisk
+        - entity: <<hainfo.system_monitor_load_1_min>>
+        - entity: <<hainfo.system_monitor_load_5_min>>
+        - entity: <<hainfo.system_monitor_load_15_min>>
+        positions:
+          indicator: inside
+          name: 'off'
+        severity:
+        - color: Green
+          from: 0
+          to: 60
+        - color: Orange
+          from: 61
+          to: 80
+        - color: Red
+          from: 81
+          to: 100
+        style: "ha-card {\n  border-radius: 5px;\n}\nbar-card-backgroundbar, bar-card-currentbar {\n \
+          \ border-radius: 5px;\n}\nbar-card-value {\n  font-weight: bold;\n}\nbar-card-iconbar {\n  height:\
+          \ 20px;\n}      \n"
+        type: custom:bar-card
+      - cards:
+        - entities:
+          - <<hainfo.system_monitor_processor_use>>
+          font_size: 75
+          height: 130
+          hours_to_show: 24
+          icon_adaptive_color: true
+          line_color: red
+          line_width: 2
+          name: Processor
+          points_per_hour: 60
+          show:
+            labels: false
+          type: custom:mini-graph-card
+        - entities:
+          - <<hainfo.system_monitor_geheugengebruik>>
+          font_size: 75
+          height: 130
+          icon: mdi:memory
+          hours_to_show: 24
+          line_color: green
+          line_width: 2
+          name: Geheugen
+          points_per_hour: 60
+          show:
+            labels: false
+          type: custom:mini-graph-card
+        type: horizontal-stack
+      item_classes: col-xs-12 col-sm-6
+      type: vertical-stack
+    - cards:
+      - title: HA database size
+        type: custom:mushroom-title-card
+      type: vertical-stack
+    - cards:
+      - entity: <<hainfo.mariadb_database_size>>
+        name: Mariadb db size
+        type: custom:mushroom-entity-card
+      type: horizontal-stack
+    type: vertical-stack
+  - type: vertical-stack
+    cards:
+    - type: custom:flex-horseshoe-card
+      entities:
+      - entity: <<hainfo.telenet_telemeter_internet_ae80976>>
+        attribute: period_used_percentage
+        decimals: 1
+        unit: '%'
+        name: Telemeter
+        tap_action:
+          action: none
+      - entity: <<hainfo.telenet_telemeter_internet_ae80976>>
+        attribute: period_days_left
+        decimals: 0
+        unit: d
+        name: resterend
+        icon: mdi:calendar
+      - entity: <<hainfo.telenet_telemeter_internet_ae80976>>
+        attribute: peak_usage
+        decimals: 1
+        unit: Gb
+        name: verbruikt
+      - entity: <<hainfo.telenet_telemeter_internet_ae80976>>
+        attribute: offpeak_usage
+        decimals: 1
+        unit: Gb
+        name: verbruik
+      show:
+        horseshoe_style: colorstop
+      layout:
+        hlines:
+        - id: 0
+          xpos: 50
+          ypos: 40
+          length: 50
+          styles:
+          - stroke-width: 1;
+          - opacity: 0.6;
+          - stroke-linecap: round;
+        vlines:
+        - id: 0
+          xpos: 50
+          ypos: 60
+          length: 20
+          styles:
+          - stroke-width: 1;
+          - opacity: 0.6;
+          - stroke-linecap: round;
+        states:
+        - id: 0
+          entity_index: 0
+          xpos: 50
+          ypos: 34
+          styles:
+          - font-size: 3em;
+        - id: 1
+          entity_index: 1
+          xpos: 46
+          ypos: 59
+          styles:
+          - font-size: 1.2em;
+          - text-anchor: end
+        - id: 2
+          entity_index: 2
+          xpos: 53
+          ypos: 59
+          styles:
+          - font-size: 1.2em;
+          - text-anchor: start
+        names:
+        - id: 0
+          entity_index: 0
+          xpos: 50
+          ypos: 95
+          styles:
+          - font-size: 1.6em;
+          - opacty: 1;
+        - id: 1
+          entity_index: 1
+          xpos: 46
+          ypos: 66
+          styles:
+          - font-size: 0.6em;
+          - opacity: 0.6;
+          - text-anchor: end
+        - id: 2
+          entity_index: 2
+          xpos: 54
+          ypos: 66
+          styles:
+          - font-size: 0.6em;
+          - opacity: 0.6;
+          - text-anchor: start
+        icons:
+        - id: 0
+          entity_index: 1
+          xpos: 31
+          ypos: 58
+          icon_size: 1.5
+          align: end
+          styles:
+          - opacity: 0.6
+      horseshoe_scale:
+        min: 0
+        max: 100
+      color_stops:
+        '90': '#FFC421'
+        '95': '#FF0000'
+  - type: vertical-stack
+    cards:
+    - type: custom:apexcharts-card
+      apex_config:
+        chart:
+          stacked: true
+        xaxis:
+          labels:
+            format: dd
+        legend:
+          show: true
+      graph_span: 7d1s
+      span:
+        end: day
+      show:
+        last_updated: true
+      header:
+        show: true
+        show_states: true
+        colorize_states: true
+      series:
+      - entity: <<hainfo.telenet_telemeter_peak_ae80976>>
+        attribute: peak_usage
+        name: Peak
+        unit: ' GB'
+        type: column
+        color: darkviolet
+        group_by:
+          func: max
+          duration: 1d
+        show:
+          datalabels: true
+        transform: return x;
+      - entity: <<hainfo.telenet_telemeter_peak_ae80976>>
+        attribute: offpeak_usage
+        name: Offpeak
+        unit: ' GB'
+        type: column
+        group_by:
+          func: max
+          duration: 1d
+        show:
+          datalabels: true
+        transform: return x;
+    - type: vertical-stack
+      cards:
+      - type: custom:bar-card
+        entities:
+        - animation:
+            state: 'on'
+          entity: <<hainfo.telenet_telemeter_mobile_0474493161>>
+          entity_row: true
+          icon: mdi:cellphone-cog
+          name: 5g data Persoon 1
+          positions:
+            name: inside
+            value: inside
+          severity:
+          - color: green
+            from: 0
+            to: 60
+          - color: orange
+            from: 60
+            to: 80
+          - color: red
+            from: 80
+            to: 100
+        severity:
+        - from: ''
+          to: ''
+          color: ''
+      - type: custom:bar-card
+        entities:
+        - animation:
+            state: 'on'
+          entity: <<hainfo.telenet_telemeter_mobile_0484914980>>
+          entity_row: true
+          icon: mdi:cellphone-cog
+          name: 5g data Persoon 2
+          positions:
+            name: inside
+            value: inside
+          severity:
+          - color: green
+            from: 0
+            to: 60
+          - color: orange
+            from: 60
+            to: 80
+          - color: red
+            from: 80
+            to: 100
+      - type: custom:bar-card
+        entities:
+        - animation:
+            state: 'on'
+          entity: <<hainfo.telenet_telemeter_mobile_0469240313>>
+          entity_row: true
+          icon: mdi:cellphone-cog
+          name: 5g data Tablet
+          positions:
+            name: inside
+            value: inside
+          severity:
+          - color: green
+            from: 0
+            to: 60
+          - color: orange
+            from: 60
+            to: 80
+          - color: red
+            from: 80
+            to: 100
+  - square: false
+    type: grid
+    cards:
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_core_firmware>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_firmware_2>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_firmware>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_connection_mode>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_ethernet>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_internet>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_core_chip_temp>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_chip_temperatuur>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_chip_temperatuur_2>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_core_uptime>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_type>>
+    - type: tile
+      entity: <<hainfo.slzb_mr5u_zigbee_type_2>>
+    title: SLZB-MR5U
+    grid_options:
+      rows: 1
+      columns: 12
+  column_span: 4
+max_columns: 4
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap

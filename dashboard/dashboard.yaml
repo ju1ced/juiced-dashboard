@@ -26,3 +26,4 @@ views:
   - !include views/terras.yaml
   - !include views/net.yaml
   - !include views/valliant.yaml
+  - !include views/hainfo.yaml
