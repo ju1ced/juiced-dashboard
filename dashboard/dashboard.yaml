@@ -24,3 +24,4 @@ views:
   - !include views/garage.yaml
   - !include views/serverroom.yaml
   - !include views/terras.yaml
+  - !include views/net.yaml
