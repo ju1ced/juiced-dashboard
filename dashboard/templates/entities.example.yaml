@@ -488,3 +488,29 @@ woonkamer:
   power_strip_tv_monthly: sensor.example_power_strip_tv_monthly
   power_strip_tv_yearly: sensor.example_power_strip_tv_yearly
   power_strip_tv_energie: sensor.example_power_strip_tv_energie
+oprit:
+  schakelaar_voordeur_l1: light.example_schakelaar_voordeur_l1
+  deursensor_voordeur: binary_sensor.example_deursensor_voordeur
+  daikin_badkamer_climatecontrol_buiten_temperatuur: sensor.example_daikin_badkamer_climatecontrol_buiten_temperatuur
+  nightshade_electric_range: sensor.example_nightshade_electric_range
+  nightshade_charging_cable_connected: binary_sensor.example_nightshade_charging_cable_connected
+  nightshade_charging_rate: sensor.example_nightshade_charging_rate
+  nightshade_charging_time_left: sensor.example_nightshade_charging_time_left
+  nightshade_battery_level: sensor.example_nightshade_battery_level
+  nightshade_charging_power: sensor.example_nightshade_charging_power
+  deurbel_high_resolution_channel: camera.example_deurbel_high_resolution_channel
+  nightshade_electric_climatisation: climate.example_nightshade_electric_climatisation
+  person_1_load_person_1_1: sensor.example_person_1_load_person_1_1
+  smappee_laadpaal_kwh: sensor.example_smappee_laadpaal_kwh
+  laadpaal_daily: sensor.example_laadpaal_daily
+  laadpaal_daily_eur: sensor.example_laadpaal_daily_eur
+  laadpaal_daily_yesterday: sensor.example_laadpaal_daily_yesterday
+  laadpaal_daily_yesterday_eur: sensor.example_laadpaal_daily_yesterday_eur
+  laadpaal_monthly: sensor.example_laadpaal_monthly
+  laadpaal_yearly: sensor.example_laadpaal_yearly
+  person_1_to_home: sensor.example_person_1_to_home
+  person_1_to_work: sensor.example_person_1_to_work
+  person_1_to_school_kind: sensor.example_person_1_to_school_kind
+  person_2_to_home: sensor.example_person_2_to_home
+  person_2_to_work: sensor.example_person_2_to_work
+  person_2_to_person_1: sensor.example_person_2_to_person_1

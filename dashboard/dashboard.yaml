@@ -19,3 +19,4 @@ views:
   - !include views/bureau.yaml
   - !include views/toilet.yaml
   - !include views/woonkamer.yaml
+  - !include views/oprit.yaml
