@@ -1,0 +1,216 @@
+# person view — migrated to committed YAML (PR-25).
+# Inline 1:1 lift via scripts/extract_view.py. Stable `path: person` present ->
+# no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
+# household-name keys are neutralized to generic tokens (real ids resolve from
+# the git-ignored entities.local.yaml).
+theme: Backend-selected
+title: person
+layout:
+  columns: 2
+badges:
+- type: custom:decluttering-card
+  template: global_navigation_badges
+cards: []
+type: sections
+sections:
+- type: grid
+  cards:
+  - type: horizontal-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - type: custom:state-switch
+        default: persons
+        entity: hash
+        states:
+          persons:
+            type: vertical-stack
+            cards:
+            - type: horizontal-stack
+              cards:
+              - type: custom:button-card
+                name: Personen
+                tap_action:
+                  action: navigate
+                  navigation_path: '#persons'
+              - type: custom:button-card
+                name: Apparaten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#devices'
+              - type: custom:button-card
+                name: Objecten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#objects'
+            - type: vertical-stack
+              cards:
+              - type: entities
+                title: Where is my family?
+                style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n.card-header {\n\
+                  \  padding: 5px 16px;\n  font-size: 15px;\n  font-weight: 700 !important;\n}\n#states\
+                  \ {\n  padding-top: 0px !important;\n  padding-bottom: 0px !important;\n}\n.secondary\
+                  \ {\n  color: darkgray !important;\n  margin-left: 2px !important;\n}\n"
+                entities:
+                - entity: <<person.person_1>>
+                  secondary_info: last-updated
+                - entity: <<person.person_2>>
+                  secondary_info: last-updated
+              - type: map
+                aspect_ratio: '16:9'
+                default_zoom: 15
+                entities:
+                - entity: <<person.person_1>>
+                - entity: <<person.person_2>>
+                dark_mode: false
+                hours_to_show: 2
+          devices:
+            type: vertical-stack
+            cards:
+            - type: horizontal-stack
+              cards:
+              - type: custom:button-card
+                name: Personen
+                tap_action:
+                  action: navigate
+                  navigation_path: '#persons'
+              - type: custom:button-card
+                name: Apparaten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#devices'
+              - type: custom:button-card
+                name: Objecten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#objects'
+            - type: vertical-stack
+              cards:
+              - type: entities
+                title: Devices Persoon 1
+                style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n.card-header {\n\
+                  \  padding: 5px 16px;\n  font-size: 15px;\n  font-weight: 700 !important;\n}\n#states\
+                  \ {\n  padding-top: 0px !important;\n  padding-bottom: 0px !important;\n}\n.secondary\
+                  \ {\n  color: darkgray !important;\n  margin-left: 2px !important;\n}\n"
+                entities:
+                - entity: <<person.oneplus_person_1>>
+                  secondary_info: last-updated
+                  icon: mdi:cellphone-information
+                  type: custom:multiple-entity-row
+                  entities:
+                  - entity: <<person.oneplus_person_1_battery_level>>
+                    name: Batterij
+                    unit: '%'
+                - entity: <<person.ipad_van_person_1_2>>
+                  icon: phu:apple-ipad-pro
+                  secondary_info: last-updated
+                  type: custom:multiple-entity-row
+                  entities:
+                  - entity: <<person.ipad_van_person_1_2_battery_level>>
+                    name: Batterij
+                    unit: '%'
+                - entity: <<person.oneplus_watch_2_person_1>>
+                  secondary_info: last-updated
+                  type: custom:multiple-entity-row
+                  icon: mdi:watch-variant
+                  entities:
+                  - entity: <<person.oneplus_watch_2_person_1_battery_level>>
+                    name: Batterij
+                    unit: '%'
+            - type: vertical-stack
+              cards:
+              - type: entities
+                title: Devices Persoon 2
+                style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n.card-header {\n\
+                  \  padding: 5px 16px;\n  font-size: 15px;\n  font-weight: 700 !important;\n}\n#states\
+                  \ {\n  padding-top: 0px !important;\n  padding-bottom: 0px !important;\n}\n.secondary\
+                  \ {\n  color: darkgray !important;\n  margin-left: 2px !important;\n}\n"
+                entities:
+                - entity: <<person.iphone_van_person_2>>
+                  secondary_info: last-updated
+                  type: custom:multiple-entity-row
+                  entities:
+                  - entity: <<person.iphone_van_person_2_battery_level>>
+                    name: Batterij
+                    unit: '%'
+              - type: map
+                aspect_ratio: '16:9'
+                default_zoom: 15
+                entities:
+                - entity: <<person.ipad_van_person_1_2>>
+                - entity: <<person.iphone_van_person_2>>
+                - entity: <<person.oneplus_person_1>>
+                - entity: <<person.oneplus_watch_2_person_1>>
+                dark_mode: false
+                hours_to_show: 2
+          objects:
+            type: vertical-stack
+            cards:
+            - type: horizontal-stack
+              cards:
+              - type: custom:button-card
+                name: Personen
+                tap_action:
+                  action: navigate
+                  navigation_path: '#persons'
+              - type: custom:button-card
+                name: Apparaten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#devices'
+              - type: custom:button-card
+                name: Objecten
+                tap_action:
+                  action: navigate
+                  navigation_path: '#objects'
+            - type: vertical-stack
+              cards:
+              - type: entities
+                title: Objecten Persoon 1
+                style: "ha-card {\n  border-radius: 10px;\n  padding-bottom: 10px;\n}\n.card-header {\n\
+                  \  padding: 5px 16px;\n  font-size: 15px;\n  font-weight: 700 !important;\n}\n#states\
+                  \ {\n  padding-top: 0px !important;\n  padding-bottom: 0px !important;\n}\n.secondary\
+                  \ {\n  color: darkgray !important;\n  margin-left: 2px !important;\n}\n"
+                entities:
+                - entity: <<person.nightshade_position>>
+                  name: Car
+                  icon: mdi:car
+                  secondary_info: last-updated
+                  type: custom:multiple-entity-row
+                  entities:
+                  - entity: <<person.nightshade_battery_level>>
+                    name: Batterij
+                  - entity: <<person.nightshade_electric_range>>
+                    name: Bereik
+              - type: map
+                aspect_ratio: '16:9'
+                default_zoom: 15
+                entities:
+                - entity: <<person.nightshade_position>>
+                  icon: mdi:car
+                dark_mode: false
+                hours_to_show: 2
+  - type: entities
+    entities:
+    - entity: <<person.person_1_to_home>>
+    - entity: <<person.person_2_to_home>>
+    - entity: <<person.person_2_to_person_1>>
+    - entity: <<person.person_1_to_work>>
+    - entity: <<person.person_2_to_work>>
+    - entity: <<person.person_1_to_school_kind>>
+    title: Travel Times
+    state_color: true
+    header:
+      type: picture
+      image: https://www.strategyzer.com/hs-fs/hubfs/Waze%20Business%20Model%20Header.png
+      tap_action:
+        action: none
+      hold_action:
+        action: none
+  column_span: 2
+header:
+  layout: responsive
+  badges_position: bottom
+  badges_wrap: wrap
+max_columns: 2
+path: person
