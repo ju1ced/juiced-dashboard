@@ -25,3 +25,4 @@ views:
   - !include views/serverroom.yaml
   - !include views/terras.yaml
   - !include views/net.yaml
+  - !include views/valliant.yaml
