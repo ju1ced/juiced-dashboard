@@ -24,6 +24,11 @@ Juiced Horizon:
       ha-card-background: "#20242d"
       divider-color: "#343a46"
       ha-card-box-shadow: "0 18px 44px rgba(0, 0, 0, 0.32)"
+      # mushroom chip fallback background (inactive chips). Kept explicit so views
+      # that adopt Juiced Horizon keep their chip backgrounds — not defined by the
+      # theme would fall back to the mushroom bundle default. Tune against the pilot
+      # screenshot; see docs/theme-rollout-plan.md (Phase 1).
+      main-icon-background-color: "rgba(255, 255, 255, 0.06)"
       # text
       primary-text-color: "#f4f6f8"
       secondary-text-color: "#b7c0cc"
@@ -58,6 +63,8 @@ Juiced Horizon:
       ha-card-background: "#ffffff"
       divider-color: "#d4dae2"
       ha-card-box-shadow: "0 10px 30px rgba(15, 17, 21, 0.10)"
+      # mushroom chip fallback background (inactive chips) — see the dark-mode note.
+      main-icon-background-color: "rgba(15, 17, 21, 0.05)"
       # text
       primary-text-color: "#0f1115"
       secondary-text-color: "#3a4351"
