@@ -10,29 +10,29 @@ decluttering_templates: !include templates/decluttering_templates.yaml
 # Views are wired in with one `!include` each as they are migrated (Fase 3/4).
 views:
   - !include views/home.yaml
-  - !include views/badkamer.yaml
+  - !include views/oprit.yaml
   - !include views/inkomhal.yaml
-  - !include views/energy.yaml
-  - !include views/logeerkamer.yaml
-  - !include views/slaapkamer.yaml
-  - !include views/kinderkamer.yaml
-  - !include views/bureau.yaml
   - !include views/toilet.yaml
   - !include views/woonkamer.yaml
-  - !include views/oprit.yaml
   - !include views/keuken.yaml
   - !include views/garage.yaml
+  - !include views/bureau.yaml
   - !include views/serverroom.yaml
+  - !include views/slaapkamer.yaml
+  - !include views/kinderkamer.yaml
+  - !include views/badkamer.yaml
+  - !include views/logeerkamer.yaml
   - !include views/terras.yaml
+  - !include views/house.yaml
   - !include views/net.yaml
   - !include views/valliant.yaml
   - !include views/hainfo.yaml
   - !include views/water.yaml
   - !include views/person.yaml
-  - !include views/ecopower.yaml
+  - !include views/car.yaml
+  - !include views/energy.yaml
   - !include views/batteries1.yaml
+  - !include views/ecopower.yaml
   - !include views/anycubic.yaml
   - !include views/zwembad.yaml
-  - !include views/house.yaml
-  - !include views/car.yaml
   - !include views/garden.yaml
