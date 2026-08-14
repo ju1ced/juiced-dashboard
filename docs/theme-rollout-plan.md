@@ -25,15 +25,29 @@ theme-tokens) and is the visual half of the cutover.
 ## Phase 0 — Deploy the theme to HA (HOST, user-gated) — HARD PREREQUISITE
 
 HA loads themes via `configuration.yaml` → `frontend: themes: !include_dir_merge_named themes`
-(confirmed). Only `themes/kia-horizon.yaml` is present today (→ theme "Kia Horizon").
+(confirmed). Only `themes/kia-horizon.yaml` is deployed today (→ theme "Kia Horizon").
 
-1. Copy `dashboard/themes/juiced-horizon.yaml` → `/projects/HomeAssistant/themes/juiced-horizon.yaml`.
-2. Reload themes (Developer Tools → YAML → *Reload Themes*, or `homeassistant.reload_core_config`).
+> **CRITICAL — deploy target is the LIVE config dir, not the mirror.** `/api/config` reports the
+> running HA's `config_dir` is **`/config`** (the HA container). **`/projects/HomeAssistant` is a
+> git *mirror*** of that config (it has commits like "Update Kia dashboard render"), **not** the
+> live directory — writing a theme file there does NOT reach the running HA (verified: a `cp` +
+> `reload_themes` + a full restart did not register even a minimal test theme). The managed
+> theme-editor tool (`ha_config_set_yaml`) is **not exposed** in this MCP server, so the agent
+> cannot write to `/config` either. **Deploy is genuinely the owner's step, via the same
+> repo→`/config` mechanism that ships the Kia theme/dashboards.**
+
+1. Get `dashboard/themes/juiced-horizon.yaml` into the **live** `/config/themes/juiced-horizon.yaml`
+   — the same way Kia is deployed: commit it into the HA config repo (`/projects/HomeAssistant`,
+   where it is already staged as an untracked file) and run your usual repo→`/config` sync
+   (`git pull` on the host / File-Editor / Samba). A direct copy into `/projects/HomeAssistant/themes`
+   alone is NOT enough.
+2. Reload themes (Developer Tools → YAML → *Reload Themes*, or `frontend.reload_themes`). A
+   newly-added theme file may also need an HA restart if reload doesn't pick it up.
 3. Verify: `ha_manage_theme(action="list")` shows **`Juiced Horizon`** alongside `Kia Horizon`.
 
 > **Gate.** Nothing downstream is visually validatable until this lands — mcp-test cannot render
-> a theme HA has not loaded. **Phases 1–4 stall here until you deploy.** (I cannot do this step
-> autonomously: it writes to the HA host, outside the mcp-test-only envelope.)
+> a theme HA has not loaded. **Phases 1–4 stall here until you deploy.** (The agent cannot do this
+> step: it has no filesystem access to the live `/config`, and no managed theme-write tool.)
 
 ## Phase 1 — Theme-variable compatibility fix (repo; do BEFORE any rollout)
 
