@@ -6,7 +6,7 @@
 # heating-zone key carried household first names; neutralized to a generic token
 # (real ids resolve from the git-ignored local mapping). No visible-label change,
 # so the round-trip is a full 0-diff match with the default.
-theme: Backend-selected
+theme: Juiced Horizon
 title: woonkamer
 path: woonkamer
 type: sections

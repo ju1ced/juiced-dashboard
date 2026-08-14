@@ -4,7 +4,7 @@
 # deep-equals the default view (0 diffs). Stable `path: slaapkamer` already
 # present -> no T4/T7 refactor. card_mod/mod-card kept verbatim (theme-token
 # pass is PR-38). Real IDs resolve from the git-ignored entities.local.yaml.
-theme: Backend-selected
+theme: Juiced Horizon
 title: slaapkamer
 path: slaapkamer
 type: sections
