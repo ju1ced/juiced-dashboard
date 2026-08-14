@@ -7,7 +7,7 @@
 # git-ignored local mapping), and the single visible motion-state label has been
 # genericized. That label is the ONLY deliberate render diff vs the default.
 # card_mod/mod-card kept verbatim (theme-token pass is PR-38).
-theme: Backend-selected
+theme: Juiced Horizon
 title: kinderkamer
 path: kinderkamer
 type: sections

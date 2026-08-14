@@ -6,7 +6,7 @@
 # logical keys (real ids resolve from the git-ignored local mapping) and the one
 # visible desk label is genericized -> the ONLY deliberate render diff vs default.
 # card_mod/mod-card kept verbatim (theme-token pass is PR-38).
-theme: Backend-selected
+theme: Juiced Horizon
 title: bureau
 path: bureau
 type: sections
@@ -357,11 +357,11 @@ sections:
       moving_sensor: <<bureau.bureau_person_1_moving>>
       name: Bureau Persoon 1
       presets:
-      - label: Sit - J
+      - label: Sit - P1
         target: 85
-      - label: Stand - J
+      - label: Stand - P1
         target: 127
-      - label: Sit - L
+      - label: Sit - P2
         target: 71
       type: custom:linak-desk-card
   column_span: 4

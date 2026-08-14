@@ -3,7 +3,7 @@
 # default view (0 diffs). Stable `path: toilet` already present -> no T4/T7
 # refactor. No card_mod. Includes an apexcharts-card + area card. Real IDs
 # resolve from the git-ignored entities.local.yaml.
-theme: Backend-selected
+theme: Juiced Horizon
 title: toilet & berging
 path: toilet
 type: sections

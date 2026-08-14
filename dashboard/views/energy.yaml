@@ -5,6 +5,7 @@
 # radial-gauge / button-card); no card_mod (theme-token pass is PR-38).
 # The hybrid sections+empty cards[]+header shape is preserved verbatim for
 # byte-parity. Real IDs resolve from the git-ignored entities.local.yaml.
+theme: Juiced Horizon
 title: energy
 path: energy
 icon: ''

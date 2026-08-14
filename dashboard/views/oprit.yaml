@@ -5,6 +5,7 @@
 # PRIVACY: presence/travel-time keys carried household first names; neutralized to
 # generic tokens in the logical keys only (real ids resolve from the git-ignored
 # local mapping). No visible-label change -> full 0-diff round-trip vs the default.
+theme: Juiced Horizon
 type: sections
 max_columns: 4
 title: oprit

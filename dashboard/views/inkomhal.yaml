@@ -3,7 +3,7 @@
 # sensor_graph_row (see templates/decluttering_templates.yaml). Bespoke parts —
 # the doorbell camera + Reolink detections, battery rows and the mod-card — stay
 # inline. All real IDs resolve from the git-ignored entities.local.yaml.
-theme: Backend-selected
+theme: Juiced Horizon
 title: inkomhal
 path: inkomhal
 type: sections

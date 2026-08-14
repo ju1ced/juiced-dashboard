@@ -5,7 +5,7 @@
 # a stable `path: logeerkamer` is added (T4 — the default view had none, giving
 # it a fragile numeric render path). card_mod kept verbatim (theme-token pass is
 # PR-38). Real IDs resolve from the git-ignored entities.local.yaml.
-theme: Backend-selected
+theme: Juiced Horizon
 title: logeerkamer
 path: logeerkamer
 type: sections

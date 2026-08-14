@@ -3,7 +3,7 @@
 # no T4/T7 refactor. card_mod kept verbatim (theme-token pass is PR-38). Any
 # household-name keys are neutralized to generic tokens (real ids resolve from
 # the git-ignored entities.local.yaml).
-theme: Backend-selected
+theme: Juiced Horizon
 path: hainfo
 title: System and update info
 icon: ''

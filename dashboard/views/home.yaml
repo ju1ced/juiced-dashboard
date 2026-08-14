@@ -4,6 +4,7 @@
 # `path: home` (fixes fragile lovelace/0 + the nav 'Home' deep-link), and the
 # empty top-level cards[] dropped. card_mod kept verbatim (theme-token pass is
 # PR-38). Real IDs resolve from the git-ignored entities.local.yaml.
+theme: Juiced Horizon
 type: sections
 title: Home
 path: home
@@ -2759,7 +2760,7 @@ sections:
                     \ 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n  border-radius:\
                     \ 100px!important;\n}\n"
               - type: template
-                content: Sit - J
+                content: Sit - P1
                 tap_action:
                   action: call-service
                   service: cover.set_cover_position
@@ -2774,7 +2775,7 @@ sections:
                     \ {\n  background-color: rgba(230, 118, 118, 1) !important;\n\
                     }\n"
               - type: template
-                content: Stand - J
+                content: Stand - P1
                 tap_action:
                   action: call-service
                   service: cover.set_cover_position
@@ -2789,7 +2790,7 @@ sections:
                     \ {\n  background-color: rgba(230, 118, 118, 1) !important;\n\
                     }    \n"
               - type: template
-                content: Sit - L
+                content: Sit - P2
                 tap_action:
                   action: call-service
                   service: cover.set_cover_position
