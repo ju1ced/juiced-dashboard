@@ -71,3 +71,39 @@ count, JS Coverage). `Load` is navigation-only; main-thread cost is in `Long-tas
 | energy | 46 | 7830 | 1786 | 149.7 | 36.9 |
 | serverroom | 31 | 4330 | 4431 | 117.3 | 36.1 |
 | person | 46 | 2134 | 1572 | 98.2 | 37.4 |
+
+## Progressive disclosure — Phase B (roadmap `docs/casa-inspired-dashboard-roadmap.md`)
+
+Two disclosure slices on Home, both native mushroom `conditional` chips, shown **only when
+abnormal/open** (`state: "on"`):
+
+1. **Alerts (12)** — smoke/leak (`rookmelder_*`, `flood_*`, `hittemelder`,
+   `combinatiealarm_*_rook`).
+2. **Security openings (11 chips / 10 keys)** — door/window contacts (`deursensor_*`,
+   `raamsensor_*`, `schuifraam_bureau`). **Excluded**: `garagepoort_open_state` (it is a
+   *control* — tap toggles the gate), the appliance doors (`deursensor_bierfrigo`/`_diepvries`,
+   `koelkast_deur`), and `raamsensor_slaapkamer_window` (no standalone chip).
+
+Controls and navigation are untouched; a triggered alert / open contact reappears, and each
+remains visible in its room/`house` view (nothing becomes unreachable).
+
+| Card-elements (Home, MCP Test — `shoot_view.mjs`, 11 s hydrate, quiet state) | Count | Δ vs baseline |
+| --- | ---: | ---: |
+| Baseline (no disclosure) | 1305 | — |
+| + alerts disclosed | 1281 | −24 |
+| + alerts **and** openings disclosed | **1230** | **−75 (−5.7%)** |
+
+Error cards: 0 · unresolved placeholders: 0 · other 26 views byte-identical after staging to
+`mcp-test-dashboard[0]`.
+
+**Measurement note:** `perf/collect_runtime.mjs` DOM-node counts are **unreliable on Home**
+(readings of 204 / 749 / 4491 / 5320 across runs) because the heavy view has a 3–5 s render
+long-task and the harness snapshots the DOM at an inconsistent point. The `shoot_view.mjs`
+element-count proxy (fixed 11 s hydrate wait, same method each run) is used instead for a
+consistent before/after. "Quiet" = all contacts closed / sensors normal (the common case);
+worst-case DOM (everything triggered) is unchanged — disclosure lowers the *typical* DOM.
+
+> Note (out of scope of this slice): `scripts/acceptance_suite.py` now reports every non-home
+> view as an "unexpected" diff — each is exactly one `.theme` key (`Juiced Horizon` vs the
+> default's `Backend-selected`), i.e. **pre-existing drift from the theme rollout (#43)**, not
+> this change. The suite's expectations should be updated in a separate task.
