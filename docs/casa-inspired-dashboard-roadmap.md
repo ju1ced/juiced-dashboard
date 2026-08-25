@@ -224,7 +224,22 @@ native Overview and adopted **only on a measured win**. This is roadmap PR-35, k
 
 Each phase = one small, independently-reviewable branch/PR. No big-bang.
 
-### Phase A — Capture runtime performance baseline · **P1**
+**Status (2026-08-25):** **B ✅ · C ✅ · E ✅ merged to `main`** (A folded into B/C measurement).
+Remaining: **D** (not started), **F** (owner/cutover-gated), **G** (only if metrics demand it).
+Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
+
+| Phase | PR | Merge | Outcome |
+| --- | --- | --- | --- |
+| B — disclosure | #44 | `fef6f9e` | alerts + openings as mushroom `conditional` chips (−75) |
+| C — overview/detail | #45 | `8e5b7d5` | all 10 room mirrors → name+nav+`s1` summary (−154 more) |
+| E — card-mod tokens | #46 | `7a0d938` | chip palette → `var(--juiced-chip-*, <literal>)`, owner redeploy to activate |
+
+### Phase A — Capture runtime performance baseline · **P1** · ◑ FOLDED INTO B/C
+
+> **As shipped:** the headless DOM-node harness (`perf/collect_runtime.mjs`) proved unstable on
+> the heavy `home` view (readings swung 204–5320). Switched to a consistent `shoot_view.mjs`
+> card-element proxy (fixed hydrate wait) and measured before/after per slice inside B and C
+> instead of a standalone baseline PR. Numbers live in `docs/performance-baseline.md`.
 
 - **Objective**: fill the missing runtime metrics (DOM nodes, first-paint/TTI, long-tasks, JS
   heap) for `home` + 2–3 representative views, so later phases are measurable.
@@ -237,7 +252,13 @@ Each phase = one small, independently-reviewable branch/PR. No big-bang.
 - **Rollback**: revert the doc.
 - **Risk**: very low. **Benefit**: unblocks measuring every later phase.
 
-### Phase B — Progressive disclosure: alerts/openings (native) · **P1**
+### Phase B — Progressive disclosure: alerts/openings (native) · **P1** · ✅ DONE (PR #44, `fef6f9e`)
+
+> **As shipped:** disclosed 12 alert + 11 opening chips by wrapping each in a mushroom
+> `conditional` chip (`condition: state … "on"`) — the chip-level equivalent of native
+> `visibility:` (which applies to cards, not chips). Excluded controls (garage gate) and appliance
+> doors. Measured −75 card-elements (1305→1230). Curated set + measurement in
+> `docs/performance-baseline.md`.
 
 - **Objective**: on `home`, render the openings + safety-alert chips **only when open/abnormal**
   via native `visibility`, keeping all controls/nav always visible.
@@ -251,7 +272,15 @@ Each phase = one small, independently-reviewable branch/PR. No big-bang.
 - **Rollback**: revert home.yaml (single file).
 - **Risk**: low (native, reversible). **Benefit**: proves the pattern + first DOM reduction.
 
-### Phase C — Overview IA: collapse room mirrors to active-only + rooms nav · **P1**
+### Phase C — Overview IA: collapse room mirrors to active-only + rooms nav · **P1** · ✅ DONE (PR #45, `8e5b7d5`)
+
+> **As shipped:** chose **structural overview/detail** over state-conditional "active-only" —
+> a motion-chip test showed state-conditional disclosure only helps stably-off states (motion is
+> often on, so it read flat and was reverted). Each of the 10 room button-cards already navigates
+> to its view and carries an `s1` summary (temp/humidity/CO₂); collapse = keep name+navigate+`s1`,
+> drop the control-chip fields that duplicate the room view. Live home-only entities (keuken fridge
+> controls, bureau tv-backlight) relocated into their views first; 8 stale refs swept out. Home
+> ~1230→~916 (−29.8% cumulative). Verified parity per room via `ha_get_state` + structural check.
 
 - **Objective**: turn the home hub into a curated Overview — per-room chip rows show only when
   active; otherwise the room is a nav chip; move full room content to the (existing) room views.
@@ -276,7 +305,14 @@ Each phase = one small, independently-reviewable branch/PR. No big-bang.
 - **Rollback**: revert the room + template.
 - **Risk**: low–medium. **Benefit**: less YAML duplication, easier future room changes.
 
-### Phase E — card-mod → theme-token status palette · **P2** (parallel, independent)
+### Phase E — card-mod → theme-token status palette · **P2** (parallel, independent) · ✅ DONE (PR #46, `7a0d938`)
+
+> **As shipped:** did a **zero-regression indirection** rather than the palette *change* sketched
+> below. Added 3 mode-independent tokens (`--juiced-chip-ok/-alert/-active`) = the exact current
+> rgba values, and rewrote 73 literals to `var(--juiced-chip-*, <same literal>)` (literal kept as
+> CSS fallback). No visual/perf change until the owner redeploys `juiced-horizon.yaml` to
+> `/config`; a later deliberate recolour (e.g. onto `juiced-status-*` via `color-mix`) is then a
+> theme-only edit. See theme-rollout-plan Phase 4.
 
 - **Objective**: unify the 3 hardcoded chip status colours to `var(--juiced-status-*)` via
   `color-mix` (theme-rollout Phase 4 / roadmap PR-38 proper). Dynamic state-logic stays.
