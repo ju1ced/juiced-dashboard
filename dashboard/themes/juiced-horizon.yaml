@@ -15,6 +15,15 @@ Juiced Horizon:
   juiced-radius-lg: "24px"
   juiced-space: "12px"
 
+  # card-mod chip-background palette (per-state chip colouring). These match the
+  # rgba literals the views used inline; views now reference them as
+  # `var(--juiced-chip-*, <same rgba literal>)` so rendering is identical until the
+  # owner redeploys this theme, after which recolouring is a single edit here.
+  # Same value in both modes (semantic status colours), so defined mode-independent.
+  juiced-chip-ok: "rgba(67, 138, 94, 0.7)"       # normal / closed / off
+  juiced-chip-alert: "rgba(230, 118, 118, 0.7)"  # attention / open / triggered
+  juiced-chip-active: "rgba(255, 181, 118, 0.8)" # active / light-on
+
   modes:
     dark:
       # core Home Assistant surfaces

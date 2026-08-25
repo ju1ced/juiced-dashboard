@@ -78,8 +78,8 @@ sections:
         features_position: bottom
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_hal_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_hal_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.combinatiealarm_living_rook>>
         tap_action:
@@ -93,8 +93,8 @@ sections:
         features_position: bottom
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.combinatiealarm_living_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.combinatiealarm_living_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.hittemelder_rook>>
         tap_action:
@@ -108,8 +108,8 @@ sections:
         features_position: bottom
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.hittemelder_keuken_alarm_status>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.hittemelder_keuken_alarm_status>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_keuken_rook>>
         tap_action:
@@ -122,8 +122,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_keuken_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_keuken_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_keuken_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_bureau_rook>>
         tap_action:
@@ -136,8 +136,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_bureau_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_bureau_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_bureau_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_serverroom_rook>>
         tap_action:
@@ -150,8 +150,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_serverroom_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_serverroom_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_serverroom_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_slaapkamer_rook>>
         tap_action:
@@ -165,8 +165,8 @@ sections:
         features_position: bottom
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_slaapkamer_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_slaapkamer_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_kamer_kind_rook>>
         tap_action:
@@ -179,8 +179,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_kamer_kind_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_kamer_kind_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_kamer_kind_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_logeerkamer_rook>>
         tap_action:
@@ -193,8 +193,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_logeerkamer_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_logeerkamer_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_logeerkamer_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       - type: custom:mushroom-template-card
         entity: <<house.rookmelder_garage_rook>>
         tap_action:
@@ -207,8 +207,8 @@ sections:
         secondary: '{{states(''<<house.rookmelder_garage_batterij>>'')}} %    '
         card_mod:
           style:
-            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<house.rookmelder_garage_rook>>',\
-              \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+            mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<house.rookmelder_garage_rook>>',\
+              \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
       columns: 2
     - type: custom:mushroom-template-card
       primary: X-Sense Security Base station
