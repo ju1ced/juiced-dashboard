@@ -213,6 +213,14 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 
 ### M7 — Optimalisatie
 
+> **Status (2026-08-25):** **PR-38 (card-mod → thema-tokens) is done** — status-palette →
+> `var(--juiced-chip-*, <literal>)`, merged as `7a0d938` (Casa-roadmap **Phase E**). PR-37
+> (resource-sanering) = Casa **Phase F**, still owner/cutover-gated. PR-39 (nav-badge) not started.
+> Beyond this milestone, two Casa-inspired enhancements also landed on `main`: **progressive
+> disclosure** (`fef6f9e`) and the **Home overview/detail** redesign that collapsed the 10 room
+> mirrors, −29.8% card-elements (`8e5b7d5`). Full phase tracker:
+> [`casa-inspired-dashboard-roadmap.md`](casa-inspired-dashboard-roadmap.md) §9.
+
 **PR-37 · perf: resource-sanering** — *na M3/M4*
 
 - Verifieer de kandidaat-ongebruikte resources (analyserapport T5) tegen **álle** dashboards (default, map, dashboard-test, Kia-YAML) vóór verwijdering: Bubble-Card, config-template-card, energy-flow-card-plus, energy-period-selector-plus, flower-card, pool-monitor-card, vehicle-status-card, dual_gauge, cover-icon-element, hassio-trash-card + onzekere iconensets (T6). Documenteer wat verwijderd wordt (id+url) voor rollback.
