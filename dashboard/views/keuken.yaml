@@ -156,6 +156,12 @@ sections:
           name: Huidig verbruik
         - entity: <<keuken.amerikaanse_frigo_daily>>
           name: Dagelijks verbruik
+        - entity: <<keuken.koelkast_deur>>
+          name: Deur
+          icon: mdi:fridge-industrial-outline
+        - entity: <<keuken.koelkast_express_mode>>
+          name: Snelvriezen
+          icon: mdi:snowflake
         - type: custom:fold-entity-row
           head:
             type: section
