@@ -97,20 +97,29 @@ Set `theme: Juiced Horizon` on the remaining views, staging + dark/light screens
 for your sign-off. **Order: simplest → home last** (home is the highest-clash surface). Each is
 a one-line repo change per view; parity is now *visual* (screenshots), not byte-diff.
 
-## Phase 4 — PR-38 card-mod → tokens (scoped, only after theming is stable)
+## Phase 4 — PR-38 card-mod → tokens (scoped) — DONE (repo side), owner-deploy to activate
 
-With the theme active, do the one genuine tokenization: unify the repeated hardcoded status
-palette in the dynamic chip card_mods to theme tokens, preserving translucency via `color-mix`:
+Shipped as a **zero-regression indirection** rather than the palette *change* originally sketched:
+each repeated status-palette literal in the chip card_mods now reads its colour from a theme token
+with the **literal kept as the CSS fallback**, so rendering is byte-identical until the theme is
+redeployed — after which recolouring is a single edit in `juiced-horizon.yaml`.
 
-| hardcoded | → token |
-| --- | --- |
-| `rgba(67,138,94,0.7)` (green, ×118) | `color-mix(in srgb, var(--juiced-status-ok) 70%, transparent)` |
-| `rgba(230,118,118,·)` (red, ×100) | `var(--juiced-status-critical)` / `color-mix(… 70% …)` |
-| `rgba(255,181,118,·)` (orange, ×42) | `var(--juiced-status-warning)` (+ alpha via `color-mix`) |
+New mode-independent tokens in `juiced-horizon.yaml` + the view rewrite:
 
-This is a deliberate palette change (theme colours differ from the hardcoded ones), reviewed via
-screenshots. Dynamic state-logic and bespoke pills/resets stay. Leave the shadow `rgba(0,0,0,·)`
-and multi-colour gradients as-is.
+| literal (state) | token | view form |
+| --- | --- | --- |
+| `rgba(67, 138, 94, 0.7)` (ok/off) | `--juiced-chip-ok` | `var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))` |
+| `rgba(230, 118, 118, 0.7)` (alert/on) | `--juiced-chip-alert` | `var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))` |
+| `rgba(255, 181, 118, 0.8)` (active) | `--juiced-chip-active` | `var(--juiced-chip-active, rgba(255, 181, 118, 0.8))` |
+
+Converted **73** occurrences across `home.yaml` (51), `house.yaml` (20), `slaapkamer.yaml` (2) via
+a wrap-tolerant transform with a structural inverse check (unwrap `var(--tok, X)` → `X` reproduces
+the original doc). The lone `rgba(230, 118, 118, 1)` (different alpha, 1 use) stays literal. Dynamic
+state-logic, bespoke pills/resets, shadows and gradients are untouched.
+
+> **Zero visual/perf change now** — the tokens equal the current literals and are only *activated*
+> when the owner redeploys `juiced-horizon.yaml` to live `/config`. A later, deliberate recolour
+> (e.g. onto the semantic `juiced-status-*` palette via `color-mix`) is then a theme-only edit.
 
 ## Verification & rollback (per phase)
 

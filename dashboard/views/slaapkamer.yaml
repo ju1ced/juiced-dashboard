@@ -224,8 +224,8 @@ sections:
       features_position: bottom
       card_mod:
         style:
-          mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<slaapkamer.rookmelder_slaapkamer_rook>>',\
-            \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n"
+          mushroom-shape-icon$: ".shape {\n  --shape-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<slaapkamer.rookmelder_slaapkamer_rook>>',\
+            \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n"
   - type: vertical-stack
     cards:
     - type: custom:mushroom-cover-card

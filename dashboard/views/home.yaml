@@ -584,10 +584,10 @@ sections:
                   card_mod:
                     style: "ha-card {\n  /* Set hover and active effects */\n  --chip-box-shadow:\
                       \ 0px 0px 5px 0px rgba(0, 0, 0, 0.2);\n  --chip-background:\
-                      \ {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.garagepoort_open_state>>',\
-                      \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n}\nha-card:hover\
-                      \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.garagepoort_open_state>>',\
-                      \ 'on') else 'rgba(230, 118, 118, 0.7)' }};;\n}\n"
+                      \ {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.garagepoort_open_state>>',\
+                      \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n}\nha-card:hover\
+                      \ {\n  background-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.garagepoort_open_state>>',\
+                      \ 'on') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n}\n"
                 - type: template
                   entity: <<home.post_in_brievenbus>>
                   icon: "{% if is_state('<<home.post_in_brievenbus>>', 'on') %}\n\
@@ -598,8 +598,7 @@ sections:
                     style: "ha-card {\n  --chip-box-shadow: 0px 0px 5px 0px rgba(0,\
                       \ 0, 0, 0.2);\n  --chip-background: {{ 'rgba(244, 67, 54, 1)'\
                       \ if is_state('<<home.post_in_brievenbus>>', 'on') else 'var(--main-icon-background-color)'\
-                      \ }};\n}\nha-card:hover {\n  background-color: {{ 'rgba(67,\
-                      \ 138, 94, 0.7)' if is_state('<<home.post_in_brievenbus>>',\
+                      \ }};\n}\nha-card:hover {\n  background-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.post_in_brievenbus>>',\
                       \ 'on') else 'var(--main-icon-background-color)' }};\n}\n"
                 - type: template
                   entity: <<home.12_koornbloemstraat_8570_anzegem>>
@@ -631,8 +630,7 @@ sections:
                   entity: <<home.schakelaar_voordeur_l1>>
                   icon: phu:wall-fuzo
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.schakelaar_voordeur_l1>>', 'on')\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.schakelaar_voordeur_l1>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -645,7 +643,7 @@ sections:
                       \ 1)' if is_state('<<home.nightshade_start_climate>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n \nha-card:hover {\n\
-                      \  background-color: rgba(67, 138, 94, 0.7) !important;\n}\n"
+                      \  background-color: var(--juiced-chip-ok, rgba(67, 138, 94, 0.7)) !important;\n}\n"
                 - type: template
                   tap_action:
                     action: more-info
@@ -654,8 +652,7 @@ sections:
                   card_mod:
                     style: "ha-card {\n  --chip-background: var(--main-icon-background-color);\n\
                       \  padding: 1px!important;\n  border-radius: 100px!important;\n\
-                      }   \nha-card:hover {\n  background-color: rgba(67, 138, 94,\
-                      \ 0.7) !important;\n}\n"
+                      }   \nha-card:hover {\n  background-color: var(--juiced-chip-ok, rgba(67, 138, 94, 0.7)) !important;\n}\n"
                 - type: conditional
                   conditions:
                   - condition: state
@@ -666,9 +663,8 @@ sections:
                     entity: <<home.deursensor_voordeur>>
                     content_info: none
                     card_mod:
-                      style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                        \ 0.7)' if is_state('<<home.deursensor_voordeur>>', 'off') else\
-                        \ 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n\
+                      style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.deursensor_voordeur>>', 'off') else\
+                        \ 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n\
                         \  border-radius: 100px!important;\n}\n"
                 - type: template
                   entity: <<home.deurbel_beweging>>
@@ -677,9 +673,8 @@ sections:
                   icon: "{% if is_state('<<home.deurbel_beweging>>', 'on') %}\n  mdi:motion-sensor\n\
                     {% else %}\n  mdi:motion-sensor-off\n{% endif %}\n"
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.deurbel_beweging>>', 'off') else\
-                      \ 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.deurbel_beweging>>', 'off') else\
+                      \ 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n\
                       \  border-radius: 100px!important;\n}\n"
           styles:
             grid:
@@ -752,8 +747,7 @@ sections:
                   entity: <<home.licht_terrasspot>>
                   icon: mdi:spotlight-beam
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.licht_terrasspots>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_terrasspots>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -762,8 +756,7 @@ sections:
                   entity: <<home.terraslichtjes_3>>
                   icon: mdi:string-lights
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.terraslichtjes_3>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.terraslichtjes_3>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -772,8 +765,7 @@ sections:
                   entity: <<home.ledstrip_terraskast>>
                   icon: mdi:led-strip-variant-off
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.ledstrip_terraskast>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.ledstrip_terraskast>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -782,8 +774,7 @@ sections:
                   entity: <<home.terraslichtjes_kleur>>
                   icon: phu:bollard
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.terraslichtjes_kleur>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.terraslichtjes_kleur>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -806,11 +797,10 @@ sections:
                   tap_action:
                     action: toggle
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.onkyo_tx_nr656_zone_2>>', 'on')\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.onkyo_tx_nr656_zone_2>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\nha-card:hover {\n  background-color:\
-                      \ rgba(230, 118, 118, 0.7) !important;\n}\n"
+                      \ var(--juiced-chip-alert, rgba(230, 118, 118, 0.7)) !important;\n}\n"
                 - type: template
                   tap_action:
                     action: fire-dom-event
@@ -849,8 +839,7 @@ sections:
                     entity: <<home.living>>
                   icon: mdi:radio
                   card_mod:
-                    style: "ha-card {\n    --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.living>>', 'playing') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n    --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.living>>', 'playing') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }   \nha-card:hover {\n  background-color: rgba(230, 118, 118,\
                       \ 1) !important;\n}\n"
@@ -862,8 +851,7 @@ sections:
                   card_mod:
                     style: "ha-card {\n  --chip-background: var(--main-icon-background-color);\n\
                       \  padding: 1px!important;\n  border-radius: 100px!important;\n\
-                      }   \nha-card:hover {\n  background-color: rgba(67, 138, 94,\
-                      \ 0.7) !important;\n}\n"
+                      }   \nha-card:hover {\n  background-color: var(--juiced-chip-ok, rgba(67, 138, 94, 0.7)) !important;\n}\n"
                 - type: template
                   entity: <<home.tuin_beweging>>
                   tap_action:
@@ -871,9 +859,7 @@ sections:
                   icon: "{% if is_state('<<home.tuin_beweging>>', 'on') %}\n  mdi:motion-sensor\n\
                     {% else %}\n  mdi:motion-sensor-off\n{% endif %}\n"
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.tuin_beweging>>', 'off') else 'rgba(230,\
-                      \ 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n  border-radius:\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.tuin_beweging>>', 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n  border-radius:\
                       \ 100px!important;\n}\n"
                 - type: template
                   entity: <<home.luifel_terras>>
@@ -893,12 +879,12 @@ sections:
                   card_mod:
                     style: "ha-card {\n  /* Set hover and active effects */\n  --chip-box-shadow:\
                       \ 0px 0px 5px 0px rgba(0, 0, 0, 0.2);\n  --chip-background:\
-                      \ {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.luifel_terras>>',\
-                      \ 'closed') else 'rgba(230, 118, 118, 0.7)' }};;\n}\nha-card:active\
-                      \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.luifel_terras>>',\
-                      \ 'closed') else 'rgba(230, 118, 118, 0.7)' }};;\n}\nha-card:hover\
-                      \ {\n  background-color: {{ 'rgba(67, 138, 94, 0.7)' if is_state('<<home.luifel_terras>>',\
-                      \ 'open') else 'rgba(230, 118, 118, 0.7)' }};;\n}\n"
+                      \ {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.luifel_terras>>',\
+                      \ 'closed') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n}\nha-card:active\
+                      \ {\n  background-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.luifel_terras>>',\
+                      \ 'closed') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n}\nha-card:hover\
+                      \ {\n  background-color: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.luifel_terras>>',\
+                      \ 'open') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n}\n"
           styles:
             grid:
             - grid-template-areas: '"n" "s1" "btn" "btn1"'
@@ -980,8 +966,7 @@ sections:
                   entity: <<home.licht_bbq_buitenkeuken>>
                   icon: phu:wall-flood
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.licht_bbq_buitenkeuken>>', 'on')\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_bbq_buitenkeuken>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -990,8 +975,7 @@ sections:
                   entity: <<home.bbq_buitenkeuken_lichtjes>>
                   icon: bha:light-string
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.bbq_buitenkeuken_lichtjes>>', 'on')\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.bbq_buitenkeuken_lichtjes>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -1032,8 +1016,7 @@ sections:
                     entity: <<home.bbq_buitenkeuken>>
                   icon: mdi:radio
                   card_mod:
-                    style: "ha-card {\n    --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.bbq_buitenkeuken>>', 'playing')\
+                    style: "ha-card {\n    --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.bbq_buitenkeuken>>', 'playing')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}   \nha-card:hover {\n\
                       \  background-color: rgba(230, 118, 118, 1) !important;\n}\n"
@@ -1108,8 +1091,7 @@ sections:
                   entity: <<home.licht_tuinhuis>>
                   icon: hue:gradient-tube-long
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.licht_tuinhuis>>', 'on') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_tuinhuis>>', 'on') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }\n"
                 - type: template
@@ -1118,8 +1100,7 @@ sections:
                   entity: <<home.lichtjes_tuinhuis>>
                   icon: mdi:string-lights
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.lichtjes_tuinhuis>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.lichtjes_tuinhuis>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -1128,8 +1109,7 @@ sections:
                   entity: <<home.licht_boom>>
                   icon: hue:floor-spot
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.licht_boom>>', 'on') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_boom>>', 'on') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }\n"
                 - type: template
@@ -1170,8 +1150,7 @@ sections:
                     entity: <<home.tuinhuis>>
                   icon: mdi:radio
                   card_mod:
-                    style: "ha-card {\n    --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.tuinhuis>>', 'playing') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n    --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.tuinhuis>>', 'playing') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }   \nha-card:hover {\n  background-color: rgba(230, 118, 118,\
                       \ 1) !important;\n}\n"
@@ -1183,8 +1162,7 @@ sections:
                   card_mod:
                     style: "ha-card {\n  --chip-background: var(--main-icon-background-color);\n\
                       \  padding: 1px!important;\n  border-radius: 100px!important;\n\
-                      }   \nha-card:hover {\n  background-color: rgba(67, 138, 94,\
-                      \ 0.7) !important;\n}\n"
+                      }   \nha-card:hover {\n  background-color: var(--juiced-chip-ok, rgba(67, 138, 94, 0.7)) !important;\n}\n"
                 - type: template
                   entity: <<home.tuinhuis_beweging>>
                   tap_action:
@@ -1193,9 +1171,8 @@ sections:
                     \ mdi:motion-sensor\n{% else %}\n  mdi:motion-sensor-off\n{% endif\
                     \ %}\n"
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.tuinhuis_beweging>>', 'off') else\
-                      \ 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.tuinhuis_beweging>>', 'off') else\
+                      \ 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: conditional
                   conditions:
@@ -1207,9 +1184,8 @@ sections:
                     entity: <<home.deursensor_tuinhuis>>
                     content_info: none
                     card_mod:
-                      style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                        \ 0.7)' if is_state('<<home.deursensor_tuinhuis>>', 'off') else\
-                        \ 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n\
+                      style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.deursensor_tuinhuis>>', 'off') else\
+                        \ 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n\
                         \  border-radius: 100px!important;\n}\n"
           styles:
             grid:
@@ -1291,8 +1267,7 @@ sections:
                   icon: "{{ 'hue:room-pool'\n  if is_state('<<home.zwembad_zwemmodus>>',\
                     \ 'on')\n  else 'hue:room-pool-off' }}\n"
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.zwembad_zwemmodus>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.zwembad_zwemmodus>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -1301,8 +1276,7 @@ sections:
                   entity: <<home.smart_plug_zwembad_filter>>
                   icon: phu:pool-filter
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.smart_plug_zwembad_filter>>', 'on')\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.smart_plug_zwembad_filter>>', 'on')\
                       \ else 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -1311,8 +1285,7 @@ sections:
                   entity: <<home.pool_heater_power>>
                   icon: mdi:heat-pump-outline
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.pool_heater_power>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.pool_heater_power>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
@@ -1321,8 +1294,7 @@ sections:
                   entity: <<home.zwembad_zoutsysteem>>
                   icon: phu:pool-salinty
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.zwembad_zoutsysteem>>', 'on') else\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.zwembad_zoutsysteem>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
             btn1:
@@ -1344,8 +1316,7 @@ sections:
                     style: "ha-card {\n  --chip-background:\n    {% set current =\
                       \ states('<<home.zwembadpomp_uren_vandaag>>') | float(0) %}\n\
                       \    {% set target = states('<<home.zwembad_filter_doeluren>>')\
-                      \ | float(10) %}\n    {% if current >= target %}\n      rgba(67,\
-                      \ 138, 94, 0.7)\n    {% else %}\n      rgba(33, 150, 243, 0.25)\n\
+                      \ | float(10) %}\n    {% if current >= target %}\n      var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))\n    {% else %}\n      rgba(33, 150, 243, 0.25)\n\
                       \    {% endif %};\n  padding: 1px!important;\n  border-radius:\
                       \ 100px!important;\n}\n"
                 - type: template
@@ -1599,8 +1570,7 @@ sections:
                   entity: <<home.licht_toilet>>
                   icon: bha:ceiling-downlight
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.licht_toilet>>', 'on') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_toilet>>', 'on') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }\n"
                 - type: template
@@ -1611,9 +1581,8 @@ sections:
                     \ 'on') %}\n  mdi:motion-sensor\n{% else %}\n  mdi:motion-sensor-off\n\
                     {% endif %}\n"
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                      \ 0.7)' if is_state('<<home.bewegingssensor_toilet_occupancy>>',\
-                      \ 'off') else 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color:\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.bewegingssensor_toilet_occupancy>>',\
+                      \ 'off') else 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color:\
                       \ black;\n\n  border-radius: 100px!important;\n}\n"
           styles:
             grid:
@@ -1685,8 +1654,7 @@ sections:
                   entity: <<home.berging>>
                   icon: phu:wall-spot
                   card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'rgba(255, 181, 118,\
-                      \ 0.8)' if is_state('<<home.berging>>', 'on') else 'var(--main-icon-background-color)'\
+                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.berging>>', 'on') else 'var(--main-icon-background-color)'\
                       \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
                       }\n"
                 - type: conditional
@@ -1699,9 +1667,8 @@ sections:
                     entity: <<home.deursensor_berging>>
                     content_info: none
                     card_mod:
-                      style: "ha-card {\n  --chip-background: {{ 'rgba(67, 138, 94,\
-                        \ 0.7)' if is_state('<<home.deursensor_berging>>', 'off') else\
-                        \ 'rgba(230, 118, 118, 0.7)' }};;\n  --icon-color: black;\n\n\
+                      style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-ok, rgba(67, 138, 94, 0.7))' if is_state('<<home.deursensor_berging>>', 'off') else\
+                        \ 'var(--juiced-chip-alert, rgba(230, 118, 118, 0.7))' }};;\n  --icon-color: black;\n\n\
                         \  border-radius: 100px!important;\n}\n"
           styles:
             grid:
