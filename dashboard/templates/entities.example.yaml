@@ -376,6 +376,7 @@ kinderkamer:
   daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen: sensor.example_daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_koelen
   daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen: sensor.example_daikin_kamer_kind_climatecontrol_jaarlijks_elektriciteitsverbruik_verwarmen
 bureau:
+  tv_backlight_3_lite_dreamview: switch.example_tv_backlight_3_lite_dreamview
   bureau_spellenruimte: light.example_bureau_spellenruimte
   licht_bureau: light.example_licht_bureau
   licht_spellentafel: light.example_licht_spellentafel
@@ -515,6 +516,8 @@ oprit:
   person_2_to_work: sensor.example_person_2_to_work
   person_2_to_person_1: sensor.example_person_2_to_person_1
 keuken:
+  koelkast_deur: binary_sensor.example_koelkast_deur
+  koelkast_express_mode: switch.example_koelkast_express_mode
   ledstrip_keukeneiland_1: light.example_ledstrip_keukeneiland_1
   ledstrip_keuken_1: light.example_ledstrip_keuken_1
   ledstrip_koffiezet_1: light.example_ledstrip_koffiezet_1

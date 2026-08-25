@@ -107,3 +107,45 @@ worst-case DOM (everything triggered) is unchanged — disclosure lowers the *ty
 > view as an "unexpected" diff — each is exactly one `.theme` key (`Juiced Horizon` vs the
 > default's `Backend-selected`), i.e. **pre-existing drift from the theme rollout (#43)**, not
 > this change. The suite's expectations should be updated in a separate task.
+
+## Overview/detail — Phase C-1 (roadmap `docs/casa-inspired-dashboard-roadmap.md`)
+
+Structural collapse of per-room chip *mirrors* on Home. Each room button-card already carries a
+`tap_action: navigate → <room view>` plus a `custom_fields.s1` summary row (temp/humidity/CO₂) and
+separate control-chip fields duplicating the room view. Phase C keeps **name + navigate + `s1`
+summary** and drops the control fields — so Home becomes an overview and the detail lives in each
+room view. Unlike disclosure, this lowers DOM **regardless of live state**.
+
+C-1 covers the four **zero-loss** rooms (every dropped control verified reachable in its room view):
+**Inkomhal, Badkamer, Logeerkamer, Woonkamer** (Woonkamer's `cover.luifel_terras` is in `terras`).
+
+| Card-elements (Home, MCP Test — `shoot_view.mjs`, quiet state) | Count | Δ |
+| --- | ---: | ---: |
+| Original baseline (no disclosure) | 1305 | — |
+| PR #44 (alerts + openings disclosed) | 1230 | −75 |
+| + C-1: 4 rooms collapsed to overview | ~1153 | −77 vs #44 |
+| + C-2: 3 more rooms (Slaapkamer, Kinderkamer, Serverroom) | ~1046 | −107 vs C-1 |
+| **+ C-3: last 3 rooms (Keuken, Garage, Bureau)** | **~916** | **−130 vs C-2 (−389, −29.8% vs baseline)** |
+
+Error cards: 0 · unresolved placeholders: 0. **All 10 rooms collapsed — Phase C complete.**
+
+**C-2 finding:** the three "home-only" entities that blocked these rooms
+(`camera.g3_instant_high`, `camera.g3_flex_serverroom_high_2`, `light.schakelaar_slaapkamer_l2`)
+are **stale — they no longer exist in live HA** (confirmed via `ha_get_state` → `ENTITY_NOT_FOUND`).
+The current room cameras (`camera.kamer_adriaan_high_resolution_channel`,
+`camera.serverroom_high_resolution_channel`) already live in the room views, so collapse is
+zero-loss and simply removes dead references. (`check_entities` validates against the placeholder
+mapping, which still lists these, so it does not catch live-HA staleness.)
+
+**C-3 (Keuken, Garage, Bureau)** — of the 10 home-only entities, `ha_get_state` showed 5 stale
+(`licht_koffienis_light_1`, garage `calendar.12_koornbloemstraat…` + `camera.g3_flex_garage_high`,
+bureau `cover.joost_s_desk` + `sensor.desk_height_2`) and the 2 Garage `afvalophaling_*` toggles
+are also on Home's persistent top waste area — so only **3 live entities genuinely needed
+relocating**, now added to their room views: `koelkast_deur` + `koelkast_express_mode` → keuken
+"Amerikaanse koelkast" section; `tv_backlight_3_lite_dreamview` → bureau (mushroom-entity-card).
+New keys added to `entities.example.yaml` (+ local); keuken/bureau re-staged and verified
+(0 error cards, 0 placeholders). Then all three rooms collapsed.
+
+**Phase C outcome:** Home 1305 → ~916 card-elements (−389, −29.8%) with every room a nav+summary
+overview and full detail in the room views. The collapse also swept out **8 stale entity
+references** that had been silently rendering as "unavailable" on Home.

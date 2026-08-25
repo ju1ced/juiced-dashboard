@@ -50,6 +50,14 @@ sections:
         entity: <<bureau.licht_spellenkast>>
     - type: horizontal-stack
       cards:
+      - type: custom:mushroom-entity-card
+        entity: <<bureau.tv_backlight_3_lite_dreamview>>
+        name: TV Backlight
+        icon: mdi:movie-open
+        tap_action:
+          action: toggle
+    - type: horizontal-stack
+      cards:
       - type: conditional
         conditions:
         - condition: state
