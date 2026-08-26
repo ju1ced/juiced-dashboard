@@ -224,9 +224,10 @@ native Overview and adopted **only on a measured win**. This is roadmap PR-35, k
 
 Each phase = one small, independently-reviewable branch/PR. No big-bang.
 
-**Status (2026-08-26):** **B ✅ · C ✅ · D ✅ · E ✅ merged to `main`** (A folded into B/C
-measurement). Remaining: **F** (owner/cutover-gated), **G** (only if metrics demand it).
-Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
+**Status (2026-08-26):** **B ✅ · C ✅ · D ✅ · E ✅ merged to `main` · F ✅ executed on the live
+host** (A folded into B/C measurement). Remaining: **G** only (optional, if metrics demand it).
+Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C; F unregistered ~2.1 MB of
+unused resources from every dashboard.
 
 | Phase | PR | Merge | Outcome |
 | --- | --- | --- | --- |
@@ -335,10 +336,17 @@ Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
 - **Rollback**: revert view files.
 - **Risk**: low (visual, reviewed). **Benefit**: theme-consistent chips; small card_mod cleanup.
 
-### Phase F — resource-sanering (PR-37) · **P3 (deferred, owner/cutover-gated)**
+### Phase F — resource-sanering (PR-37) · **P3** · ✅ DONE (executed 2026-08-26, live host)
 
-- Not autonomous: global `/config` resource deletion. Execute at cutover with the owner, using
-  `docs/resource-removal-manifest.yaml`. Rollback via HACS. **Do not attempt in-session.**
+> **As executed:** with the owner present and explicitly authorizing the one live global write
+> (the exception to the "writes only to mcp-test" rule), the 10 manifest resources were re-verified
+> (0 refs across all **6** live dashboards — incl. the new `home-dashboard`; IDs still valid; `tc:`
+> 0 entity-icon overrides; `kuf:`/`phu:` icon sets kept) and deleted from the registry: **53 → 43
+> resources, ~2.1 MB** off every dashboard. Reversible — the `/hacsfiles/` files are untouched;
+> rollback via HACS or `ha_config_set_dashboard_resource(url=…, module)` (URLs in the manifest).
+
+- Was: global `/config` resource deletion, gated on owner approval at cutover, using
+  `docs/resource-removal-manifest.yaml`. Rollback via HACS.
 
 ### Phase G — custom overview card benchmark · **P3 (only if measured needed)**
 
