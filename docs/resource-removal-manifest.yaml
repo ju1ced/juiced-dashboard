@@ -1,24 +1,34 @@
-# Resource-removal manifest — rollback-ready cutover cleanup list.
+# Resource-removal manifest — EXECUTED 2026-08-26 (owner-authorized live removal).
 #
-# Companion to docs/resource-audit.md. Lists the frontend resources that are
-# VERIFIED unused across ALL dashboards (see `verification:` below). This file
-# does NOT remove anything — `ha_config_delete_dashboard_resource` is a GLOBAL
-# registry change that also affects the default dashboard, so removal stays
-# gated on explicit approval and is scheduled for the cutover (roadmap PR-37).
+# Companion to docs/resource-audit.md. Lists the frontend resources that were
+# VERIFIED unused across ALL dashboards (see `verification:` below) and have now
+# been removed from the live global resource registry (53 -> 43 resources, ~2.1 MB).
+# `ha_config_delete_dashboard_resource` is a GLOBAL registry change that also affects
+# the default dashboard, so this was gated on explicit owner approval (given at the
+# theme/cutover step) — the one deliberate exception to the "writes only to
+# mcp-test-dashboard" rule.
 #
 # Per resource:
-#   remove   -> ha_config_delete_dashboard_resource(resource_id=<id>)
+#   remove   -> ha_config_delete_dashboard_resource(resource_id=<id>)   [DONE]
 #   rollback -> ha_config_set_dashboard_resource(url=<url>, resource_type=module)
-#              (canonical rollback is via HACS, which owns the /hacsfiles/ files)
+#              (canonical rollback is via HACS, which owns the /hacsfiles/ files;
+#               removal only unregisters — the /hacsfiles/ files are untouched)
 
 verification:
   date: 2026-08-06
-  dashboards_checked:            # all 5 registered dashboards — coverage complete
+  reverified: 2026-08-26        # re-run at removal time, post B/C/D/E + theme rollout
+  executed: 2026-08-26          # 10 resources deleted from the live registry (53 -> 43)
+  dashboards_checked:            # all 6 registered dashboards at removal time — coverage complete
     - lovelace          # default (storage)
     - map               # storage, strategy (no cards)
     - dashboard-test    # storage
     - mcp-test-dashboard # storage
-    - kia-ev6           # yaml-mode (dashboards/kia/)
+    - kia-ev6           # yaml-mode (dashboards/kia/, titled "Nebula")
+    - home-dashboard    # storage — NEW since 2026-08-06; also 0 candidate refs
+  reverify_result: >
+    2026-08-26 re-scan: all 10 candidates = 0 refs across all 6 dashboards; all 10
+    IDs still present in the registry; thermal_comfort_icons (tc:) = 0 entity-icon
+    overrides. do_not_remove sets still in use: kuf: (2 overrides), phu: (7).
   method: >
     Custom cards matched on `custom:<type>` across every dashboard (0 refs).
     Icon sets matched on their registered prefix, AND on entity-icon overrides
