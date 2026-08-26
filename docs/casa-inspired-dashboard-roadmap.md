@@ -224,8 +224,8 @@ native Overview and adopted **only on a measured win**. This is roadmap PR-35, k
 
 Each phase = one small, independently-reviewable branch/PR. No big-bang.
 
-**Status (2026-08-25):** **B ✅ · C ✅ · E ✅ merged to `main`** (A folded into B/C measurement).
-Remaining: **D** (not started), **F** (owner/cutover-gated), **G** (only if metrics demand it).
+**Status (2026-08-26):** **B ✅ · C ✅ · D ✅ · E ✅ merged to `main`** (A folded into B/C
+measurement). Remaining: **F** (owner/cutover-gated), **G** (only if metrics demand it).
 Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
 
 | Phase | PR | Merge | Outcome |
@@ -233,6 +233,7 @@ Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
 | B — disclosure | #44 | `fef6f9e` | alerts + openings as mushroom `conditional` chips (−75) |
 | C — overview/detail | #45 | `8e5b7d5` | all 10 room mirrors → name+nav+`s1` summary (−154 more) |
 | E — card-mod tokens | #46 | `7a0d938` | chip palette → `var(--juiced-chip-*, <literal>)`, owner redeploy to activate |
+| D — room_view PoC | #48 | `045ef08` | shared temp/hum + CO2 mini-graph block → `sensor_graph_mini` / `air_quality_mini` across slaapkamer/kinderkamer/logeerkamer |
 
 ### Phase A — Capture runtime performance baseline · **P1** · ◑ FOLDED INTO B/C
 
@@ -294,7 +295,18 @@ Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C.
 - **Risk**: medium (UX — validate nothing important vanished). **Benefit**: the core Casa lesson,
   biggest UX + perf win.
 
-### Phase D — `room_view` template + PoC migration · **P2** (parallel to C-adjacent)
+### Phase D — `room_view` template + PoC migration · **P2** · ✅ DONE (PR #48, `045ef08`)
+
+> **As shipped:** the "universal `room_view`" premise does **not** hold — the room views are 1:1
+> lifts and non-uniform (lights, climate and opening/battery grids are idiosyncratic per room), and
+> only `inkomhal` ever used the sub-templates. The single reliably-shared shard is the
+> temp/humidity and CO2 **mini-graph** block, proven byte-identical (entity-agnostic) across
+> slaapkamer/kinderkamer/
+> logeerkamer. So D = two verbatim templates (`sensor_graph_mini`, `air_quality_mini`; kept separate
+> from the apexcharts `sensor_graph_row` inkomhal uses) + migrate those 3 rooms. Verified offline
+> (`substitute(template, keys)` == the room's block) + frontend (0 error cards; +4 typed elems/room =
+> decluttering-card wrappers). Pure dedup, not a perf win. **Note:** `decluttering_templates` are
+> dashboard-level, so single-view staging must register them first (`build/set_declutter.mjs`).
 
 - **Objective**: introduce a composable `room_view` decluttering template; migrate one simple
   room as PoC.
