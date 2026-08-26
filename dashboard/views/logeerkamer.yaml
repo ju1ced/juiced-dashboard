@@ -1,7 +1,8 @@
 # logeerkamer view — migrated to committed YAML (PR-09).
-# Inline 1:1 lift via scripts/extract_view.py (badkamer-style: this room has a
-# single light card and idiosyncratic graphs, so the room_light_row/
-# sensor_graph_row sub-templates don't cleanly apply). One deliberate change:
+# Inline 1:1 lift via scripts/extract_view.py. The light card + paper-buttons grid
+# stay bespoke, but the temp/humidity and CO2 mini-graph blocks are shared verbatim
+# with slaapkamer/kinderkamer and now delegate to the `sensor_graph_mini` /
+# `air_quality_mini` decluttering templates (PR-D). One deliberate change:
 # a stable `path: logeerkamer` is added (T4 — the default view had none, giving
 # it a fragile numeric render path). card_mod kept verbatim (theme-token pass is
 # PR-38). Real IDs resolve from the git-ignored entities.local.yaml.
@@ -81,70 +82,15 @@ sections:
         type: custom:mini-graph-card
   - type: vertical-stack
     cards:
-    - type: custom:stack-in-card
-      cards:
-      - type: grid
-        square: false
-        columns: 2
-        cards:
-        - type: custom:mushroom-entity-card
-          entity: <<logeerkamer.ht_logeerkamer_temperatuur>>
-          primary_info: state
-          secondary_info: name
-          name: Temperatuur
-          icon_color: green
-        - type: custom:mushroom-entity-card
-          entity: <<logeerkamer.ht_logeerkamer_luchtvochtigheid>>
-          primary_info: state
-          secondary_info: name
-          name: Vochtigheidsgraad
-          icon_color: blue
-      - type: custom:mini-graph-card
-        entities:
-        - entity: <<logeerkamer.ht_logeerkamer_temperatuur>>
-          name: Temperatuur
-          color: '#00bb33'
-        - entity: <<logeerkamer.ht_logeerkamer_luchtvochtigheid>>
-          name: Vochtigheidsgraad
-          color: '#2196f3'
-          y_axis: secondary
-        hours_to_show: 72
-        line_width: 3
-        font_size: 50
-        animate: true
-        show:
-          name: false
-          icon: false
-          state: false
-          legend: false
-          fill: fade
-    - type: custom:stack-in-card
-      cards:
-      - type: grid
-        square: false
-        columns: 1
-        cards:
-        - type: custom:mushroom-entity-card
-          entity: <<logeerkamer.ht_logeerkamer_kooldioxide>>
-          primary_info: state
-          secondary_info: name
-          name: luchtkwaliteit
-          icon_color: red
-      - type: custom:mini-graph-card
-        entities:
-        - entity: <<logeerkamer.ht_logeerkamer_kooldioxide>>
-          name: luchtkwaliteit
-          color: red
-        hours_to_show: 72
-        line_width: 3
-        font_size: 50
-        animate: true
-        show:
-          name: false
-          icon: false
-          state: false
-          legend: false
-          fill: fade
+    - type: custom:decluttering-card
+      template: sensor_graph_mini
+      variables:
+      - temp_entity: <<logeerkamer.ht_logeerkamer_temperatuur>>
+      - humidity_entity: <<logeerkamer.ht_logeerkamer_luchtvochtigheid>>
+    - type: custom:decluttering-card
+      template: air_quality_mini
+      variables:
+      - co2_entity: <<logeerkamer.ht_logeerkamer_kooldioxide>>
     - card:
         cards:
         - cards:

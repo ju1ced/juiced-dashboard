@@ -229,70 +229,15 @@ sections:
         entity: <<kinderkamer.kamer_kind_high_resolution_channel>>
         image:
           media_content_id: https://demo.home-assistant.io/stub_config/bedroom.png
-    - type: custom:stack-in-card
-      cards:
-      - type: grid
-        square: false
-        columns: 2
-        cards:
-        - type: custom:mushroom-entity-card
-          entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
-          primary_info: state
-          secondary_info: name
-          name: Temperatuur
-          icon_color: green
-        - type: custom:mushroom-entity-card
-          entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
-          primary_info: state
-          secondary_info: name
-          name: Vochtigheidsgraad
-          icon_color: blue
-      - type: custom:mini-graph-card
-        entities:
-        - entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
-          name: Temperatuur
-          color: '#00bb33'
-        - entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
-          name: Vochtigheidsgraad
-          color: '#2196f3'
-          y_axis: secondary
-        hours_to_show: 72
-        line_width: 3
-        font_size: 50
-        animate: true
-        show:
-          name: false
-          icon: false
-          state: false
-          legend: false
-          fill: fade
-    - type: custom:stack-in-card
-      cards:
-      - type: grid
-        square: false
-        columns: 1
-        cards:
-        - type: custom:mushroom-entity-card
-          entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
-          primary_info: state
-          secondary_info: name
-          name: luchtkwaliteit
-          icon_color: red
-      - type: custom:mini-graph-card
-        entities:
-        - entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
-          name: luchtkwaliteit
-          color: red
-        hours_to_show: 72
-        line_width: 3
-        font_size: 50
-        animate: true
-        show:
-          name: false
-          icon: false
-          state: false
-          legend: false
-          fill: fade
+    - type: custom:decluttering-card
+      template: sensor_graph_mini
+      variables:
+      - temp_entity: <<kinderkamer.ht_kamer_kind_temperatuur>>
+      - humidity_entity: <<kinderkamer.ht_kamer_kind_luchtvochtigheid>>
+    - type: custom:decluttering-card
+      template: air_quality_mini
+      variables:
+      - co2_entity: <<kinderkamer.ht_kamer_kind_kooldioxide>>
   - type: vertical-stack
     cards:
     - type: custom:mushroom-cover-card

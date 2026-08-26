@@ -169,3 +169,78 @@ sensor_graph_row:
         group_by:
           func: max
           duration: 30min
+
+# Temp + humidity readout with a 72h **mini-graph** (distinct from sensor_graph_row, which uses
+# apexcharts and is used by inkomhal). This block is shared VERBATIM by slaapkamer/kinderkamer/
+# logeerkamer (proven byte-identical, entity-agnostic); only the two sensor entities vary.
+sensor_graph_mini:
+  card:
+    type: custom:stack-in-card
+    cards:
+    - type: grid
+      square: false
+      columns: 2
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: '[[temp_entity]]'
+        primary_info: state
+        secondary_info: name
+        name: Temperatuur
+        icon_color: green
+      - type: custom:mushroom-entity-card
+        entity: '[[humidity_entity]]'
+        primary_info: state
+        secondary_info: name
+        name: Vochtigheidsgraad
+        icon_color: blue
+    - type: custom:mini-graph-card
+      entities:
+      - entity: '[[temp_entity]]'
+        name: Temperatuur
+        color: '#00bb33'
+      - entity: '[[humidity_entity]]'
+        name: Vochtigheidsgraad
+        color: '#2196f3'
+        y_axis: secondary
+      hours_to_show: 72
+      line_width: 3
+      font_size: 50
+      animate: true
+      show:
+        name: false
+        icon: false
+        state: false
+        legend: false
+        fill: fade
+
+# CO2 / air-quality readout with a 72h mini-graph. Shared VERBATIM by the same three rooms;
+# only the CO2 entity varies.
+air_quality_mini:
+  card:
+    type: custom:stack-in-card
+    cards:
+    - type: grid
+      square: false
+      columns: 1
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: '[[co2_entity]]'
+        primary_info: state
+        secondary_info: name
+        name: luchtkwaliteit
+        icon_color: red
+    - type: custom:mini-graph-card
+      entities:
+      - entity: '[[co2_entity]]'
+        name: luchtkwaliteit
+        color: red
+      hours_to_show: 72
+      line_width: 3
+      font_size: 50
+      animate: true
+      show:
+        name: false
+        icon: false
+        state: false
+        legend: false
+        fill: fade
