@@ -592,7 +592,6 @@ sections:
       title: Wind direction
       data_period:
         hours_to_show: 24
-      max_width: 400
       windspeed_bar_full: true
       wind_direction_entity:
         entity: <<terras.windmeter_windstoot_hoek>>
