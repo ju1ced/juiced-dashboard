@@ -490,17 +490,16 @@ woonkamer:
   power_strip_tv_yearly: sensor.example_power_strip_tv_yearly
   power_strip_tv_energie: sensor.example_power_strip_tv_energie
 oprit:
+  nebula_ev_range: sensor.example_oprit_nebula_ev_range
+  nebula_ev_battery_plug: binary_sensor.example_oprit_nebula_ev_battery_plug
+  nebula_estimated_charge_duration: sensor.example_oprit_nebula_estimated_charge_duration
+  nebula_ev_battery_level: sensor.example_oprit_nebula_ev_battery_level
+  nebula_ev_charging_power: sensor.example_oprit_nebula_ev_charging_power
+  nebula_climate_control: climate.example_oprit_nebula_climate_control
   schakelaar_voordeur_l1: light.example_schakelaar_voordeur_l1
   deursensor_voordeur: binary_sensor.example_deursensor_voordeur
   daikin_badkamer_climatecontrol_buiten_temperatuur: sensor.example_daikin_badkamer_climatecontrol_buiten_temperatuur
-  nightshade_electric_range: sensor.example_nightshade_electric_range
-  nightshade_charging_cable_connected: binary_sensor.example_nightshade_charging_cable_connected
-  nightshade_charging_rate: sensor.example_nightshade_charging_rate
-  nightshade_charging_time_left: sensor.example_nightshade_charging_time_left
-  nightshade_battery_level: sensor.example_nightshade_battery_level
-  nightshade_charging_power: sensor.example_nightshade_charging_power
   deurbel_high_resolution_channel: camera.example_deurbel_high_resolution_channel
-  nightshade_electric_climatisation: climate.example_nightshade_electric_climatisation
   person_1_load_person_1_1: sensor.example_person_1_load_person_1_1
   smappee_laadpaal_kwh: sensor.example_smappee_laadpaal_kwh
   laadpaal_daily: sensor.example_laadpaal_daily
@@ -872,12 +871,6 @@ net:
   ap_serverroom_uptime: sensor.example_ap_serverroom_uptime
   ap_serverroom_cpu_utilization: sensor.example_ap_serverroom_cpu_utilization
   ap_serverroom_memory_utilization: sensor.example_ap_serverroom_memory_utilization
-  ap_slaapkamer_uptime: sensor.example_ap_slaapkamer_uptime
-  ap_slaapkamer_cpu_utilization: sensor.example_ap_slaapkamer_cpu_utilization
-  ap_slaapkamer_memory_utilization: sensor.example_ap_slaapkamer_memory_utilization
-  ap_logeerkamer_uptime: sensor.example_ap_logeerkamer_uptime
-  ap_logeerkamer_cpu_utilization: sensor.example_ap_logeerkamer_cpu_utilization
-  ap_logeerkamer_memory_utilization: sensor.example_ap_logeerkamer_memory_utilization
   vichte_network: update.example_vichte_network
   main: update.example_main
   poe: update.example_poe
@@ -956,6 +949,9 @@ water:
   waterverbruik_quarterly: sensor.example_waterverbruik_quarterly
   waterverbruik_yearly: sensor.example_waterverbruik_yearly
 person:
+  nebula_location: device_tracker.example_oprit_nebula_location
+  nebula_ev_battery_level: sensor.example_oprit_nebula_ev_battery_level
+  nebula_ev_range: sensor.example_oprit_nebula_ev_range
   person_1: person.example_person_1
   person_2: person.example_person_2
   oneplus_person_1: device_tracker.example_oneplus_person_1
@@ -966,9 +962,6 @@ person:
   oneplus_watch_2_person_1_battery_level: sensor.example_oneplus_watch_2_person_1_battery_level
   iphone_van_person_2: device_tracker.example_iphone_van_person_2
   iphone_van_person_2_battery_level: sensor.example_iphone_van_person_2_battery_level
-  nightshade_position: device_tracker.example_nightshade_position
-  nightshade_battery_level: sensor.example_nightshade_battery_level
-  nightshade_electric_range: sensor.example_nightshade_electric_range
   person_1_to_home: sensor.example_person_1_to_home
   person_2_to_home: sensor.example_person_2_to_home
   person_2_to_person_1: sensor.example_person_2_to_person_1

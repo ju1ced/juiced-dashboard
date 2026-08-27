@@ -172,21 +172,21 @@ sections:
                   \ {\n  padding-top: 0px !important;\n  padding-bottom: 0px !important;\n}\n.secondary\
                   \ {\n  color: darkgray !important;\n  margin-left: 2px !important;\n}\n"
                 entities:
-                - entity: <<person.nightshade_position>>
+                - entity: <<person.nebula_location>>
                   name: Car
                   icon: mdi:car
                   secondary_info: last-updated
                   type: custom:multiple-entity-row
                   entities:
-                  - entity: <<person.nightshade_battery_level>>
+                  - entity: <<person.nebula_ev_battery_level>>
                     name: Batterij
-                  - entity: <<person.nightshade_electric_range>>
+                  - entity: <<person.nebula_ev_range>>
                     name: Bereik
               - type: map
                 aspect_ratio: '16:9'
                 default_zoom: 15
                 entities:
-                - entity: <<person.nightshade_position>>
+                - entity: <<person.nebula_location>>
                   icon: mdi:car
                 dark_mode: false
                 hours_to_show: 2

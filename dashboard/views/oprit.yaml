@@ -115,20 +115,18 @@ sections:
         cards:
         - type: entities
           entities:
-          - entity: <<oprit.nightshade_electric_range>>
+          - entity: <<oprit.nebula_ev_range>>
             name: ID4 Actieradius
             icon: mdi:speedometer
-          - entity: <<oprit.nightshade_charging_cable_connected>>
+          - entity: <<oprit.nebula_ev_battery_plug>>
             name: Laadkabel
-          - entity: <<oprit.nightshade_charging_rate>>
-            name: Laadsnelheid Km/H
-          - entity: <<oprit.nightshade_charging_time_left>>
+          - entity: <<oprit.nebula_estimated_charge_duration>>
             name: Resterende laadtijd
             icon: mdi:clock-end
         - type: horizontal-stack
           cards:
           - type: gauge
-            entity: <<oprit.nightshade_battery_level>>
+            entity: <<oprit.nebula_ev_battery_level>>
             min: 0
             max: 100
             name: Accu status
@@ -138,7 +136,7 @@ sections:
               yellow: 40
               red: 20
           - type: gauge
-            entity: <<oprit.nightshade_charging_power>>
+            entity: <<oprit.nebula_ev_charging_power>>
             min: 0
             max: 125
             name: Laadsnelheid
@@ -216,7 +214,7 @@ sections:
         image:
           media_content_id: local/images/id4_pro_transparent.png
       - type: custom:mushroom-climate-card
-        entity: <<oprit.nightshade_electric_climatisation>>
+        entity: <<oprit.nebula_climate_control>>
         fill_container: true
         layout: horizontal
         show_temperature_control: true
