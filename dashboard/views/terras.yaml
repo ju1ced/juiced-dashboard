@@ -590,18 +590,20 @@ sections:
       - entity: <<terras.windmeter_windstoot_sterkte>>
     - type: custom:windrose-card
       title: Wind direction
+      # windrose-card v2 schema: data_period uses period codes; the windspeed display
+      # options moved from root into each windspeed_entities entry (v2.0.0 breaking change).
       data_period:
-        hours_to_show: 24
-      windspeed_bar_full: true
+        period_back: -24h
       wind_direction_entity:
         entity: <<terras.windmeter_windstoot_hoek>>
       windspeed_entities:
       - entity: <<terras.windmeter_windstoot_sterkte>>
         name: Average
-      speed_range_beaufort: false
-      output_speed_unit: kph
-      speed_range_step: 5
-      speed_range_max: 80
+        windspeed_bar_full: true
+        speed_range_beaufort: false
+        output_speed_unit: kph
+        speed_range_step: 5
+        speed_range_max: 80
   - type: vertical-stack
     cards:
     - type: custom:apexcharts-card
