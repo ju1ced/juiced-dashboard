@@ -781,8 +781,6 @@ terras:
   bbq_buitenkeuken_lichtjes: light.example_bbq_buitenkeuken_lichtjes
   tuinhuislichtjes_lichtjes_tuinhuis: light.example_tuinhuislichtjes_lichtjes_tuinhuis
   licht_tuinhuis: light.example_licht_tuinhuis
-  terraslichtjes_kleur: light.example_terraslichtjes_kleur
-  licht_boom: light.example_licht_boom
   luifel_terras: cover.example_luifel_terras
   luifel_bureau_luifel_bureau: cover.example_luifel_bureau_luifel_bureau
   keuken: media_player.example_keuken
@@ -807,9 +805,7 @@ terras:
   bewegingssensor_tuinhuis_occupancy: binary_sensor.example_bewegingssensor_tuinhuis_occupancy
   bewegingssensor_tuinhuis_battery: sensor.example_bewegingssensor_tuinhuis_battery
   tomorrow_io_temperatuur: sensor.example_tomorrow_io_temperatuur
-  tomorrow_io_windsnelheid: sensor.example_tomorrow_io_windsnelheid
   tomorrow_io_vochtigheidsgraad: sensor.example_tomorrow_io_vochtigheidsgraad
-  tomorrow_io_household_home_cloud_cover: sensor.example_tomorrow_io_household_home_cloud_cover
   buienradar: camera.example_buienradar
   regenmodule_neerslag: sensor.example_regenmodule_neerslag
   regenmodule_neerslag_vandaag: sensor.example_regenmodule_neerslag_vandaag

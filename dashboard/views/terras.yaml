@@ -57,18 +57,6 @@ sections:
         use_light_color: true
         entity: <<terras.licht_tuinhuis>>
         icon: mdi:lightbulb
-    - type: horizontal-stack
-      cards:
-      - type: custom:mushroom-light-card
-        entity: <<terras.terraslichtjes_kleur>>
-        use_light_color: true
-        show_brightness_control: true
-        show_color_temp_control: true
-        collapsible_controls: true
-        show_color_control: true
-      - type: custom:mushroom-light-card
-        entity: <<terras.licht_boom>>
-        icon: phu:stage-uplight
     - type: custom:mushroom-cover-card
       entity: <<terras.luifel_terras>>
       show_position_control: true
@@ -511,17 +499,6 @@ sections:
                     color: green
               type: custom:paper-buttons-row
             type: entities
-          - entities:
-            - buttons:
-              - entity: <<terras.tomorrow_io_windsnelheid>>
-                layout: icon|state|name
-                name: km/u
-                styles:
-                  button:
-                    border-radius: 10px
-                    color: green
-              type: custom:paper-buttons-row
-            type: entities
           columns: 2
           square: false
           type: grid
@@ -531,18 +508,6 @@ sections:
               - entity: <<terras.tomorrow_io_vochtigheidsgraad>>
                 layout: icon|state|name
                 name: '%'
-                styles:
-                  button:
-                    border-radius: 10px
-                    color: green
-              type: custom:paper-buttons-row
-            type: entities
-          - entities:
-            - buttons:
-              - entity: <<terras.tomorrow_io_household_home_cloud_cover>>
-                layout: icon|state|name
-                name: '%'
-                icon: mdi:cloud
                 styles:
                   button:
                     border-radius: 10px
