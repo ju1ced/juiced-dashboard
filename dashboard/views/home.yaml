@@ -769,15 +769,6 @@ sections:
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
                 - type: template
-                  tap_action:
-                    action: toggle
-                  entity: <<home.terraslichtjes_kleur>>
-                  icon: phu:bollard
-                  card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.terraslichtjes_kleur>>', 'on') else\
-                      \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
-                      \  border-radius: 100px!important;\n}\n"
-                - type: template
                   entity: <<home.weearth_status>>
                   icon: mdi:compost
                   icon_color: ''
@@ -1103,15 +1094,6 @@ sections:
                     style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.lichtjes_tuinhuis>>', 'on') else\
                       \ 'var(--main-icon-background-color)' }};\n  padding: 1px!important;\n\
                       \  border-radius: 100px!important;\n}\n"
-                - type: template
-                  tap_action:
-                    action: toggle
-                  entity: <<home.licht_boom>>
-                  icon: hue:floor-spot
-                  card_mod:
-                    style: "ha-card {\n  --chip-background: {{ 'var(--juiced-chip-active, rgba(255, 181, 118, 0.8))' if is_state('<<home.licht_boom>>', 'on') else 'var(--main-icon-background-color)'\
-                      \ }};\n  padding: 1px!important;\n  border-radius: 100px!important;\n\
-                      }\n"
                 - type: template
                   tap_action:
                     action: fire-dom-event
