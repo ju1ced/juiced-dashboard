@@ -317,3 +317,18 @@ gh pr create --repo ju1ced/juiced-dashboard --base main \
 ```
 
 Zeg welk beslispunt uit §10 je anders wilt, of geef akkoord om PR-01 te starten.
+
+---
+
+## 12. Onderhoud & hotfixes (buiten het migratieplan)
+
+Kleine fixes die buiten de geplande milestones vallen maar wel op `main` landen.
+
+| PR | Datum | Omschrijving |
+|----|-------|--------------|
+| #51 | 2026-08-26 | `fix(views)`: dode entity-refs opgeruimd — auto rename (`nightshade`→`oprit_nebula`), APs logeerkamer/slaapkamer→`ap_boven`, terras `max_width` |
+| #52 | 2026-08-27 | `fix(views)`: terras windrose-card gemigreerd naar v2-schema |
+| #53 | 2026-08-27 | `fix(views)`: 4 dode terras-kaarten verwijderd (hernoemde/verwijderde entities) |
+| #54 | 2026-09-03 | `fix(views/templates)`: 2 dode home-chips verwijderd (`terraslichtjes_kleur`, `licht_boom`) + 15 example-entity-ID's gecorrigeerd voor HA 2026.8.3 renames (`_window`→`_raam`, `_illuminance`→`_licht`, temperatuursensors, `switch`→`light`, media\_player-prefix, kalender-stadsnaam, wijnklimatkast-typo); echte ID's al gefixed in `entities.local.yaml` (gitignored) |
+
+> **Trigger PR #51–#54:** HA-update van 2026.1.0 naar 2026.8.3 (~28-29 aug) standaardiseerde entity-ID-conventies en verwijderde de `volkswagencarnet`-integratie. Spook meldde 9 dode refs bij de eerstvolgende herstart (31 aug 05:12 UTC).
