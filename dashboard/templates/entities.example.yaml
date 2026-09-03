@@ -110,7 +110,7 @@ home:
   garagepoort_open_state: binary_sensor.example_home_garagepoort_open_state
   garagepoort: switch.example_home_garagepoort
   post_in_brievenbus: input_boolean.example_home_post_in_brievenbus
-  12_koornbloemstraat_8570_anzegem: calendar.example_home_12_koornbloemstraat_8570_anzegem
+  12_koornbloemstraat_8570_anzegem: calendar.example_home_12_koornbloemstraat_8570_vichte
   afvalophaling_buitengezet: input_boolean.example_home_afvalophaling_buitengezet
   afvalophaling_bevestigd: input_boolean.example_home_afvalophaling_bevestigd
   schakelaar_voordeur_l1: switch.example_home_schakelaar_voordeur_l1
@@ -126,7 +126,7 @@ home:
   ledstrip_terraskast: light.example_home_ledstrip_terraskast
   terraslichtjes_kleur: light.example_home_terraslichtjes_kleur
   weearth_status: sensor.example_home_weearth_status
-  onkyo_tx_nr656_zone_2: media_player.example_home_onkyo_tx_nr656_zone_2
+  onkyo_tx_nr656_zone_2: media_player.example_home_tx_nr656_zone_2
   living: media_player.example_home_living
   keuken: media_player.example_home_keuken
   kantoor: media_player.example_home_kantoor
@@ -144,12 +144,12 @@ home:
   licht_bbq_buitenkeuken: light.example_home_licht_bbq_buitenkeuken
   bbq_buitenkeuken_lichtjes: light.example_home_bbq_buitenkeuken_lichtjes
   bewegingssensor_tuinhuis_temperature: sensor.example_home_bewegingssensor_tuinhuis_temperature
-  licht_tuinhuis: switch.example_home_licht_tuinhuis
-  lichtjes_tuinhuis: light.example_home_lichtjes_tuinhuis
+  licht_tuinhuis: light.example_home_licht_tuinhuis
+  lichtjes_tuinhuis: light.example_home_licht_tuinhuis
   licht_boom: light.example_home_licht_boom
   tuinhuis_high_resolution_channel: camera.example_home_tuinhuis_high_resolution_channel
   tuinhuis_beweging: binary_sensor.example_home_tuinhuis_beweging
-  deursensor_tuinhuis: binary_sensor.example_home_deursensor_tuinhuis
+  deursensor_tuinhuis: binary_sensor.example_home_deursensor_tuinhuis_raam
   smart_plug_zwembad_filter_vermogen: sensor.example_home_smart_plug_zwembad_filter_vermogen
   smart_plug_warmtepomp_zwembad_vermogen: sensor.example_home_smart_plug_warmtepomp_zwembad_vermogen
   zwembad_zoutsysteem_vermogen: sensor.example_home_zwembad_zoutsysteem_vermogen
@@ -189,7 +189,7 @@ home:
   combinatiealarm_living_rook: binary_sensor.example_home_combinatiealarm_living_rook
   rolluik_living: cover.example_home_rolluik_living
   rolluik_eetkamer: cover.example_home_rolluik_eetkamer
-  raamsensor_schuifraam_eetkamer: binary_sensor.example_home_raamsensor_schuifraam_eetkamer
+  raamsensor_schuifraam_eetkamer: binary_sensor.example_home_raamsensor_schuifraam_eetkamer_raam
   daikin_keuken_room_temperature: climate.example_home_daikin_keuken_room_temperature
   bewegingssensor_bijkeuken_temperature: sensor.example_home_bewegingssensor_bijkeuken_temperature
   temperatuur_keuken_eetkamer_gemiddeld: sensor.example_home_temperatuur_keuken_eetkamer_gemiddeld
@@ -267,20 +267,20 @@ home:
   rolluik_kamer_kind: cover.example_home_rolluik_kamer_kind
   ht_badkamer_temperatuur: sensor.example_home_ht_badkamer_temperatuur
   ht_badkamer_luchtvochtigheid: sensor.example_home_ht_badkamer_luchtvochtigheid
-  raamsensor_badkamer_illuminance: sensor.example_home_raamsensor_badkamer_illuminance
+  raamsensor_badkamer_illuminance: sensor.example_home_raamsensor_badkamer_licht
   badkamer_2: light.example_home_badkamer_2
   daikin_badkamer_room_temperature: climate.example_home_daikin_badkamer_room_temperature
   bewegingssensor_badkamer_occupancy: binary_sensor.example_home_bewegingssensor_badkamer_occupancy
-  raamsensor_badkamer_window: binary_sensor.example_home_raamsensor_badkamer_window
+  raamsensor_badkamer_window: binary_sensor.example_home_raamsensor_badkamer_raam
   rolluik_badkamer_links: cover.example_home_rolluik_badkamer_links
   rolluik_badkamer_rechts: cover.example_home_rolluik_badkamer_rechts
   ht_logeerkamer_temperatuur: sensor.example_home_ht_logeerkamer_temperatuur
   ht_logeerkamer_luchtvochtigheid: sensor.example_home_ht_logeerkamer_luchtvochtigheid
   ht_logeerkamer_kooldioxide: sensor.example_home_ht_logeerkamer_kooldioxide
-  raamsensor_logeerkamer_illuminance: sensor.example_home_raamsensor_logeerkamer_illuminance
+  raamsensor_logeerkamer_illuminance: sensor.example_home_raamsensor_logeerkamer_licht
   schakelaar_logeerkamer_left: light.example_home_schakelaar_logeerkamer_left
   daikin_logeerkamer_room_temperature: climate.example_home_daikin_logeerkamer_room_temperature
-  raamsensor_logeerkamer_window: binary_sensor.example_home_raamsensor_logeerkamer_window
+  raamsensor_logeerkamer_window: binary_sensor.example_home_raamsensor_logeerkamer_raam
   rookmelder_logeerkamer_rook: binary_sensor.example_home_rookmelder_logeerkamer_rook
   rolluik_logeerkamer: cover.example_home_rolluik_logeerkamer
   garage_high_resolution_channel: camera.example_home_garage_high_resolution_channel
@@ -570,7 +570,7 @@ keuken:
   stopcontact_microgolfoven_energy: sensor.example_stopcontact_microgolfoven_energy
   wijnklimaatkast_vermogen: sensor.example_wijnklimaatkast_vermogen
   wijnklimaatkast_daily: sensor.example_wijnklimaatkast_daily
-  wijnklimaatkast_monthly: sensor.example_wijnklimaatkast_monthly
+  wijnklimaatkast_monthly: sensor.example_wijnklimatkast_monthly
   wijnklimaatkast_yearly: sensor.example_wijnklimaatkast_yearly
   wijnklimaatkast_energie: sensor.example_wijnklimaatkast_energie
   stopcontact_vaatwas: switch.example_stopcontact_vaatwas
@@ -1120,18 +1120,18 @@ house:
   basisstation_signaalsterkte: sensor.example_basisstation_signaalsterkte
   basisstation_connected: binary_sensor.example_basisstation_connected
   household_zone_zone_1_circuit_0_climate: climate.example_household_zone_zone_1_circuit_0_climate
-  woonkamer_temperature: sensor.example_woonkamer_temperature
+  woonkamer_temperature: sensor.example_ht_woonkamer_temperatuur
   daikin_keuken_room_temperature: climate.example_daikin_keuken_room_temperature
   shellyht_441793210b65_temperature: sensor.example_shellyht_441793210b65_temperature
   daikin_bureau_room_temperature: climate.example_daikin_bureau_room_temperature
   daikin_slaapkamer_room_temperature: climate.example_daikin_slaapkamer_room_temperature
-  slaapkamer_temperature: sensor.example_slaapkamer_temperature
+  slaapkamer_temperature: sensor.example_ht_slaapkamer_temperatuur
   daikin_kamer_kind_room_temperature: climate.example_daikin_kamer_kind_room_temperature
-  kamer_kind_temperature: sensor.example_kamer_kind_temperature
+  kamer_kind_temperature: sensor.example_ht_kamer_kind_temperatuur
   daikin_badkamer_room_temperature: climate.example_daikin_badkamer_room_temperature
   bewegingssensor_badkamer_temperature: sensor.example_bewegingssensor_badkamer_temperature
   daikin_logeerkamer_room_temperature: climate.example_daikin_logeerkamer_room_temperature
-  logeerkamer_temperature: sensor.example_logeerkamer_temperature
+  logeerkamer_temperature: sensor.example_ht_logeerkamer_temperatuur
 car:
   oprit_nebula_vehicle_identification_number: sensor.example_oprit_nebula_vehicle_identification_number
   oprit_nebula_data: sensor.example_oprit_nebula_data
