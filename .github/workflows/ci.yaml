@@ -21,11 +21,28 @@ jobs:
       - name: Install Python dev dependencies
         run: pip install -r requirements-dev.txt
 
+      # No package-lock.json yet (package.json gained TS/esbuild deps this
+      # PR) — `npm install` instead of `npm ci` until one is committed.
+      - name: Install Node dev dependencies
+        run: npm install
+
       - name: YAML lint
         run: yamllint .
 
       - name: Markdown lint
-        run: npx --yes markdownlint-cli2 "**/*.md"
+        run: npm run lint:md
+
+      - name: Type-check the HACS card source
+        run: npm run typecheck
+
+      - name: Build the HACS bundle
+        run: npm run build
+
+      - name: Check built bundle syntax
+        run: npm run check:syntax
+
+      - name: HACS card unit tests
+        run: node --test
 
       - name: Privacy guard (no real entity IDs / serials committed)
         run: python scripts/check_entity_refs.py
