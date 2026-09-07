@@ -25,8 +25,11 @@ dashboard/
   cards/                    # reusable card fragments
   templates/                # decluttering/button templates, colors, icons, entity mapping
   themes/                   # juiced-horizon theme tokens
-scripts/                    # render + mapping + validation tooling
-docs/                       # analysis, POC, roadmap, entity-mapping guide
+scripts/                    # render + mapping + validation tooling (+ build.mjs for the HACS card)
+docs/                       # analysis, POC, roadmap, entity-mapping guide, hacs-card.md
+src/                        # TypeScript source for the HACS card (see docs/hacs-card.md)
+dist/                       # committed HACS bundle (juiced-dashboard.js), built from src/
+test/                       # unit + render-smoke tests for the HACS card
 .github/                    # CI, PR template, CODEOWNERS
 ```
 
@@ -52,13 +55,19 @@ python scripts/render_dashboard.py --out build/juiced-dashboard.yaml
 `entities.local.yaml` and everything under `build/` are git-ignored, so your real IDs and
 serials never leave your machine. Full guide: [`docs/entity-mapping.md`](docs/entity-mapping.md).
 
+## HACS card
+
+This repo also ships a small, independent HACS-installable custom card,
+`custom:juiced-dashboard-room-card` — additive to, not a replacement for, the YAML dashboard
+above. See [`docs/hacs-card.md`](docs/hacs-card.md) for install and configuration.
+
 ## Development
 
 One-time setup:
 
 ```bash
 pip install -r requirements-dev.txt   # pyyaml, yamllint, pytest
-npm install                           # markdownlint-cli2 (needs Node)
+npm install                           # markdownlint-cli2, typescript, esbuild (needs Node)
 ```
 
 Run the **same blocking checks as CI** with a single command:

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="nl" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>juiced-dashboard-room-card — preview harness</title>
+    <style>
+      /* Minimal stand-in for the core Home Assistant + juiced-horizon theme
+         variables the card reads — enough to preview it without loading the
+         full HA frontend. Values match dashboard/themes/juiced-horizon.yaml
+         (dark mode). Fictional example data only, see README. */
+      :root {
+        color-scheme: dark;
+        --primary-background-color: #0f1115;
+        --secondary-background-color: #171a21;
+        --card-background-color: #20242d;
+        --ha-card-background: #20242d;
+        --divider-color: #343a46;
+        --primary-text-color: #f4f6f8;
+        --secondary-text-color: #b7c0cc;
+        --primary-color: #5cc8ff;
+        --accent-color: #7ee787;
+        --state-icon-active-color: #ffd166;
+        --state-active-color: #7ee787;
+        --ha-card-border-radius: 18px;
+
+        --juiced-surface-raised: #20242d;
+        --juiced-surface-elevated: #2b303a;
+        --juiced-border-subtle: #343a46;
+        --juiced-text-primary: #f4f6f8;
+        --juiced-text-secondary: #b7c0cc;
+        --juiced-text-muted: #8a94a3;
+        --juiced-text-inverse: #081018;
+        --juiced-brand-primary: #5cc8ff;
+        --juiced-brand-secondary: #7ee787;
+        --juiced-brand-accent: #ffd166;
+        --juiced-chip-active: rgba(255, 209, 102, 0.16);
+        --juiced-status-ok: #7ee787;
+        --juiced-radius-lg: 24px;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--primary-background-color);
+        color: var(--primary-text-color);
+        font-family:
+          "Segoe UI",
+          Roboto,
+          -apple-system,
+          sans-serif;
+      }
+      main {
+        max-width: 420px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+      p.caption {
+        color: var(--secondary-text-color);
+        font-size: 13px;
+        margin-bottom: 18px;
+      }
+      /* Minimal <ha-icon> stand-in so mdi: icons don't render as empty tags */
+      ha-icon {
+        display: inline-flex;
+        width: 18px;
+        height: 18px;
+      }
+      ha-icon::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: currentColor;
+        mask: radial-gradient(circle, black 55%, transparent 58%);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="caption">
+        juiced-dashboard-room-card — preview harness, fictional example data (see README /
+        docs/hacs-card.md). Not a live Home Assistant install.
+      </p>
+      <juiced-dashboard-room-card id="card"></juiced-dashboard-room-card>
+    </main>
+
+    <script type="module">
+      import "../../dist/juiced-dashboard.js";
+
+      const hass = {
+        states: {
+          "sensor.bureau_temperature": { state: "21.5", attributes: {} },
+          "sensor.bureau_humidity": { state: "43", attributes: {} },
+          "light.bureau_spellenruimte": { state: "on", attributes: { friendly_name: "Bureau & spellenruimte" } },
+          "light.bureau_spellentafel": { state: "off", attributes: { friendly_name: "Spellentafel" } },
+          "cover.luifel_bureau": { state: "open", attributes: { current_position: 40, friendly_name: "Luifel bureau" } },
+          "media_player.kantoor": {
+            state: "playing",
+            attributes: { friendly_name: "Kantoor +1", media_title: "VRT Radio 1" },
+          },
+          "climate.daikin_bureau": {
+            state: "cool",
+            attributes: {
+              current_temperature: 28,
+              temperature: 23,
+              hvac_modes: ["off", "heat", "cool", "auto"],
+              target_temp_step: 0.5,
+              friendly_name: "Daikin Bureau",
+            },
+          },
+          "sensor.woonkamer_temperature": { state: "24.4", attributes: {} },
+          "sensor.woonkamer_humidity": { state: "41", attributes: {} },
+          "light.woonkamer_living": { state: "off", attributes: { friendly_name: "Living" } },
+        },
+        callService(domain, service, data) {
+          // eslint-disable-next-line no-console
+          console.log(`callService: ${domain}.${service}`, data);
+        },
+      };
+
+      const card = document.getElementById("card");
+      card.setConfig({
+        type: "custom:juiced-dashboard-room-card",
+        title: "Kamers",
+        subtitle: "Tik een kamer om lichten, rolluiken, luifels, radio of airco direct te bedienen",
+        rooms: [
+          {
+            name: "Bureau",
+            icon: "mdi:desk",
+            temperature: "sensor.bureau_temperature",
+            humidity: "sensor.bureau_humidity",
+            lights: [
+              { entity: "light.bureau_spellenruimte" },
+              { entity: "light.bureau_spellentafel" },
+            ],
+            awnings: [{ entity: "cover.luifel_bureau" }],
+            media_player: "media_player.kantoor",
+            climate: "climate.daikin_bureau",
+          },
+          {
+            name: "Woonkamer",
+            icon: "mdi:sofa",
+            temperature: "sensor.woonkamer_temperature",
+            humidity: "sensor.woonkamer_humidity",
+            lights: [{ entity: "light.woonkamer_living" }],
+          },
+          { name: "Toilet & berging", icon: "mdi:toilet" },
+        ],
+      });
+      card.hass = hass;
+
+      // Open the first room's popup so the screenshot shows the actual
+      // "tap a room, get a popup" interaction, not just the list.
+      requestAnimationFrame(() => {
+        card.shadowRoot.getElementById("list").firstElementChild.click();
+      });
+    </script>
+  </body>
+</html>

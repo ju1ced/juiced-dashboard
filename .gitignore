@@ -11,6 +11,15 @@ build/
 # Node / tooling
 node_modules/
 
+# Claude Code local session config (permissions, machine-specific) — never
+# commit; .claude/launch.json (dev-preview server config) IS committed.
+.claude/settings.local.json
+
+# Reproducible HACS release artifacts — the bundle itself (dist/juiced-dashboard.js)
+# stays tracked, only the generated manifest/checksum are regenerated per build.
+dist/*.sha256
+dist/release-manifest.json
+
 # Python
 __pycache__/
 *.pyc

@@ -1,0 +1,4 @@
+# The HACS bundle is a reproducible build artifact — keep its line endings
+# exactly as esbuild produced them (LF) regardless of platform checkout
+# settings, so the committed file always matches what CI built.
+dist/*.js -text eol=lf
