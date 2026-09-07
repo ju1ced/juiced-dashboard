@@ -44,6 +44,18 @@ jobs:
       - name: HACS card unit tests
         run: node --test
 
+      # No local Node/esbuild in the authoring environment for this PR — the
+      # committed dist/juiced-dashboard.js was produced from this artifact,
+      # downloaded via `gh run download` and committed by hand. Safe to
+      # remove once a maintainer has a normal local Node setup.
+      - name: Upload built HACS bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: juiced-dashboard-bundle
+          path: dist/juiced-dashboard.js
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Privacy guard (no real entity IDs / serials committed)
         run: python scripts/check_entity_refs.py
 
