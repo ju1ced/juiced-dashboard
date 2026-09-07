@@ -108,13 +108,25 @@ read-only; alles wordt eerst bewezen op `mcp-test-dashboard`.
 
 ### Fase H0 — Spike: kamer-popup PoC (Bureau) · P1
 
-- **Doel:** bewijs het gekozen mechanisme (§3.1) end-to-end op MCP Test vóór 13 kamers worden
-  aangeraakt — dit is de enige aanname in de hele render die nog niet technisch bevestigd is.
-- **Bestanden:** 1 nieuwe resource (indien `browser_mod`) + 1 testview met de popup voor Bureau.
-- **Acceptatie:** popup opent/sluit, minstens één toggle werkt op een echte MCP-Test-entiteit,
-  0 error-cards, screenshot dark + light.
-- **Risico:** middel (mogelijk nieuwe dependency). **Baat:** valideert de kernaanname van de hele
-  render vóór grootschalige investering.
+> **Status (2026-09-07):** mechanisme-beslissing (§3.1) genomen: **eigen custom card**, geen
+> `browser_mod`. Card gebouwd en als `v0.1.0` (pre-release) gepubliceerd in het nieuwe repo
+> [`ju1ced/juiced-room-card`](https://github.com/ju1ced/juiced-room-card)
+> (`custom:juiced-room-card`, HACS-installeerbaar als custom repository — zie dat repo's README).
+> CI groen (37 unit tests + render-smoke-tests tegen ontbrekende/onbeschikbare entiteiten,
+> syntax-check, markdown-lint, hacs.json-validatie). **Nog niet gedaan:** geïnstalleerd/getoetst op
+> een echte Home Assistant-instance, en nog niet opgenomen in `dashboard/**` van dit repo — dat is
+> de resterende acceptatiestap hieronder vóór H0 als afgerond geldt.
+
+- **Doel:** bewijs het gekozen mechanisme (§3.1) end-to-end vóór 13 kamers worden aangeraakt —
+  dit was de enige aanname in de hele render die nog niet technisch bevestigd was.
+- **Bestanden:** nieuw repo `juiced-room-card` (buiten dit repo, naar het "Garden model" van de
+  sibling-repo's `ha-kia-connect-dashboard`/`garden-dashboard`) — géén wijziging in
+  `juiced-dashboard` zelf voor de card-code. In dit repo volgt nog: de resource toevoegen aan
+  `dashboard/resources.yaml` en een testview op MCP Test met `custom:juiced-room-card` voor Bureau.
+- **Resterende acceptatie:** resource geregistreerd op MCP Test, popup opent/sluit met een echte
+  MCP-Test-entiteit, minstens één toggle werkt end-to-end, 0 error-cards, screenshot dark + light.
+- **Risico:** laag nu de card zelf werkt (unit-getest); resterend risico zit in de HA-integratie
+  (resource laden, thema-tokens die effectief doorkomen op een echte instance).
 
 ### Fase H1 — Topnav-herstructurering · P1
 
@@ -166,12 +178,14 @@ MCP-Test-validatielus, snapshot-vooraf, privacy-mapping-laag, CI-gates, `juiced-
 
 ## 6. Volgende stap
 
-**Fase H0** (popup-spike op Bureau) is de logische eerste branch/PR — het is de enige aanname in
-de hele render die nog niet technisch bevestigd is, en alles daarna (H2, H3) hangt ervan af.
+`juiced-room-card` v0.1.0 bestaat en is HACS-installeerbaar (§4, Fase H0-status). Resterend om H0
+volledig te sluiten — **niets hiervan is uitgevoerd zonder jouw akkoord:**
 
-Nog niets wordt uitgevoerd of gepusht zonder jouw akkoord. Openstaande vragen om te beantwoorden
-voor ik H0 opstart:
+1. Installeer `juiced-room-card` op de echte Home Assistant-instance (HACS custom repository) en
+   voeg de resource toe.
+2. Zet een testview met `custom:juiced-room-card` voor Bureau op **MCP Test** (snapshot vooraf,
+   zoals altijd), met een config die alle 5 categorieën dekt (licht/rolluik/luifel/radio/airco).
+3. Verifieer de resterende acceptatiecriteria (popup opent/sluit, een echte toggle werkt,
+   0 error-cards, screenshot dark + light) en rapporteer terug.
 
-1. Voorkeur voor het popup-mechanisme (§3.1): **(a) `browser_mod`** (aanbevolen, krachtigst, nieuwe
-   dependency) of **(b) native `more-info`** (geen nieuwe dependency, beperktere popup)?
-2. Akkoord om een nieuwe branch `feat/h0-room-popup-spike` te starten voor de PoC op Bureau?
+Na een akkoord op die drie stappen is H0 gesloten en kan H1 (topnav-herstructurering) starten.
