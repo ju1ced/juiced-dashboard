@@ -220,6 +220,11 @@ Totaal ± 42 PR's. **PR-nummers zijn indicatief** (er zijn 13 kamer-/ruimteviews
 > disclosure** (`fef6f9e`) and the **Home overview/detail** redesign that collapsed the 10 room
 > mirrors, −29.8% card-elements (`8e5b7d5`). Full phase tracker:
 > [`casa-inspired-dashboard-roadmap.md`](casa-inspired-dashboard-roadmap.md) §9.
+>
+> **2026-09-07 — superseded for PR-39 and M3's kamerview approach:** a confirmed visual/IA
+> redesign (Kia-style, calm hero + section-tabbed room pages) replaces the "lighten the nav-badge"
+> and "1:1-lift kamerviews" premises. See [`horizon-redesign-roadmap.md`](horizon-redesign-roadmap.md)
+> for the new phasing (H0–H6) — nothing in it has been executed yet.
 
 **PR-37 · perf: resource-sanering** — *na M3/M4*
 
