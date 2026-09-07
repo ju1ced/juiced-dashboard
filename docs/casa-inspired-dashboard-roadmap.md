@@ -229,6 +229,10 @@ host** (A folded into B/C measurement). Remaining: **G** only (optional, if metr
 Cumulative: Home ~1305 → ~916 card-elements (**−29.8%**) across B+C; F unregistered ~2.1 MB of
 unused resources from every dashboard.
 
+**2026-09-07 — G superseded:** a confirmed Kia-style visual/IA redesign replaces the "custom
+overview card, only if metrics demand it" premise. See
+[`horizon-redesign-roadmap.md`](horizon-redesign-roadmap.md) (phases H0–H6) — nothing executed yet.
+
 | Phase | PR | Merge | Outcome |
 | --- | --- | --- | --- |
 | B — disclosure | #44 | `fef6f9e` | alerts + openings as mushroom `conditional` chips (−75) |
