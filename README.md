@@ -59,7 +59,12 @@ serials never leave your machine. Full guide: [`docs/entity-mapping.md`](docs/en
 
 This repo also ships a small, independent HACS-installable custom card,
 `custom:juiced-dashboard-room-card` — additive to, not a replacement for, the YAML dashboard
-above. See [`docs/hacs-card.md`](docs/hacs-card.md) for install and configuration.
+above. Tap a room, get a popup with only what's controllable there:
+
+![Juiced Dashboard Room Card — room list and an open room popup](docs/renders/room-card-preview.svg)
+
+See [`docs/hacs-card.md`](docs/hacs-card.md) for the full install guide and configuration
+reference.
 
 ## Development
 
