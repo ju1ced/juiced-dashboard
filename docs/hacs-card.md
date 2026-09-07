@@ -86,6 +86,22 @@ missing, unknown, or unavailable entities. Tests import from the **built**
 `pretest` script), not the TypeScript source, so there's no separate test-time TS loader to
 maintain.
 
+## Preview harness
+
+`docs/renders/preview.html` loads the built bundle in a real browser against a small fake
+`hass` object (fictional example data, matching the config above) — no Home Assistant
+install required. Serve the repo root with any static file server and open the page, e.g.:
+
+```sh
+python -m http.server 8942
+# then open http://localhost:8942/docs/renders/preview.html
+```
+
+This is how the card was manually verified end-to-end this session (list view, opening a
+room's popup, all four sections rendering correctly) — a real screenshot from this harness
+still needs to be captured and added to the README (currently missing; `hacs/action`'s
+`check-images` validation flags this).
+
 ## Status
 
 v0.1.0 is a working first release, ported from the (now superseded)
