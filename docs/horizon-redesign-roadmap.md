@@ -108,21 +108,27 @@ read-only; alles wordt eerst bewezen op `mcp-test-dashboard`.
 
 ### Fase H0 — Spike: kamer-popup PoC (Bureau) · P1
 
-> **Status (2026-09-07):** mechanisme-beslissing (§3.1) genomen: **eigen custom card**, geen
-> `browser_mod`. Card gebouwd en als `v0.1.0` (pre-release) gepubliceerd in het nieuwe repo
-> [`ju1ced/juiced-room-card`](https://github.com/ju1ced/juiced-room-card)
-> (`custom:juiced-room-card`, HACS-installeerbaar als custom repository — zie dat repo's README).
-> CI groen (37 unit tests + render-smoke-tests tegen ontbrekende/onbeschikbare entiteiten,
-> syntax-check, markdown-lint, hacs.json-validatie). **Nog niet gedaan:** geïnstalleerd/getoetst op
-> een echte Home Assistant-instance, en nog niet opgenomen in `dashboard/**` van dit repo — dat is
-> de resterende acceptatiestap hieronder vóór H0 als afgerond geldt.
+> **Status (2026-09-07, herzien):** mechanisme-beslissing (§3.1) genomen: **eigen custom card**,
+> geen `browser_mod`. **Architectuur herzien** — niet als apart repo (de aanvankelijke
+> `ju1ced/juiced-room-card`-spike), maar als HACS-packaging **in dit repo zelf**: `hacs.json`,
+> TypeScript → esbuild → getrackte `dist/juiced-dashboard.js`, `hacs/action`-CI-validatie en een
+> tag-getriggerde release-workflow (zelfde patroon als de sibling-repo's
+> `ha-kia-connect-dashboard`/`garden-dashboard`). Card herbouwd in TypeScript als
+> `custom:juiced-dashboard-room-card` in PR [#58](https://github.com/ju1ced/juiced-dashboard/pull/58);
+> `juiced-room-card` wordt gearchiveerd zodra deze PR gemerged en getagd is. Uitdrukkelijk **geen**
+> samenvoeging met `ju1ced/home-dashboard` (apart project, apart ontwikkeld, zie project-notities).
+> CI groen (typecheck + build + 37 unit-/render-smoke-tests + hacs/action-structuurcheck) en
+> handmatig geverifieerd in een echte browser via `docs/renders/preview.html` (lijst + popup, alle
+> vier secties). **Nog niet gedaan:** geïnstalleerd/getoetst op een echte Home Assistant-instance
+> of MCP Test, en een echte README-screenshot (2 van de 8 `hacs/action`-checks — license/images —
+> hangen af van de default branch en sluiten pas na merge).
 
 - **Doel:** bewijs het gekozen mechanisme (§3.1) end-to-end vóór 13 kamers worden aangeraakt —
   dit was de enige aanname in de hele render die nog niet technisch bevestigd was.
-- **Bestanden:** nieuw repo `juiced-room-card` (buiten dit repo, naar het "Garden model" van de
-  sibling-repo's `ha-kia-connect-dashboard`/`garden-dashboard`) — géén wijziging in
-  `juiced-dashboard` zelf voor de card-code. In dit repo volgt nog: de resource toevoegen aan
-  `dashboard/resources.yaml` en een testview op MCP Test met `custom:juiced-room-card` voor Bureau.
+- **Bestanden:** `src/`, `dist/`, `hacs.json`, `test/` in dít repo (niet meer een apart repo) —
+  zie [`docs/hacs-card.md`](hacs-card.md). In dit repo volgt nog: de resource toevoegen aan
+  `dashboard/resources.yaml` en een testview op MCP Test met `custom:juiced-dashboard-room-card`
+  voor Bureau.
 - **Resterende acceptatie:** resource geregistreerd op MCP Test, popup opent/sluit met een echte
   MCP-Test-entiteit, minstens één toggle werkt end-to-end, 0 error-cards, screenshot dark + light.
 - **Risico:** laag nu de card zelf werkt (unit-getest); resterend risico zit in de HA-integratie
@@ -178,14 +184,20 @@ MCP-Test-validatielus, snapshot-vooraf, privacy-mapping-laag, CI-gates, `juiced-
 
 ## 6. Volgende stap
 
-`juiced-room-card` v0.1.0 bestaat en is HACS-installeerbaar (§4, Fase H0-status). Resterend om H0
-volledig te sluiten — **niets hiervan is uitgevoerd zonder jouw akkoord:**
+`custom:juiced-dashboard-room-card` bestaat, is HACS-installeerbaar vanuit dit repo, en is
+handmatig geverifieerd in een browser (§4, Fase H0-status; PR
+[#58](https://github.com/ju1ced/juiced-dashboard/pull/58)). Resterend om H0 volledig te sluiten —
+**niets hiervan is uitgevoerd zonder jouw akkoord:**
 
-1. Installeer `juiced-room-card` op de echte Home Assistant-instance (HACS custom repository) en
-   voeg de resource toe.
-2. Zet een testview met `custom:juiced-room-card` voor Bureau op **MCP Test** (snapshot vooraf,
-   zoals altijd), met een config die alle 5 categorieën dekt (licht/rolluik/luifel/radio/airco).
-3. Verifieer de resterende acceptatiecriteria (popup opent/sluit, een echte toggle werkt,
+1. PR #58 mergen, `v0.1.0` taggen/releasen, en daarna `ju1ced/juiced-room-card` archiveren
+   (per afspraak deze sessie).
+2. Een echte screenshot uit `docs/renders/preview.html` toevoegen aan de README (laatste
+   `hacs/action`-bevinding).
+3. Installeer de card op de echte Home Assistant-instance (HACS custom repository) en voeg de
+   resource toe.
+4. Zet een testview met `custom:juiced-dashboard-room-card` voor Bureau op **MCP Test** (snapshot
+   vooraf, zoals altijd), met een config die alle 5 categorieën dekt (licht/rolluik/luifel/radio/airco).
+5. Verifieer de resterende acceptatiecriteria (popup opent/sluit, een echte toggle werkt,
    0 error-cards, screenshot dark + light) en rapporteer terug.
 
-Na een akkoord op die drie stappen is H0 gesloten en kan H1 (topnav-herstructurering) starten.
+Na een akkoord op deze vijf stappen is H0 gesloten en kan H1 (topnav-herstructurering) starten.
