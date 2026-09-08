@@ -64,6 +64,50 @@ test("compileConfig treats a non-array rooms value as an empty list", () => {
   assert.deepEqual(config.rooms, []);
 });
 
+test("compileConfig defaults today to an empty waste list and no entities", () => {
+  const config = compileConfig({});
+  assert.deepEqual(config.today, { waste_entities: [] });
+});
+
+test("compileConfig keeps configured today entities and filters the waste list to strings", () => {
+  const config = compileConfig({
+    today: {
+      weather_entity: "weather.thuis",
+      solar_power_entity: "sensor.solar",
+      waste_entities: ["sensor.gft", 42, null, "sensor.restafval"],
+    },
+  });
+  assert.equal(config.today.weather_entity, "weather.thuis");
+  assert.equal(config.today.solar_power_entity, "sensor.solar");
+  assert.equal(config.today.battery_soc_entity, undefined);
+  assert.deepEqual(config.today.waste_entities, ["sensor.gft", "sensor.restafval"]);
+});
+
+test("compileConfig treats a non-array today.waste_entities as empty", () => {
+  const config = compileConfig({ today: { waste_entities: "not an array" } });
+  assert.deepEqual(config.today.waste_entities, []);
+});
+
+test("compileConfig drops quick actions missing an entity or service", () => {
+  const config = compileConfig({
+    quick_actions: [
+      { key: "a", label: "Alarm", entity: "alarm_control_panel.huis", service: "alarm_arm_home" },
+      { key: "b", label: "Geen entiteit", service: "toggle" },
+      { key: "c", label: "Geen service", entity: "light.x" },
+    ],
+  });
+  assert.equal(config.quick_actions.length, 1);
+  assert.equal(config.quick_actions[0].key, "a");
+  assert.equal(config.quick_actions[0].entity, "alarm_control_panel.huis");
+  assert.equal(config.quick_actions[0].service, "alarm_arm_home");
+});
+
+test("compileConfig falls back to the entity id as the quick action label when none is given", () => {
+  const config = compileConfig({ quick_actions: [{ entity: "light.garage", service: "toggle" }] });
+  assert.equal(config.quick_actions[0].label, "light.garage");
+  assert.ok(config.quick_actions[0].key);
+});
+
 test("compileRoomForCard expands each single entity into the card's array shape", () => {
   const card = compileRoomForCard({
     key: "bureau",

@@ -41,9 +41,37 @@ export interface EditorRoomConfig {
   climate_entity?: EntityReference;
 }
 
+/** "Vandaag" hero: weather, a handful of energy KPIs, and waste sensors. All optional — an unset field's tile is simply omitted. */
+export interface TodayConfig {
+  weather_entity?: EntityReference;
+  battery_soc_entity?: EntityReference;
+  battery_charge_entity?: EntityReference;
+  battery_discharge_entity?: EntityReference;
+  solar_power_entity?: EntityReference;
+  home_consumption_entity?: EntityReference;
+  monthly_peak_entity?: EntityReference;
+  waste_entities: EntityReference[];
+}
+
+/**
+ * A single quick-action chip. `service` is the short service name
+ * (e.g. "toggle", "turn_on", "alarm_arm_home") — the domain is derived from
+ * `entity` at call time (`entity.split(".")[0]`), so a room light chip is
+ * just `{entity: "light.x", service: "toggle"}`, no separate domain field.
+ */
+export interface QuickActionConfig {
+  key: string;
+  label: string;
+  icon?: string;
+  entity: EntityReference;
+  service: string;
+}
+
 export interface JuicedDashboardConfigV1 {
   type: "custom:juiced-dashboard";
   schema_version: typeof CONFIG_SCHEMA_VERSION;
   general: GeneralConfig;
+  today: TodayConfig;
+  quick_actions: QuickActionConfig[];
   rooms: EditorRoomConfig[];
 }

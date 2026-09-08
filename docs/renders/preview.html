@@ -114,6 +114,13 @@
       <h2>4. Strategy config editor (custom:juiced-dashboard, GUI form)</h2>
       <p class="caption">Try editing the title, adding/removing a room — check the console for the emitted <code>config-changed</code> events.</p>
       <juiced-dashboard-strategy-editor id="editor"></juiced-dashboard-strategy-editor>
+
+      <h2>5. "Vandaag" card (custom:juiced-dashboard-today-card)</h2>
+      <div id="today-wrap"></div>
+
+      <h2>6. Snelacties (custom:juiced-dashboard-quick-actions)</h2>
+      <p class="caption">Click a chip — check the console for the simulated <code>callService</code> call.</p>
+      <div id="qa-wrap"></div>
     </main>
 
     <script type="module">
@@ -242,6 +249,42 @@
         // eslint-disable-next-line no-console
         console.log("config-changed", event.detail.config);
       });
+
+      // ---- 5. Today card ----
+      hass.states["weather.thuis"] = { state: "sunny", attributes: { temperature: 25 } };
+      hass.states["sensor.batterij_soc"] = { state: "31", attributes: { unit_of_measurement: "%", friendly_name: "Batterij SoC" } };
+      hass.states["sensor.zon_opbrengst"] = { state: "5812.0", attributes: { unit_of_measurement: "W", friendly_name: "Zon" } };
+      hass.states["sensor.gft"] = { state: "over 2 dagen", attributes: { friendly_name: "GFT" } };
+      hass.states["sensor.restafval"] = { state: "over 2 dagen", attributes: { friendly_name: "Restafval" } };
+
+      const todayCard = document.createElement("juiced-dashboard-today-card");
+      document.getElementById("today-wrap").appendChild(todayCard);
+      todayCard.setConfig({
+        type: "custom:juiced-dashboard-today-card",
+        today: {
+          weather_entity: "weather.thuis",
+          battery_soc_entity: "sensor.batterij_soc",
+          solar_power_entity: "sensor.zon_opbrengst",
+          waste_entities: ["sensor.gft", "sensor.restafval"],
+        },
+      });
+      todayCard.hass = hass;
+
+      // ---- 6. Quick actions ----
+      hass.states["alarm_control_panel.huis"] = { state: "disarmed", attributes: {} };
+      hass.states["cover.garagepoort"] = { state: "closed", attributes: {} };
+
+      const qaCard = document.createElement("juiced-dashboard-quick-actions");
+      document.getElementById("qa-wrap").appendChild(qaCard);
+      qaCard.setConfig({
+        type: "custom:juiced-dashboard-quick-actions",
+        actions: [
+          { key: "alarm", label: "Alarm", entity: "alarm_control_panel.huis", service: "alarm_arm_home" },
+          { key: "garage", label: "Garagepoort", entity: "cover.garagepoort", service: "open_cover" },
+          { key: "sfeer", label: "Sfeerlicht woonkamer", entity: "light.woonkamer_living", service: "toggle" },
+        ],
+      });
+      qaCard.hass = hass;
     </script>
   </body>
 </html>

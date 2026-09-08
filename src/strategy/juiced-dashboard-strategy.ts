@@ -51,6 +51,8 @@ function createView(path: ViewPath, config: JuicedDashboardConfigV1): Record<str
       type: "custom:juiced-dashboard-view",
       view: path,
       general: config.general,
+      today: config.today,
+      quick_actions: config.quick_actions,
       rooms: config.rooms,
     },
   };
