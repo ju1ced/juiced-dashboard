@@ -272,6 +272,121 @@ export function toggleMediaPlayPause(hass: HomeAssistant | null | undefined, ent
 }
 
 /* ------------------------------------------------------------------ *
+ * Section renderers (pure — shared by the popup here and by the room
+ * detail subview card, which reuses these exact same section bodies)
+ * ------------------------------------------------------------------ */
+
+export function roomSectionLights(hass: HomeAssistant | null, room: RoomConfig): string {
+  const lights = room.lights || [];
+  if (!lights.length) return "";
+  const rows = lights
+    .map((l) => {
+      const stateObj = entityState(hass, l.entity);
+      const on = stateObj?.state === "on";
+      const name = displayName(l.name, stateObj, l.entity);
+      const unavailable = isUnavailable(stateObj?.state);
+      return `
+        <div class="jrc-lightrow${on ? " on" : ""}">
+          <span class="jrc-lrow-ic">${ICON_BULB}</span>
+          <span class="jrc-lrow-text">
+            <span class="jrc-lrow-name">${escapeHtml(name)}</span>
+            <span class="jrc-lrow-sub">${unavailable ? "Niet beschikbaar" : on ? "Aan" : "Uit"}</span>
+          </span>
+          <button class="jrc-toggle${on ? " on" : ""}" data-action="toggle-light"
+            data-entity="${escapeHtml(l.entity)}" ${unavailable ? "disabled" : ""}
+            aria-label="${escapeHtml(name)} omschakelen"><i></i></button>
+        </div>`;
+    })
+    .join("");
+  return `<div class="jrc-section"><h4>Verlichting</h4>${rows}</div>`;
+}
+
+export function roomSectionCovers(hass: HomeAssistant | null, room: RoomConfig, key: "covers" | "awnings", title: string): string {
+  const items = room[key] || [];
+  if (!items.length) return "";
+  const rows = items
+    .map((c) => {
+      const stateObj = entityState(hass, c.entity);
+      const name = displayName(c.name, stateObj, c.entity);
+      return `
+        <div class="jrc-coverrow">
+          <span class="jrc-cr-name">${escapeHtml(name)}</span>
+          <span class="jrc-cr-pos">${coverPositionLabel(stateObj)}</span>
+          <span class="jrc-cr-btns">
+            <button data-action="cover-open" data-entity="${escapeHtml(c.entity)}" aria-label="Omhoog">${ICON_CARET_UP}</button>
+            <button data-action="cover-stop" data-entity="${escapeHtml(c.entity)}" aria-label="Stop">${ICON_STOP}</button>
+            <button data-action="cover-close" data-entity="${escapeHtml(c.entity)}" aria-label="Omlaag">${ICON_CARET_DOWN}</button>
+          </span>
+        </div>`;
+    })
+    .join("");
+  return `<div class="jrc-section"><h4>${escapeHtml(title)}</h4>${rows}</div>`;
+}
+
+export function roomSectionMedia(hass: HomeAssistant | null, room: RoomConfig): string {
+  if (!room.media_player) return "";
+  const stateObj = entityState(hass, room.media_player);
+  const name = displayName(null, stateObj, room.media_player);
+  const mediaTitle = stateObj?.attributes?.["media_title"];
+  const track = typeof mediaTitle === "string" && mediaTitle ? mediaTitle : isUnavailable(stateObj?.state) ? "Niet beschikbaar" : "Uit";
+  const playing = stateObj?.state === "playing";
+  return `
+    <div class="jrc-section">
+      <h4>Media</h4>
+      <div class="jrc-media">
+        <span class="jrc-media-ic">${ICON_SPEAKER}</span>
+        <span class="jrc-media-text">
+          <span class="jrc-media-name">${escapeHtml(name)}</span>
+          <span class="jrc-media-sub">${escapeHtml(track)}</span>
+        </span>
+        <button class="jrc-media-btn${playing ? " on" : ""}" data-action="media-toggle"
+          data-entity="${escapeHtml(room.media_player)}" aria-label="Afspelen/pauzeren">${ICON_PLAY}</button>
+      </div>
+    </div>`;
+}
+
+export function roomSectionClimate(hass: HomeAssistant | null, room: RoomConfig): string {
+  if (!room.climate) return "";
+  const stateObj = entityState(hass, room.climate);
+  const name = displayName(null, stateObj, room.climate);
+  const rawModes = stateObj?.attributes?.["hvac_modes"];
+  const modes = Array.isArray(rawModes) ? (rawModes.filter((m): m is string => typeof m === "string")) : [];
+  const currentMode = stateObj?.state;
+  const current = formatTemp(stateObj?.attributes?.["current_temperature"], 1);
+  const target = stateObj?.attributes?.["temperature"];
+  const targetLabel = formatTemp(target, 1) || "—";
+  const rawStep = Number(stateObj?.attributes?.["target_temp_step"]);
+  const step = Number.isFinite(rawStep) && rawStep > 0 ? rawStep : 0.5;
+
+  const modeButtons = modes
+    .map(
+      (mode) => `
+      <button class="jrc-pill${mode === currentMode ? " on" : ""}" data-action="climate-mode"
+        data-entity="${escapeHtml(room.climate)}" data-mode="${escapeHtml(mode)}">${escapeHtml(hvacModeLabel(mode))}</button>`,
+    )
+    .join("");
+
+  const targetAttr = typeof target === "string" || typeof target === "number" ? String(target) : "";
+
+  return `
+    <div class="jrc-section">
+      <h4>Klimaat</h4>
+      <div class="jrc-kv"><span>${escapeHtml(name)}</span><span class="ok">${escapeHtml(hvacModeLabel(currentMode))}</span></div>
+      ${modeButtons ? `<div class="jrc-pillrow">${modeButtons}</div>` : ""}
+      <div class="jrc-stepper">
+        <button data-action="climate-step" data-entity="${escapeHtml(room.climate)}"
+          data-target="${targetAttr}" data-step="${-step}" aria-label="Kouder">−</button>
+        <div class="jrc-stepper-mid">
+          <div class="v">${escapeHtml(targetLabel)}</div>
+          <div class="l">doel${current ? ` · nu ${escapeHtml(current)}` : ""}</div>
+        </div>
+        <button data-action="climate-step" data-entity="${escapeHtml(room.climate)}"
+          data-target="${targetAttr}" data-step="${step}" aria-label="Warmer">+</button>
+      </div>
+    </div>`;
+}
+
+/* ------------------------------------------------------------------ *
  * The custom element
  * ------------------------------------------------------------------ */
 
@@ -471,11 +586,11 @@ export class JuicedDashboardRoomCard extends HTMLElementBase {
     if (subEl) subEl.textContent = roomStatLine(hass, room);
 
     const sections = [
-      this._sectionLights(hass, room),
-      this._sectionCovers(hass, room, "covers", "Rolluiken"),
-      this._sectionCovers(hass, room, "awnings", "Luifels"),
-      this._sectionMedia(hass, room),
-      this._sectionClimate(hass, room),
+      roomSectionLights(hass, room),
+      roomSectionCovers(hass, room, "covers", "Rolluiken"),
+      roomSectionCovers(hass, room, "awnings", "Luifels"),
+      roomSectionMedia(hass, room),
+      roomSectionClimate(hass, room),
     ]
       .filter(Boolean)
       .join("");
@@ -484,116 +599,6 @@ export class JuicedDashboardRoomCard extends HTMLElementBase {
     if (body) {
       body.innerHTML = sections || `<p class="jrc-empty">Geen snelbediening geconfigureerd voor deze kamer.</p>`;
     }
-  }
-
-  private _sectionLights(hass: HomeAssistant | null, room: RoomConfig): string {
-    const lights = room.lights || [];
-    if (!lights.length) return "";
-    const rows = lights
-      .map((l) => {
-        const stateObj = entityState(hass, l.entity);
-        const on = stateObj?.state === "on";
-        const name = displayName(l.name, stateObj, l.entity);
-        const unavailable = isUnavailable(stateObj?.state);
-        return `
-          <div class="jrc-lightrow${on ? " on" : ""}">
-            <span class="jrc-lrow-ic">${ICON_BULB}</span>
-            <span class="jrc-lrow-text">
-              <span class="jrc-lrow-name">${escapeHtml(name)}</span>
-              <span class="jrc-lrow-sub">${unavailable ? "Niet beschikbaar" : on ? "Aan" : "Uit"}</span>
-            </span>
-            <button class="jrc-toggle${on ? " on" : ""}" data-action="toggle-light"
-              data-entity="${escapeHtml(l.entity)}" ${unavailable ? "disabled" : ""}
-              aria-label="${escapeHtml(name)} omschakelen"><i></i></button>
-          </div>`;
-      })
-      .join("");
-    return `<div class="jrc-section"><h4>Verlichting</h4>${rows}</div>`;
-  }
-
-  private _sectionCovers(hass: HomeAssistant | null, room: RoomConfig, key: "covers" | "awnings", title: string): string {
-    const items = room[key] || [];
-    if (!items.length) return "";
-    const rows = items
-      .map((c) => {
-        const stateObj = entityState(hass, c.entity);
-        const name = displayName(c.name, stateObj, c.entity);
-        return `
-          <div class="jrc-coverrow">
-            <span class="jrc-cr-name">${escapeHtml(name)}</span>
-            <span class="jrc-cr-pos">${coverPositionLabel(stateObj)}</span>
-            <span class="jrc-cr-btns">
-              <button data-action="cover-open" data-entity="${escapeHtml(c.entity)}" aria-label="Omhoog">${ICON_CARET_UP}</button>
-              <button data-action="cover-stop" data-entity="${escapeHtml(c.entity)}" aria-label="Stop">${ICON_STOP}</button>
-              <button data-action="cover-close" data-entity="${escapeHtml(c.entity)}" aria-label="Omlaag">${ICON_CARET_DOWN}</button>
-            </span>
-          </div>`;
-      })
-      .join("");
-    return `<div class="jrc-section"><h4>${escapeHtml(title)}</h4>${rows}</div>`;
-  }
-
-  private _sectionMedia(hass: HomeAssistant | null, room: RoomConfig): string {
-    if (!room.media_player) return "";
-    const stateObj = entityState(hass, room.media_player);
-    const name = displayName(null, stateObj, room.media_player);
-    const mediaTitle = stateObj?.attributes?.["media_title"];
-    const track = typeof mediaTitle === "string" && mediaTitle ? mediaTitle : isUnavailable(stateObj?.state) ? "Niet beschikbaar" : "Uit";
-    const playing = stateObj?.state === "playing";
-    return `
-      <div class="jrc-section">
-        <h4>Media</h4>
-        <div class="jrc-media">
-          <span class="jrc-media-ic">${ICON_SPEAKER}</span>
-          <span class="jrc-media-text">
-            <span class="jrc-media-name">${escapeHtml(name)}</span>
-            <span class="jrc-media-sub">${escapeHtml(track)}</span>
-          </span>
-          <button class="jrc-media-btn${playing ? " on" : ""}" data-action="media-toggle"
-            data-entity="${escapeHtml(room.media_player)}" aria-label="Afspelen/pauzeren">${ICON_PLAY}</button>
-        </div>
-      </div>`;
-  }
-
-  private _sectionClimate(hass: HomeAssistant | null, room: RoomConfig): string {
-    if (!room.climate) return "";
-    const stateObj = entityState(hass, room.climate);
-    const name = displayName(null, stateObj, room.climate);
-    const rawModes = stateObj?.attributes?.["hvac_modes"];
-    const modes = Array.isArray(rawModes) ? (rawModes.filter((m): m is string => typeof m === "string")) : [];
-    const currentMode = stateObj?.state;
-    const current = formatTemp(stateObj?.attributes?.["current_temperature"], 1);
-    const target = stateObj?.attributes?.["temperature"];
-    const targetLabel = formatTemp(target, 1) || "—";
-    const rawStep = Number(stateObj?.attributes?.["target_temp_step"]);
-    const step = Number.isFinite(rawStep) && rawStep > 0 ? rawStep : 0.5;
-
-    const modeButtons = modes
-      .map(
-        (mode) => `
-        <button class="jrc-pill${mode === currentMode ? " on" : ""}" data-action="climate-mode"
-          data-entity="${escapeHtml(room.climate)}" data-mode="${escapeHtml(mode)}">${escapeHtml(hvacModeLabel(mode))}</button>`,
-      )
-      .join("");
-
-    const targetAttr = typeof target === "string" || typeof target === "number" ? String(target) : "";
-
-    return `
-      <div class="jrc-section">
-        <h4>Klimaat</h4>
-        <div class="jrc-kv"><span>${escapeHtml(name)}</span><span class="ok">${escapeHtml(hvacModeLabel(currentMode))}</span></div>
-        ${modeButtons ? `<div class="jrc-pillrow">${modeButtons}</div>` : ""}
-        <div class="jrc-stepper">
-          <button data-action="climate-step" data-entity="${escapeHtml(room.climate)}"
-            data-target="${targetAttr}" data-step="${-step}" aria-label="Kouder">−</button>
-          <div class="jrc-stepper-mid">
-            <div class="v">${escapeHtml(targetLabel)}</div>
-            <div class="l">doel${current ? ` · nu ${escapeHtml(current)}` : ""}</div>
-          </div>
-          <button data-action="climate-step" data-entity="${escapeHtml(room.climate)}"
-            data-target="${targetAttr}" data-step="${step}" aria-label="Warmer">+</button>
-        </div>
-      </div>`;
   }
 
   /* ---- event delegation ---- */

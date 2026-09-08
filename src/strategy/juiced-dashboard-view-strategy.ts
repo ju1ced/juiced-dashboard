@@ -7,6 +7,7 @@
 
 import { compileRoomForCard } from "../config/compiler";
 import { registerJuicedDashboardQuickActions } from "../cards/juiced-dashboard-quick-actions";
+import { registerJuicedDashboardRoomDetailCard } from "../cards/juiced-dashboard-room-detail-card";
 import { registerJuicedDashboardSecurityCard } from "../cards/juiced-dashboard-security-card";
 import { registerJuicedDashboardTodayCard } from "../cards/juiced-dashboard-today-card";
 import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, SecurityConfig, TodayConfig, ViewPath } from "../config/types";
@@ -88,23 +89,7 @@ function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[
   if (!room) {
     return [{ type: "grid", cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
   }
-  const entities = [
-    room.temperature_entity,
-    room.humidity_entity,
-    room.light_entity,
-    room.cover_entity,
-    room.awning_entity,
-    room.media_player_entity,
-    room.climate_entity,
-  ].filter((id): id is string => Boolean(id));
-
-  const cards: LovelaceConfig[] = [
-    markdown(`Volledige kamerdetail (hero + secties zoals Klimaat/Verlichting/Sensoren/Media) voor **${room.name}** volgt in een volgende stap.`, room.name),
-  ];
-  if (entities.length > 0) {
-    cards.push({ type: "entities", title: "Entiteiten in deze kamer", entities });
-  }
-  return [{ type: "grid", cards }];
+  return [{ type: "grid", cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
 }
 
 function placeholderSections(title: string, note: string): LovelaceConfig[] {
@@ -151,6 +136,7 @@ export function registerJuicedDashboardViewStrategy(): void {
   registerJuicedDashboardTodayCard();
   registerJuicedDashboardQuickActions();
   registerJuicedDashboardSecurityCard();
+  registerJuicedDashboardRoomDetailCard();
   if (typeof customElements === "undefined") return;
   const tag = "ll-strategy-view-juiced-dashboard-view";
   if (!customElements.get(tag)) customElements.define(tag, JuicedDashboardViewStrategy);
