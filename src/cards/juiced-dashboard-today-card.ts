@@ -57,6 +57,33 @@ function humanizeCondition(condition: string): string {
   return labels[condition] || condition;
 }
 
+const WEEKDAY_LABELS = ["zo", "ma", "di", "wo", "do", "vr", "za"];
+
+/** Parses a waste-collection sensor's state — "DD-MM-YYYY", "YYYY-MM-DD", or anything `Date` can parse. Returns null when unparseable. */
+export function parseWasteDate(value: string): Date | null {
+  const dmy = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));
+  const ymd = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (ymd) return new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3]));
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+/** Calendar-day distance from today (ignores time-of-day), positive = future. */
+export function daysUntil(date: Date, now: Date = new Date()): number {
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfTarget = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return Math.round((startOfTarget.getTime() - startOfToday.getTime()) / 86400000);
+}
+
+export function relativeWasteLabel(days: number): string {
+  if (days === 0) return "Vandaag";
+  if (days === 1) return "Morgen";
+  if (days > 1) return `Over ${days} dagen`;
+  if (days === -1) return "Gisteren";
+  return `${Math.abs(days)} dagen geleden`;
+}
+
 export class JuicedDashboardTodayCard extends HTMLElementBase {
   private _config: JuicedDashboardTodayCardConfig | null = null;
   private _hass: HomeAssistant | null = null;
@@ -155,10 +182,19 @@ export class JuicedDashboardTodayCard extends HTMLElementBase {
         if (!state || isUnavailable(state.state)) return "";
         const name = state.attributes?.["friendly_name"];
         const label = typeof name === "string" && name ? name : entityId;
+        const date = parseWasteDate(state.state);
+        const dateHtml =
+          date === null
+            ? `<span class="jtc-waste-wd">${escapeHtml(state.state)}</span>`
+            : `<span class="jtc-waste-day">${date.getDate()}</span><span class="jtc-waste-wd">${WEEKDAY_LABELS[date.getDay()]}</span>`;
+        const relative = date === null ? "" : relativeWasteLabel(daysUntil(date));
         return `
           <div class="jtc-waste-chip">
-            <div class="jtc-waste-name">${escapeHtml(label)}</div>
-            <div class="jtc-waste-value">${escapeHtml(state.state)}</div>
+            <div class="jtc-waste-date">${dateHtml}</div>
+            <div class="jtc-waste-text">
+              <div class="jtc-waste-name">${escapeHtml(label)}</div>
+              ${relative ? `<div class="jtc-waste-value">${escapeHtml(relative)}</div>` : ""}
+            </div>
           </div>`;
       })
       .filter(Boolean)
@@ -199,9 +235,25 @@ const CARD_CSS = `
     margin: 0 0 10px; font-size: 11.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
     color: var(--juiced-text-muted, var(--secondary-text-color));
   }
-  .jtc-waste-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-  .jtc-waste-chip { background: var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.04))); border-radius: 12px; padding: 10px; }
-  .jtc-waste-name { font-size: 11.5px; font-weight: 700; color: var(--juiced-text-primary, var(--primary-text-color)); }
+  .jtc-waste-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .jtc-waste-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.04)));
+    border-radius: 12px; padding: 10px;
+  }
+  .jtc-waste-date {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--juiced-surface-raised, var(--card-background-color, #fff));
+    color: var(--juiced-brand-primary, var(--primary-color));
+  }
+  .jtc-waste-day { font-size: 15px; font-weight: 800; line-height: 1.1; }
+  .jtc-waste-wd { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+  .jtc-waste-text { min-width: 0; }
+  .jtc-waste-name {
+    font-size: 11.5px; font-weight: 700; color: var(--juiced-text-primary, var(--primary-text-color));
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
   .jtc-waste-value { font-size: 10.5px; color: var(--juiced-text-muted, var(--secondary-text-color)); margin-top: 2px; }
 
   @media (max-width: 480px) { .jtc-energy { grid-template-columns: repeat(2, 1fr); } }

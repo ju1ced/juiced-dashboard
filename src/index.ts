@@ -52,13 +52,14 @@ export type { HassEntity, HomeAssistant, JuicedDashboardRoomCardConfig, RoomConf
 
 export { compileConfig, compileRoomForCard } from "./config/compiler";
 export { createDefaultConfig } from "./config/defaults";
-export { CONFIG_SCHEMA_VERSION, START_VIEWS, THEME_MODES, VIEW_PATHS } from "./config/types";
+export { CONFIG_SCHEMA_VERSION, ROOM_ZONES, START_VIEWS, THEME_MODES, VIEW_PATHS } from "./config/types";
 export type {
   CameraConfig,
   EditorRoomConfig,
   GeneralConfig,
   JuicedDashboardConfigV1,
   QuickActionConfig,
+  RoomZone,
   SecurityConfig,
   StartView,
   ThemeMode,
@@ -70,7 +71,7 @@ export { JuicedDashboardStrategy, registerJuicedDashboardStrategy, roomPath } fr
 export { buildView, JuicedDashboardViewStrategy, registerJuicedDashboardViewStrategy } from "./strategy/juiced-dashboard-view-strategy";
 export type { JuicedDashboardViewConfig } from "./strategy/juiced-dashboard-view-strategy";
 export { JuicedDashboardStrategyEditor, registerJuicedDashboardEditor } from "./editor/juiced-dashboard-editor";
-export { JuicedDashboardTodayCard, registerJuicedDashboardTodayCard } from "./cards/juiced-dashboard-today-card";
+export { daysUntil, JuicedDashboardTodayCard, parseWasteDate, registerJuicedDashboardTodayCard, relativeWasteLabel } from "./cards/juiced-dashboard-today-card";
 export type { JuicedDashboardTodayCardConfig } from "./cards/juiced-dashboard-today-card";
 export { JuicedDashboardQuickActions, registerJuicedDashboardQuickActions } from "./cards/juiced-dashboard-quick-actions";
 export type { JuicedDashboardQuickActionsConfig } from "./cards/juiced-dashboard-quick-actions";

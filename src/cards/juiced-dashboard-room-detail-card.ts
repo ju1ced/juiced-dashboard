@@ -135,11 +135,12 @@ export class JuicedDashboardRoomDetailCard extends HTMLElementBase {
       roomSectionCovers(hass, room, "covers", "Rolluiken"),
       roomSectionCovers(hass, room, "awnings", "Luifels"),
       roomSectionMedia(hass, room),
-    ]
-      .filter(Boolean)
-      .join("");
+    ].filter((section): section is string => Boolean(section));
 
-    const body = overview || sections ? `${overview}${sections}` : `<p class="jrd-empty">Geen bediening of sensoren geconfigureerd voor deze kamer.</p>`;
+    const body =
+      overview || sections.length
+        ? `${overview}${sections.length ? `<div class="jrd-sections">${sections.join("")}</div>` : ""}`
+        : `<p class="jrd-empty">Geen bediening of sensoren geconfigureerd voor deze kamer.</p>`;
 
     this.root.innerHTML = `
       <style>${CARD_CSS}</style>
@@ -199,18 +200,28 @@ const CARD_CSS = `
     overflow: hidden;
   }
 
-  .jrd-hero { display: flex; align-items: center; gap: 13px; padding: 18px 20px 14px; }
+  .jrd-hero {
+    display: flex; align-items: center; gap: 18px; padding: 28px 24px;
+    background: linear-gradient(155deg, var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.04))), transparent);
+  }
   .jrd-hero-ic {
-    width: 44px; height: 44px; border-radius: 13px; flex: none;
+    width: 64px; height: 64px; border-radius: 18px; flex: none;
     background: var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.05)));
     color: var(--juiced-brand-primary, var(--primary-color));
     display: flex; align-items: center; justify-content: center;
   }
-  .jrd-hero-ic ha-icon { --mdc-icon-size: 22px; }
-  .jrd-hero-name { margin: 0; font-size: 19px; font-weight: 800; color: var(--juiced-text-primary, var(--primary-text-color)); }
+  .jrd-hero-ic ha-icon { --mdc-icon-size: 32px; }
+  .jrd-hero-name { margin: 0; font-size: 26px; font-weight: 800; color: var(--juiced-text-primary, var(--primary-text-color)); }
 
-  .jrd-body { padding: 0 20px 18px; }
+  .jrd-body { padding: 0 24px 24px; }
   .jrd-empty { color: var(--juiced-text-muted, var(--secondary-text-color)); font-size: 12.5px; padding: 10px 0; }
+
+  .jrd-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 4px; }
+  .jrd-sections .jrc-section {
+    padding: 16px; border-top: none;
+    background: var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.035)));
+    border-radius: var(--juiced-radius-md, 14px);
+  }
 
   .jrd-overview {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;
@@ -224,8 +235,6 @@ const CARD_CSS = `
   .jrd-tile-unit { font-size: 11px; font-weight: 600; color: var(--juiced-text-muted, var(--secondary-text-color)); }
   .jrd-tile-label { font-size: 10.5px; color: var(--juiced-text-muted, var(--secondary-text-color)); margin-top: 2px; line-height: 1.3; }
 
-  .jrd-body .jrc-section { padding: 14px 0; border-top: 1px solid var(--juiced-border-subtle, var(--divider-color)); }
-  .jrd-body .jrc-section:first-of-type { border-top: 0; padding-top: 0; }
   .jrd-body .jrc-section h4 {
     margin: 0 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
     color: var(--juiced-text-muted, var(--secondary-text-color));
