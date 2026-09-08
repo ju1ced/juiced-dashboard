@@ -70,9 +70,9 @@ function compileRoom(raw: unknown): EditorRoomConfig | null {
     zone: asRoomZone(raw.zone),
     temperature_entity: asOptionalString(raw.temperature_entity),
     humidity_entity: asOptionalString(raw.humidity_entity),
-    light_entity: asOptionalString(raw.light_entity),
-    cover_entity: asOptionalString(raw.cover_entity),
-    awning_entity: asOptionalString(raw.awning_entity),
+    light_entities: asStringArray(raw.light_entities),
+    cover_entities: asStringArray(raw.cover_entities),
+    awning_entities: asStringArray(raw.awning_entities),
     media_player_entity: asOptionalString(raw.media_player_entity),
     climate_entity: asOptionalString(raw.climate_entity),
   };
@@ -195,7 +195,7 @@ export function compileConfig(raw: unknown): JuicedDashboardConfigV1 {
   };
 }
 
-/** Expands the flat, GUI-editable room shape into the card's array-based RoomConfig. */
+/** Expands the GUI-editable room shape into the card's RoomConfig. */
 export function compileRoomForCard(room: EditorRoomConfig): RoomConfig {
   return {
     name: room.name,
@@ -203,9 +203,9 @@ export function compileRoomForCard(room: EditorRoomConfig): RoomConfig {
     zone: room.zone,
     temperature: room.temperature_entity,
     humidity: room.humidity_entity,
-    lights: room.light_entity ? [{ entity: room.light_entity }] : [],
-    covers: room.cover_entity ? [{ entity: room.cover_entity }] : [],
-    awnings: room.awning_entity ? [{ entity: room.awning_entity }] : [],
+    lights: (room.light_entities ?? []).map((entity) => ({ entity })),
+    covers: (room.cover_entities ?? []).map((entity) => ({ entity })),
+    awnings: (room.awning_entities ?? []).map((entity) => ({ entity })),
     media_player: room.media_player_entity,
     climate: room.climate_entity,
   };

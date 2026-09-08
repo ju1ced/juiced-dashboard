@@ -136,6 +136,14 @@ test("setConfig + hass assignment never throws, even with a missing light entity
   assert.ok(listHtml.includes("Lege kamer"));
 });
 
+test("a room row never shows a quick light-toggle button — opening the popup is the only action", () => {
+  const card = makeCard();
+  card.setConfig(RICH_CONFIG);
+  card.hass = HASS;
+  const listHtml = card.shadowRoot.getElementById("list").innerHTML;
+  assert.ok(!listHtml.includes('data-action="toggle-light"'));
+});
+
 test("opening a room renders all configured sections without throwing", () => {
   const card = makeCard();
   card.setConfig(RICH_CONFIG);

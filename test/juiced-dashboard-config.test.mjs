@@ -146,16 +146,16 @@ test("compileConfig keeps a camera's optional privacy fields only when configure
   assert.equal(config.security.cameras[1].privacy_service, "toggle");
 });
 
-test("compileRoomForCard expands each single entity into the card's array shape", () => {
+test("compileRoomForCard expands each entity list into the card's array shape", () => {
   const card = compileRoomForCard({
     key: "bureau",
     name: "Bureau",
     icon: "mdi:desk",
     temperature_entity: "sensor.bureau_temp",
     humidity_entity: "sensor.bureau_hum",
-    light_entity: "light.bureau",
-    cover_entity: "cover.bureau",
-    awning_entity: "cover.luifel_bureau",
+    light_entities: ["light.bureau_1", "light.bureau_2"],
+    cover_entities: ["cover.bureau"],
+    awning_entities: ["cover.luifel_bureau"],
     media_player_entity: "media_player.kantoor",
     climate_entity: "climate.daikin_bureau",
   });
@@ -163,7 +163,7 @@ test("compileRoomForCard expands each single entity into the card's array shape"
   assert.equal(card.icon, "mdi:desk");
   assert.equal(card.temperature, "sensor.bureau_temp");
   assert.equal(card.humidity, "sensor.bureau_hum");
-  assert.deepEqual(card.lights, [{ entity: "light.bureau" }]);
+  assert.deepEqual(card.lights, [{ entity: "light.bureau_1" }, { entity: "light.bureau_2" }]);
   assert.deepEqual(card.covers, [{ entity: "cover.bureau" }]);
   assert.deepEqual(card.awnings, [{ entity: "cover.luifel_bureau" }]);
   assert.equal(card.media_player, "media_player.kantoor");
@@ -171,12 +171,19 @@ test("compileRoomForCard expands each single entity into the card's array shape"
 });
 
 test("compileRoomForCard leaves categories empty when no entity is configured", () => {
-  const card = compileRoomForCard({ key: "toilet", name: "Toilet & berging" });
+  const card = compileRoomForCard({ key: "toilet", name: "Toilet & berging", light_entities: [], cover_entities: [], awning_entities: [] });
   assert.deepEqual(card.lights, []);
   assert.deepEqual(card.covers, []);
   assert.deepEqual(card.awnings, []);
   assert.equal(card.media_player, undefined);
   assert.equal(card.climate, undefined);
+});
+
+test("compileRoomForCard tolerates a room object missing the entity-list fields entirely", () => {
+  const card = compileRoomForCard({ key: "toilet", name: "Toilet & berging" });
+  assert.deepEqual(card.lights, []);
+  assert.deepEqual(card.covers, []);
+  assert.deepEqual(card.awnings, []);
 });
 
 test("compileConfig defaults general.person_entities to an empty list", () => {
@@ -202,6 +209,22 @@ test("compileConfig drops an invalid room zone instead of keeping garbage", () =
 test("compileConfig leaves a room's zone undefined when not configured", () => {
   const config = compileConfig({ rooms: [{ name: "Bureau" }] });
   assert.equal(config.rooms[0].zone, undefined);
+});
+
+test("compileConfig defaults a room's entity lists to empty arrays", () => {
+  const config = compileConfig({ rooms: [{ name: "Bureau" }] });
+  assert.deepEqual(config.rooms[0].light_entities, []);
+  assert.deepEqual(config.rooms[0].cover_entities, []);
+  assert.deepEqual(config.rooms[0].awning_entities, []);
+});
+
+test("compileConfig keeps multiple entities per room category and filters out non-strings", () => {
+  const config = compileConfig({
+    rooms: [{ name: "Bureau", light_entities: ["light.a", "light.b", 42, null], cover_entities: ["cover.a"] }],
+  });
+  assert.deepEqual(config.rooms[0].light_entities, ["light.a", "light.b"]);
+  assert.deepEqual(config.rooms[0].cover_entities, ["cover.a"]);
+  assert.deepEqual(config.rooms[0].awning_entities, []);
 });
 
 test("compileRoomForCard carries the zone through to the card shape", () => {

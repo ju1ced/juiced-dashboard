@@ -33,7 +33,11 @@ export interface GeneralConfig {
   person_entities: EntityReference[];
 }
 
-/** The flat, GUI-editable room shape — one entity per control category. */
+/**
+ * The GUI-editable room shape. Lights/covers/awnings are arrays — a room can
+ * have any number of each; sensors/media/climate stay single-entity since a
+ * room realistically has at most one of those.
+ */
 export interface EditorRoomConfig {
   key: string;
   name: string;
@@ -41,9 +45,9 @@ export interface EditorRoomConfig {
   zone?: RoomZone;
   temperature_entity?: EntityReference;
   humidity_entity?: EntityReference;
-  light_entity?: EntityReference;
-  cover_entity?: EntityReference;
-  awning_entity?: EntityReference;
+  light_entities: EntityReference[];
+  cover_entities: EntityReference[];
+  awning_entities: EntityReference[];
   media_player_entity?: EntityReference;
   climate_entity?: EntityReference;
 }

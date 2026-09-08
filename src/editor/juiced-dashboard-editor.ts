@@ -24,18 +24,19 @@ const HTMLElementBase = (typeof HTMLElement === "undefined" ? class {} : HTMLEle
 interface RoomEntityField {
   key: keyof Pick<
     EditorRoomConfig,
-    "temperature_entity" | "humidity_entity" | "light_entity" | "cover_entity" | "awning_entity" | "media_player_entity" | "climate_entity"
+    "temperature_entity" | "humidity_entity" | "light_entities" | "cover_entities" | "awning_entities" | "media_player_entity" | "climate_entity"
   >;
   label: string;
   domain?: string;
+  multiple?: boolean;
 }
 
 const ROOM_ENTITY_FIELDS: readonly RoomEntityField[] = [
   { key: "temperature_entity", label: "Temperatuursensor", domain: "sensor" },
   { key: "humidity_entity", label: "Vochtigheidssensor", domain: "sensor" },
-  { key: "light_entity", label: "Licht", domain: "light" },
-  { key: "cover_entity", label: "Rolluik", domain: "cover" },
-  { key: "awning_entity", label: "Luifel", domain: "cover" },
+  { key: "light_entities", label: "Lichten", domain: "light", multiple: true },
+  { key: "cover_entities", label: "Rolluiken", domain: "cover", multiple: true },
+  { key: "awning_entities", label: "Luifels", domain: "cover", multiple: true },
   { key: "media_player_entity", label: "Mediaspeler", domain: "media_player" },
   { key: "climate_entity", label: "Klimaat", domain: "climate" },
 ];
@@ -134,7 +135,13 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
 
   private _addRoom(): void {
     newRoomSeed += 1;
-    const room: EditorRoomConfig = { key: `room-${Date.now().toString(36)}-${newRoomSeed}`, name: "Nieuwe kamer" };
+    const room: EditorRoomConfig = {
+      key: `room-${Date.now().toString(36)}-${newRoomSeed}`,
+      name: "Nieuwe kamer",
+      light_entities: [],
+      cover_entities: [],
+      awning_entities: [],
+    };
     this._config = { ...this._config, rooms: [...this._config.rooms, room] };
     this._emit();
     this._render();
@@ -295,6 +302,12 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
 
     const roomKey = target.dataset.room;
     if (!roomKey) return;
+    const fieldDef = ROOM_ENTITY_FIELDS.find((candidate) => candidate.key === field);
+    if (fieldDef?.multiple) {
+      const value = Array.isArray(event.detail?.value) ? event.detail.value.filter((v): v is string => typeof v === "string") : [];
+      this._updateRoom(roomKey, { [field]: value } as Partial<EditorRoomConfig>);
+      return;
+    }
     const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
     this._updateRoom(roomKey, { [field]: value } as Partial<EditorRoomConfig>);
   }
@@ -446,8 +459,13 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       const room = c.rooms.find((candidate) => candidate.key === roomKey);
       const fieldDef = ROOM_ENTITY_FIELDS.find((candidate) => candidate.key === fieldKey);
       if (!room || !fieldDef) return;
-      el.selector = { entity: fieldDef.domain ? { domain: fieldDef.domain } : {} };
-      el.value = room[fieldDef.key] ?? "";
+      if (fieldDef.multiple) {
+        el.selector = { entity: { multiple: true, ...(fieldDef.domain ? { domain: fieldDef.domain } : {}) } };
+        el.value = room[fieldDef.key] ?? [];
+      } else {
+        el.selector = { entity: fieldDef.domain ? { domain: fieldDef.domain } : {} };
+        el.value = room[fieldDef.key] ?? "";
+      }
       if (this._hass) el.hass = this._hass;
     });
   }
