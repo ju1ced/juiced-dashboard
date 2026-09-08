@@ -37,6 +37,10 @@ export {
   roomHasControls,
   roomIconSvg,
   roomLightsOn,
+  roomSectionClimate,
+  roomSectionCovers,
+  roomSectionLights,
+  roomSectionMedia,
   roomStatLine,
   setHvacMode,
   stepClimateTarget,
@@ -72,6 +76,8 @@ export { JuicedDashboardQuickActions, registerJuicedDashboardQuickActions } from
 export type { JuicedDashboardQuickActionsConfig } from "./cards/juiced-dashboard-quick-actions";
 export { JuicedDashboardSecurityCard, registerJuicedDashboardSecurityCard } from "./cards/juiced-dashboard-security-card";
 export type { JuicedDashboardSecurityCardConfig } from "./cards/juiced-dashboard-security-card";
+export { JuicedDashboardRoomDetailCard, registerJuicedDashboardRoomDetailCard } from "./cards/juiced-dashboard-room-detail-card";
+export type { JuicedDashboardRoomDetailCardConfig } from "./cards/juiced-dashboard-room-detail-card";
 
 declare const __JUICED_DASHBOARD_VERSION__: string;
 
