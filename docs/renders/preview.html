@@ -2,11 +2,11 @@
 <html lang="nl" data-theme="dark">
   <head>
     <meta charset="utf-8" />
-    <title>juiced-dashboard-room-card — preview harness</title>
+    <title>juiced-dashboard — preview harness</title>
     <style>
       /* Minimal stand-in for the core Home Assistant + juiced-horizon theme
-         variables the card reads — enough to preview it without loading the
-         full HA frontend. Values match dashboard/themes/juiced-horizon.yaml
+         variables the card/editor read — enough to preview without loading
+         the full HA frontend. Values match dashboard/themes/juiced-horizon.yaml
          (dark mode). Fictional example data only, see README. */
       :root {
         color-scheme: dark;
@@ -49,16 +49,35 @@
           sans-serif;
       }
       main {
-        max-width: 420px;
+        max-width: 640px;
         margin: 40px auto;
-        padding: 0 16px;
+        padding: 0 16px 80px;
       }
+      h2 { font-size: 15px; border-top: 1px solid var(--divider-color); padding-top: 28px; margin-top: 28px; }
       p.caption {
         color: var(--secondary-text-color);
         font-size: 13px;
         margin-bottom: 18px;
       }
-      /* Minimal <ha-icon> stand-in so mdi: icons don't render as empty tags */
+      pre {
+        background: var(--secondary-background-color);
+        border: 1px solid var(--divider-color);
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 12px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      juiced-dashboard-strategy-editor {
+        display: block;
+        border: 1px solid var(--divider-color);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      /* Minimal <ha-icon> / <ha-selector> stand-ins so the real components
+         (which only exist inside a real Home Assistant frontend) don't
+         render as empty unknown tags in this static harness. */
       ha-icon {
         display: inline-flex;
         width: 18px;
@@ -77,14 +96,57 @@
   <body>
     <main>
       <p class="caption">
-        juiced-dashboard-room-card — preview harness, fictional example data (see README /
-        docs/hacs-card.md). Not a live Home Assistant install.
+        juiced-dashboard — preview harness, fictional example data (see README /
+        docs/hacs-card.md). Not a live Home Assistant install. <code>&lt;ha-selector&gt;</code>
+        below is a plain-text stand-in — the real picker only exists inside Home Assistant.
       </p>
+
+      <h2>1. Room card (custom:juiced-dashboard-room-card)</h2>
       <juiced-dashboard-room-card id="card"></juiced-dashboard-room-card>
+
+      <h2>2. Dashboard strategy output (JuicedDashboardStrategy.generate)</h2>
+      <p class="caption">The object Home Assistant would use to build the dashboard's views.</p>
+      <pre id="strategy-output">…</pre>
+
+      <h2>3. View strategy output — "home" view (JuicedDashboardViewStrategy.generate)</h2>
+      <pre id="view-output">…</pre>
+
+      <h2>4. Strategy config editor (custom:juiced-dashboard, GUI form)</h2>
+      <p class="caption">Try editing the title, adding/removing a room — check the console for the emitted <code>config-changed</code> events.</p>
+      <juiced-dashboard-strategy-editor id="editor"></juiced-dashboard-strategy-editor>
     </main>
 
     <script type="module">
       import "../../dist/juiced-dashboard.js";
+      import { JuicedDashboardStrategy, JuicedDashboardViewStrategy } from "../../dist/juiced-dashboard.js";
+
+      // Minimal <ha-selector> stand-in: renders as a text input reflecting
+      // `.value`, ignores `.selector`/`.hass` (the real picker needs a live
+      // Home Assistant connection this static harness doesn't have).
+      class FakeHaSelector extends HTMLElement {
+        connectedCallback() {
+          this._input = document.createElement("input");
+          this._input.type = "text";
+          this._input.placeholder = "entity_id (stand-in)";
+          this._input.style.cssText =
+            "width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--divider-color);background:var(--card-background-color);color:var(--primary-text-color);";
+          this._input.value = this._value || "";
+          this._input.addEventListener("change", () => {
+            this.dispatchEvent(new CustomEvent("value-changed", { bubbles: true, composed: true, detail: { value: this._input.value } }));
+          });
+          this.appendChild(this._input);
+        }
+        set value(v) {
+          this._value = v;
+          if (this._input) this._input.value = v || "";
+        }
+        get value() {
+          return this._value;
+        }
+        set selector(_s) {}
+        set hass(_h) {}
+      }
+      customElements.define("ha-selector", FakeHaSelector);
 
       const hass = {
         states: {
@@ -117,6 +179,7 @@
         },
       };
 
+      // ---- 1. Room card ----
       const card = document.getElementById("card");
       card.setConfig({
         type: "custom:juiced-dashboard-room-card",
@@ -128,10 +191,7 @@
             icon: "mdi:desk",
             temperature: "sensor.bureau_temperature",
             humidity: "sensor.bureau_humidity",
-            lights: [
-              { entity: "light.bureau_spellenruimte" },
-              { entity: "light.bureau_spellentafel" },
-            ],
+            lights: [{ entity: "light.bureau_spellenruimte" }, { entity: "light.bureau_spellentafel" }],
             awnings: [{ entity: "cover.luifel_bureau" }],
             media_player: "media_player.kantoor",
             climate: "climate.daikin_bureau",
@@ -147,11 +207,40 @@
         ],
       });
       card.hass = hass;
-
-      // Open the first room's popup so the screenshot shows the actual
-      // "tap a room, get a popup" interaction, not just the list.
       requestAnimationFrame(() => {
         card.shadowRoot.getElementById("list").firstElementChild.click();
+      });
+
+      // ---- 2 & 3. Dashboard + view strategy ----
+      const strategyInput = {
+        type: "custom:juiced-dashboard",
+        general: { title: "Ons Huis", start_view: "home", theme_mode: "dark" },
+        rooms: [
+          { key: "bureau", name: "Bureau", icon: "mdi:desk", light_entity: "light.bureau_spellenruimte", climate_entity: "climate.daikin_bureau" },
+          { key: "woonkamer", name: "Woonkamer", icon: "mdi:sofa", light_entity: "light.woonkamer_living" },
+        ],
+      };
+
+      JuicedDashboardStrategy.generate(strategyInput).then((result) => {
+        document.getElementById("strategy-output").textContent = JSON.stringify(result, null, 2);
+      });
+
+      JuicedDashboardViewStrategy.generate({
+        type: "custom:juiced-dashboard-view",
+        view: "home",
+        general: strategyInput.general,
+        rooms: strategyInput.rooms,
+      }).then((result) => {
+        document.getElementById("view-output").textContent = JSON.stringify(result, null, 2);
+      });
+
+      // ---- 4. Editor ----
+      const editor = document.getElementById("editor");
+      editor.setConfig(strategyInput);
+      editor.hass = hass;
+      editor.addEventListener("config-changed", (event) => {
+        // eslint-disable-next-line no-console
+        console.log("config-changed", event.detail.config);
       });
     </script>
   </body>

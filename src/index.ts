@@ -10,6 +10,9 @@
  */
 
 import { registerJuicedDashboardRoomCard } from "./cards/juiced-dashboard-room-card";
+import { registerJuicedDashboardStrategy } from "./strategy/juiced-dashboard-strategy";
+import { registerJuicedDashboardViewStrategy } from "./strategy/juiced-dashboard-view-strategy";
+import { registerJuicedDashboardEditor } from "./editor/juiced-dashboard-editor";
 
 export {
   closeCover,
@@ -43,6 +46,16 @@ export {
 } from "./cards/juiced-dashboard-room-card";
 export type { HassEntity, HomeAssistant, JuicedDashboardRoomCardConfig, RoomConfig, RoomCoverConfig, RoomLightConfig } from "./cards/juiced-dashboard-room-card";
 
+export { compileConfig, compileRoomForCard } from "./config/compiler";
+export { createDefaultConfig } from "./config/defaults";
+export { CONFIG_SCHEMA_VERSION, START_VIEWS, THEME_MODES, VIEW_PATHS } from "./config/types";
+export type { EditorRoomConfig, GeneralConfig, JuicedDashboardConfigV1, StartView, ThemeMode, ViewPath } from "./config/types";
+
+export { JuicedDashboardStrategy, registerJuicedDashboardStrategy, roomPath } from "./strategy/juiced-dashboard-strategy";
+export { buildView, JuicedDashboardViewStrategy, registerJuicedDashboardViewStrategy } from "./strategy/juiced-dashboard-view-strategy";
+export type { JuicedDashboardViewConfig } from "./strategy/juiced-dashboard-view-strategy";
+export { JuicedDashboardStrategyEditor, registerJuicedDashboardEditor } from "./editor/juiced-dashboard-editor";
+
 declare const __JUICED_DASHBOARD_VERSION__: string;
 
 export interface JuicedDashboardBuildInfo {
@@ -63,6 +76,9 @@ export const buildInfo: JuicedDashboardBuildInfo = Object.freeze({
 
 if (typeof window !== "undefined") {
   registerJuicedDashboardRoomCard();
+  registerJuicedDashboardEditor();
+  registerJuicedDashboardViewStrategy();
+  registerJuicedDashboardStrategy();
   window.__JUICED_DASHBOARD_BUILD__ = buildInfo;
   // eslint-disable-next-line no-console
   console.info(
