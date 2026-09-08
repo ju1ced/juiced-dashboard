@@ -54,11 +54,6 @@ function hasTodayContent(today: TodayConfig | undefined): boolean {
   );
 }
 
-function todaySection(today: TodayConfig | undefined): LovelaceConfig | undefined {
-  if (!hasTodayContent(today)) return undefined;
-  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-today-card", today }] };
-}
-
 function quickActionsSection(actions: QuickActionConfig[] | undefined): LovelaceConfig | undefined {
   if (!actions || actions.length === 0) return undefined;
   return { type: "grid", cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
@@ -69,18 +64,27 @@ function hasSecurityContent(security: SecurityConfig | undefined): boolean {
   return Boolean(security.alarm_entity || (security.cameras ?? []).length > 0);
 }
 
-function securitySection(security: SecurityConfig | undefined): LovelaceConfig | undefined {
-  if (!hasSecurityContent(security)) return undefined;
-  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-security-card", security }] };
+/**
+ * Vandaag + Security share one section so they sit in the same row and get
+ * the same row height (HA's grid card stretches its children by default) —
+ * two cards of very different content length looked visually mismatched as
+ * separate sections.
+ */
+function heroSection(today: TodayConfig | undefined, security: SecurityConfig | undefined): LovelaceConfig | undefined {
+  const cards: LovelaceConfig[] = [];
+  if (hasTodayContent(today)) cards.push({ type: "custom:juiced-dashboard-today-card", today });
+  if (hasSecurityContent(security)) cards.push({ type: "custom:juiced-dashboard-security-card", security });
+  if (cards.length === 0) return undefined;
+  if (cards.length === 1) return { type: "grid", cards };
+  return { type: "grid", cards: [{ type: "grid", columns: 2, square: false, cards }] };
 }
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
   if (rooms.length === 0) {
-    return { type: "grid", column_span: 2, cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
+    return { type: "grid", cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
   }
   return {
     type: "grid",
-    column_span: 2,
     cards: [
       {
         type: "custom:juiced-dashboard-room-card",
@@ -102,7 +106,7 @@ function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[
   if (!room) {
     return [{ type: "grid", cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
   }
-  return [{ type: "grid", column_span: 2, cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
+  return [{ type: "grid", cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
 }
 
 function placeholderSections(title: string, note: string): LovelaceConfig[] {
@@ -114,8 +118,7 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   switch (config.view) {
     case "home":
       sections = [
-        todaySection(config.today),
-        securitySection(config.security),
+        heroSection(config.today, config.security),
         quickActionsSection(config.quick_actions),
         roomsSection(config.rooms ?? []),
       ].filter((section): section is LovelaceConfig => Boolean(section));
@@ -138,8 +141,12 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   }
   const badges = config.view === "home" ? personBadges(config.general) : undefined;
   return {
+    // Every section here is meant to span the full row — each one already
+    // lays out its own internal content responsively (room grid, zone grid,
+    // room-detail sections grid), so HA's coarser section-column packing
+    // just adds unpredictable gaps between them without helping.
     type: "sections",
-    max_columns: 4,
+    max_columns: 1,
     dense_section_placement: true,
     sections,
     ...(badges ? { badges } : {}),

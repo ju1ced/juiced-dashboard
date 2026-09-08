@@ -562,8 +562,6 @@ export class JuicedDashboardRoomCard extends HTMLElementBase {
   private _roomRowHtml(room: RoomConfig, index: number, hass: HomeAssistant | null): string {
     const stat = roomStatLine(hass, room);
     const flag = roomFlag(hass, room);
-    const firstLight = (room.lights || [])[0];
-    const firstLightOn = firstLight ? entityState(hass, firstLight.entity)?.state === "on" : false;
     return `
       <div class="jrc-row" role="button" tabindex="0" data-action="open-room" data-room="${index}">
         <span class="jrc-row-ic">${roomIconSvg(room.icon)}</span>
@@ -572,13 +570,7 @@ export class JuicedDashboardRoomCard extends HTMLElementBase {
           <span class="jrc-row-stat">${escapeHtml(stat)}</span>
         </span>
         ${flag ? `<span class="jrc-flag">${escapeHtml(flag)}</span>` : ""}
-        ${
-          firstLight
-            ? `<button class="jrc-quick${firstLightOn ? " on" : ""}" data-action="toggle-light"
-                 data-entity="${escapeHtml(firstLight.entity)}"
-                 aria-label="Licht ${escapeHtml(room.name)} omschakelen" title="Licht omschakelen">${ICON_BULB}</button>`
-            : `<span class="jrc-chev">${ICON_CHEVRON}</span>`
-        }
+        <span class="jrc-chev">${ICON_CHEVRON}</span>
       </div>`;
   }
 
@@ -779,18 +771,6 @@ const CARD_CSS = `
     padding: 4px 8px; border-radius: 999px;
   }
   .jrc-chev { margin-left: auto; color: var(--juiced-text-muted, var(--secondary-text-color)); flex: none; display:flex; }
-  .jrc-quick {
-    margin-left: auto; flex: none; width: 32px; height: 32px; border-radius: 10px;
-    border: 1px solid var(--juiced-border-subtle, var(--divider-color));
-    background: var(--juiced-surface-elevated, var(--secondary-background-color, transparent));
-    color: var(--juiced-text-muted, var(--secondary-text-color));
-    display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;
-  }
-  .jrc-quick.on {
-    background: var(--juiced-chip-active, rgba(178,106,0,.14));
-    color: var(--juiced-brand-accent, var(--state-icon-active-color, #b26a00));
-    border-color: transparent;
-  }
 
   .jrc-backdrop {
     position: fixed; inset: 0; z-index: 500; display: none;
