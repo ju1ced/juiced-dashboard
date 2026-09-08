@@ -237,8 +237,15 @@
         type: "custom:juiced-dashboard",
         general: { title: "Ons Huis", start_view: "home", theme_mode: "dark", person_entities: ["person.joost", "person.leen"] },
         rooms: [
-          { key: "bureau", name: "Bureau", icon: "mdi:desk", zone: "boven", light_entity: "light.bureau_spellenruimte", climate_entity: "climate.daikin_bureau" },
-          { key: "woonkamer", name: "Woonkamer", icon: "mdi:sofa", zone: "gelijkvloers", light_entity: "light.woonkamer_living" },
+          {
+            key: "bureau",
+            name: "Bureau",
+            icon: "mdi:desk",
+            zone: "boven",
+            light_entities: ["light.bureau_spellenruimte", "light.bureau_spellentafel"],
+            climate_entity: "climate.daikin_bureau",
+          },
+          { key: "woonkamer", name: "Woonkamer", icon: "mdi:sofa", zone: "gelijkvloers", light_entities: ["light.woonkamer_living"] },
         ],
       };
 
