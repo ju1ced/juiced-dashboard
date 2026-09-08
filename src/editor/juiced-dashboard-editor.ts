@@ -82,14 +82,14 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
   }
 
   connectedCallback(): void {
-    this.root.addEventListener("input", this._onInput);
-    this.root.addEventListener("click", this._onClick);
+    this.root.addEventListener("input", this._onInput as EventListener);
+    this.root.addEventListener("click", this._onClick as EventListener);
     this.root.addEventListener("value-changed", this._onSelectorChange as EventListener);
   }
 
   disconnectedCallback(): void {
-    this.root.removeEventListener("input", this._onInput);
-    this.root.removeEventListener("click", this._onClick);
+    this.root.removeEventListener("input", this._onInput as EventListener);
+    this.root.removeEventListener("click", this._onClick as EventListener);
     this.root.removeEventListener("value-changed", this._onSelectorChange as EventListener);
   }
 
