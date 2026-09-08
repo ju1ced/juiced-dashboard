@@ -6,8 +6,10 @@ import {
   type EditorRoomConfig,
   type GeneralConfig,
   type JuicedDashboardConfigV1,
+  type QuickActionConfig,
   type StartView,
   type ThemeMode,
+  type TodayConfig,
 } from "./types";
 import type { RoomConfig } from "../cards/juiced-dashboard-room-card";
 
@@ -66,6 +68,56 @@ function compileRoom(raw: unknown): EditorRoomConfig | null {
   };
 }
 
+function asStringArray(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((item): item is string => typeof item === "string" && item.length > 0);
+}
+
+function compileToday(raw: unknown): TodayConfig {
+  if (!isRecord(raw)) return { waste_entities: [] };
+  return {
+    weather_entity: asOptionalString(raw.weather_entity),
+    battery_soc_entity: asOptionalString(raw.battery_soc_entity),
+    battery_charge_entity: asOptionalString(raw.battery_charge_entity),
+    battery_discharge_entity: asOptionalString(raw.battery_discharge_entity),
+    solar_power_entity: asOptionalString(raw.solar_power_entity),
+    home_consumption_entity: asOptionalString(raw.home_consumption_entity),
+    monthly_peak_entity: asOptionalString(raw.monthly_peak_entity),
+    waste_entities: asStringArray(raw.waste_entities),
+  };
+}
+
+let actionKeySeed = 0;
+
+function generateActionKey(): string {
+  actionKeySeed += 1;
+  return `action-${Date.now().toString(36)}-${actionKeySeed}`;
+}
+
+function compileQuickAction(raw: unknown): QuickActionConfig | null {
+  if (!isRecord(raw)) return null;
+  const entity = asOptionalString(raw.entity);
+  const service = asOptionalString(raw.service);
+  if (!entity || !service) return null;
+  return {
+    key: asString(raw.key, generateActionKey()),
+    label: asString(raw.label, entity),
+    icon: asOptionalString(raw.icon),
+    entity,
+    service,
+  };
+}
+
+function compileQuickActions(raw: unknown): QuickActionConfig[] {
+  if (!Array.isArray(raw)) return [];
+  const actions: QuickActionConfig[] = [];
+  for (const item of raw) {
+    const action = compileQuickAction(item);
+    if (action) actions.push(action);
+  }
+  return actions;
+}
+
 function compileRooms(raw: unknown): EditorRoomConfig[] {
   if (!Array.isArray(raw)) return [];
   const rooms: EditorRoomConfig[] = [];
@@ -87,6 +139,8 @@ export function compileConfig(raw: unknown): JuicedDashboardConfigV1 {
     type: "custom:juiced-dashboard",
     schema_version: CONFIG_SCHEMA_VERSION,
     general: compileGeneral(source.general),
+    today: compileToday(source.today),
+    quick_actions: compileQuickActions(source.quick_actions),
     rooms: compileRooms(source.rooms),
   };
 }

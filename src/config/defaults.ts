@@ -9,6 +9,10 @@ export function createDefaultConfig(): JuicedDashboardConfigV1 {
       start_view: "home",
       theme_mode: "system",
     },
+    today: {
+      waste_entities: [],
+    },
+    quick_actions: [],
     rooms: [],
   };
 }

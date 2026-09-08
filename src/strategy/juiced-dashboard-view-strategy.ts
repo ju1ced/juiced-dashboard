@@ -6,12 +6,16 @@
  */
 
 import { compileRoomForCard } from "../config/compiler";
-import type { EditorRoomConfig, GeneralConfig, ViewPath } from "../config/types";
+import { registerJuicedDashboardQuickActions } from "../cards/juiced-dashboard-quick-actions";
+import { registerJuicedDashboardTodayCard } from "../cards/juiced-dashboard-today-card";
+import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, TodayConfig, ViewPath } from "../config/types";
 
 export interface JuicedDashboardViewConfig {
   type: "custom:juiced-dashboard-view";
   view: ViewPath | "room";
   general: GeneralConfig;
+  today?: TodayConfig;
+  quick_actions?: QuickActionConfig[];
   rooms?: EditorRoomConfig[];
   room?: EditorRoomConfig;
 }
@@ -26,6 +30,30 @@ function markdown(content: string, title?: string): LovelaceConfig {
 
 const ROOMS_TITLE = "Kamers";
 const ROOMS_SUBTITLE = "Tik een kamer om lichten, rolluiken, luifels, radio of airco direct te bedienen";
+
+function hasTodayContent(today: TodayConfig | undefined): boolean {
+  if (!today) return false;
+  return Boolean(
+    today.weather_entity ||
+      today.battery_soc_entity ||
+      today.battery_charge_entity ||
+      today.battery_discharge_entity ||
+      today.solar_power_entity ||
+      today.home_consumption_entity ||
+      today.monthly_peak_entity ||
+      (today.waste_entities ?? []).length > 0,
+  );
+}
+
+function todaySection(today: TodayConfig | undefined): LovelaceConfig | undefined {
+  if (!hasTodayContent(today)) return undefined;
+  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-today-card", today }] };
+}
+
+function quickActionsSection(actions: QuickActionConfig[] | undefined): LovelaceConfig | undefined {
+  if (!actions || actions.length === 0) return undefined;
+  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
+}
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
   if (rooms.length === 0) {
@@ -75,6 +103,10 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   let sections: LovelaceConfig[];
   switch (config.view) {
     case "home":
+      sections = [todaySection(config.today), quickActionsSection(config.quick_actions), roomsSection(config.rooms ?? [])].filter(
+        (section): section is LovelaceConfig => Boolean(section),
+      );
+      break;
     case "rooms":
       sections = [roomsSection(config.rooms ?? [])];
       break;
@@ -101,6 +133,8 @@ export class JuicedDashboardViewStrategy extends HTMLElementBase {
 }
 
 export function registerJuicedDashboardViewStrategy(): void {
+  registerJuicedDashboardTodayCard();
+  registerJuicedDashboardQuickActions();
   if (typeof customElements === "undefined") return;
   const tag = "ll-strategy-view-juiced-dashboard-view";
   if (!customElements.get(tag)) customElements.define(tag, JuicedDashboardViewStrategy);

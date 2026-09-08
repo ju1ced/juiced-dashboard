@@ -12,7 +12,7 @@
  */
 
 import { compileConfig } from "../config/compiler";
-import type { EditorRoomConfig, JuicedDashboardConfigV1, StartView, ThemeMode } from "../config/types";
+import type { EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
 
 type HomeAssistantLike = Record<string, unknown>;
 
@@ -38,6 +38,24 @@ const ROOM_ENTITY_FIELDS: readonly RoomEntityField[] = [
 ];
 
 let newRoomSeed = 0;
+let newActionSeed = 0;
+
+/** Vandaag's single-entity fields (everything except the multi-entity waste_entities). */
+interface TodayEntityField {
+  key: Exclude<keyof JuicedDashboardConfigV1["today"], "waste_entities">;
+  label: string;
+  domain?: string;
+}
+
+const TODAY_ENTITY_FIELDS: readonly TodayEntityField[] = [
+  { key: "weather_entity", label: "Weerbron", domain: "weather" },
+  { key: "battery_soc_entity", label: "Thuisbatterij SoC", domain: "sensor" },
+  { key: "battery_charge_entity", label: "Batterij laden", domain: "sensor" },
+  { key: "battery_discharge_entity", label: "Batterij ontladen", domain: "sensor" },
+  { key: "solar_power_entity", label: "Zonnepanelen opbrengst", domain: "sensor" },
+  { key: "home_consumption_entity", label: "Huisverbruik", domain: "sensor" },
+  { key: "monthly_peak_entity", label: "Maandelijkse vermogenspiek", domain: "sensor" },
+];
 
 function escapeHtml(value: unknown): string {
   return String(value ?? "")
@@ -124,6 +142,33 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     this._render();
   }
 
+  private _updateToday(patch: Partial<TodayConfig>): void {
+    this._config = { ...this._config, today: { ...this._config.today, ...patch } };
+    this._emit();
+  }
+
+  private _updateAction(key: string, patch: Partial<QuickActionConfig>): void {
+    this._config = {
+      ...this._config,
+      quick_actions: this._config.quick_actions.map((action) => (action.key === key ? { ...action, ...patch } : action)),
+    };
+    this._emit();
+  }
+
+  private _addAction(): void {
+    newActionSeed += 1;
+    const action: QuickActionConfig = { key: `action-${Date.now().toString(36)}-${newActionSeed}`, label: "Nieuwe actie", entity: "", service: "toggle" };
+    this._config = { ...this._config, quick_actions: [...this._config.quick_actions, action] };
+    this._emit();
+    this._render();
+  }
+
+  private _removeAction(key: string): void {
+    this._config = { ...this._config, quick_actions: this._config.quick_actions.filter((action) => action.key !== key) };
+    this._emit();
+    this._render();
+  }
+
   private _onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLSelectElement | null;
     if (!target) return;
@@ -137,6 +182,15 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       return;
     }
 
+    if (target.dataset.scope === "action") {
+      const actionKey = target.dataset.actionKey;
+      if (!actionKey) return;
+      if (field === "label") this._updateAction(actionKey, { label: target.value });
+      if (field === "icon") this._updateAction(actionKey, { icon: target.value || undefined });
+      if (field === "service") this._updateAction(actionKey, { service: target.value });
+      return;
+    }
+
     const roomKey = target.dataset.room;
     if (!roomKey) return;
     if (field === "name") this._updateRoom(roomKey, { name: target.value });
@@ -147,9 +201,31 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     const target = event.target as HTMLElement | null;
     if (!target || target.tagName.toLowerCase() !== "ha-selector") return;
     event.stopPropagation();
-    const field = target.dataset.field as RoomEntityField["key"] | undefined;
+    const field = target.dataset.field;
+    const scope = target.dataset.scope;
+    if (!field) return;
+
+    if (scope === "today") {
+      if (field === "waste_entities") {
+        const value = Array.isArray(event.detail?.value) ? event.detail.value.filter((v): v is string => typeof v === "string") : [];
+        this._updateToday({ waste_entities: value });
+        return;
+      }
+      const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
+      this._updateToday({ [field]: value } as Partial<TodayConfig>);
+      return;
+    }
+
+    if (scope === "action") {
+      const actionKey = target.dataset.actionKey;
+      if (!actionKey) return;
+      const value = typeof event.detail?.value === "string" ? event.detail.value : "";
+      this._updateAction(actionKey, { entity: value });
+      return;
+    }
+
     const roomKey = target.dataset.room;
-    if (!field || !roomKey) return;
+    if (!roomKey) return;
     const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
     this._updateRoom(roomKey, { [field]: value } as Partial<EditorRoomConfig>);
   }
@@ -159,6 +235,8 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     if (!target) return;
     if (target.dataset.action === "add-room") this._addRoom();
     if (target.dataset.action === "remove-room" && target.dataset.room) this._removeRoom(target.dataset.room);
+    if (target.dataset.action === "add-action") this._addAction();
+    if (target.dataset.action === "remove-action" && target.dataset.actionKey) this._removeAction(target.dataset.actionKey);
   }
 
   private _render(): void {
@@ -186,6 +264,27 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       </div>
 
       <div class="jde-section">
+        <h3>Vandaag</h3>
+        ${TODAY_ENTITY_FIELDS.map(
+          (field) => `
+          <label>${escapeHtml(field.label)}
+            <ha-selector data-scope="today" data-field="${field.key}"></ha-selector>
+          </label>`,
+        ).join("")}
+        <label>Afvalbronnen
+          <ha-selector data-scope="today" data-field="waste_entities"></ha-selector>
+        </label>
+      </div>
+
+      <div class="jde-section">
+        <div class="jde-section-head">
+          <h3>Snelacties</h3>
+          <button type="button" data-action="add-action">+ Actie toevoegen</button>
+        </div>
+        ${c.quick_actions.length === 0 ? `<p class="jde-empty">Nog geen snelacties geconfigureerd.</p>` : c.quick_actions.map((action) => this._actionHtml(action)).join("")}
+      </div>
+
+      <div class="jde-section">
         <div class="jde-section-head">
           <h3>Kamers</h3>
           <button type="button" data-action="add-room">+ Kamer toevoegen</button>
@@ -193,22 +292,66 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
         ${c.rooms.length === 0 ? `<p class="jde-empty">Nog geen kamers geconfigureerd.</p>` : c.rooms.map((room) => this._roomHtml(room)).join("")}
       </div>`;
 
-    // Read data-room/data-field back off each element rather than building
-    // CSS selector strings from room keys (room keys are user-editable via
-    // the name field's slug — quoting them into a selector would break if a
-    // key ever contained a `"`).
+    // Read data-*/data-field back off each element rather than building CSS
+    // selector strings from user-editable keys/names (quoting them into a
+    // selector would break if one ever contained a `"`).
     this.root.querySelectorAll("ha-selector").forEach((node) => {
       const el = node as HTMLElement & { hass?: HomeAssistantLike; selector?: unknown; value?: unknown };
+      const scope = el.dataset.scope;
+      const fieldKey = el.dataset.field;
+      if (!fieldKey) return;
+
+      if (scope === "today") {
+        if (fieldKey === "waste_entities") {
+          el.selector = { entity: { multiple: true } };
+          el.value = c.today.waste_entities ?? [];
+        } else {
+          const fieldDef = TODAY_ENTITY_FIELDS.find((candidate) => candidate.key === fieldKey);
+          el.selector = { entity: fieldDef?.domain ? { domain: fieldDef.domain } : {} };
+          el.value = (c.today[fieldKey as TodayEntityField["key"]] as string | undefined) ?? "";
+        }
+        if (this._hass) el.hass = this._hass;
+        return;
+      }
+
+      if (scope === "action") {
+        const actionKey = el.dataset.actionKey;
+        const action = c.quick_actions.find((candidate) => candidate.key === actionKey);
+        if (!action) return;
+        el.selector = { entity: {} };
+        el.value = action.entity ?? "";
+        if (this._hass) el.hass = this._hass;
+        return;
+      }
+
       const roomKey = el.dataset.room;
-      const fieldKey = el.dataset.field as RoomEntityField["key"] | undefined;
-      if (!roomKey || !fieldKey) return;
+      if (!roomKey) return;
       const room = c.rooms.find((candidate) => candidate.key === roomKey);
       const fieldDef = ROOM_ENTITY_FIELDS.find((candidate) => candidate.key === fieldKey);
       if (!room || !fieldDef) return;
       el.selector = { entity: fieldDef.domain ? { domain: fieldDef.domain } : {} };
-      el.value = room[fieldKey] ?? "";
+      el.value = room[fieldDef.key] ?? "";
       if (this._hass) el.hass = this._hass;
     });
+  }
+
+  private _actionHtml(action: QuickActionConfig): string {
+    return `
+      <div class="jde-room">
+        <div class="jde-room-head">
+          <input type="text" data-scope="action" data-action-key="${action.key}" data-field="label" value="${escapeHtml(action.label)}" placeholder="Label">
+          <button type="button" data-action="remove-action" data-action-key="${action.key}" aria-label="Actie verwijderen">&times;</button>
+        </div>
+        <label>Icoon
+          <input type="text" data-scope="action" data-action-key="${action.key}" data-field="icon" value="${escapeHtml(action.icon ?? "")}" placeholder="mdi:lightning-bolt">
+        </label>
+        <label>Entiteit
+          <ha-selector data-scope="action" data-action-key="${action.key}" data-field="entity"></ha-selector>
+        </label>
+        <label>Service (bv. toggle, turn_on, alarm_arm_home)
+          <input type="text" data-scope="action" data-action-key="${action.key}" data-field="service" value="${escapeHtml(action.service)}" placeholder="toggle">
+        </label>
+      </div>`;
   }
 
   private _roomHtml(room: EditorRoomConfig): string {
