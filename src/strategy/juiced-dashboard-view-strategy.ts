@@ -34,7 +34,7 @@ type LovelaceConfig = Record<string, unknown>;
 const HTMLElementBase = (typeof HTMLElement === "undefined" ? class {} : HTMLElement) as typeof HTMLElement;
 
 function markdown(content: string, title?: string): LovelaceConfig {
-  return { type: "markdown", ...(title ? { title } : {}), content };
+  return { type: "markdown", ...(title ? { title } : {}), content, grid_options: GRID_FULL };
 }
 
 const ROOMS_TITLE = "Kamers";
@@ -49,6 +49,16 @@ const ROOMS_SUBTITLE = "Tik een kamer om lichten, rolluiken, luifels, radio of a
  * actually computed for this viewport instead of just one column-track.
  */
 const FULL_SPAN = 4;
+
+/**
+ * Measured live: a custom card with no grid_options defaults to roughly a
+ * third of its section's width (a 4-of-12-column span), not the full 12
+ * columns the docs describe — confirmed via a DOM walk-up on the live
+ * dashboard (section container 1070px, card container only 351px). Every
+ * card placed directly in one of our full-span sections needs this to
+ * actually reach that width.
+ */
+const GRID_FULL = { columns: "full" } as const;
 
 function hasTodayContent(today: TodayConfig | undefined): boolean {
   if (!today) return false;
@@ -66,7 +76,7 @@ function hasTodayContent(today: TodayConfig | undefined): boolean {
 
 function quickActionsSection(actions: QuickActionConfig[] | undefined): LovelaceConfig | undefined {
   if (!actions || actions.length === 0) return undefined;
-  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
+  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-quick-actions", actions, grid_options: GRID_FULL }] };
 }
 
 function hasSecurityContent(security: SecurityConfig | undefined): boolean {
@@ -85,8 +95,12 @@ function heroSection(today: TodayConfig | undefined, security: SecurityConfig | 
   if (hasTodayContent(today)) cards.push({ type: "custom:juiced-dashboard-today-card", today });
   if (hasSecurityContent(security)) cards.push({ type: "custom:juiced-dashboard-security-card", security });
   if (cards.length === 0) return undefined;
-  if (cards.length === 1) return { type: "grid", column_span: FULL_SPAN, cards };
-  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "grid", columns: 2, square: false, cards }] };
+  if (cards.length === 1) return { type: "grid", column_span: FULL_SPAN, cards: [{ ...cards[0], grid_options: GRID_FULL }] };
+  return {
+    type: "grid",
+    column_span: FULL_SPAN,
+    cards: [{ type: "grid", columns: 2, square: false, grid_options: GRID_FULL, cards }],
+  };
 }
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
@@ -102,6 +116,7 @@ function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
         title: ROOMS_TITLE,
         subtitle: ROOMS_SUBTITLE,
         rooms: rooms.map(compileRoomForCard),
+        grid_options: GRID_FULL,
       },
     ],
   };
@@ -117,7 +132,9 @@ function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[
   if (!room) {
     return [{ type: "grid", column_span: FULL_SPAN, cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
   }
-  return [{ type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
+  return [
+    { type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room), grid_options: GRID_FULL }] },
+  ];
 }
 
 function placeholderSections(title: string, note: string): LovelaceConfig[] {
