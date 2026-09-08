@@ -100,7 +100,7 @@ test("a room with nothing configured shows the empty-state message", () => {
   card.hass = { states: {} };
   const html = card.shadowRoot.innerHTML;
   assert.ok(html.includes("Geen bediening of sensoren geconfigureerd"));
-  assert.ok(!html.includes("jrd-overview"));
+  assert.ok(!html.includes('class="jrd-overview'));
 });
 
 test("a room with only a climate entity gets an overview tile but no light/cover/media sections", () => {
