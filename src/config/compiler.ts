@@ -1,6 +1,7 @@
 import { createDefaultConfig } from "./defaults";
 import {
   CONFIG_SCHEMA_VERSION,
+  ROOM_ZONES,
   START_VIEWS,
   THEME_MODES,
   type CameraConfig,
@@ -8,6 +9,7 @@ import {
   type GeneralConfig,
   type JuicedDashboardConfigV1,
   type QuickActionConfig,
+  type RoomZone,
   type SecurityConfig,
   type StartView,
   type ThemeMode,
@@ -35,6 +37,10 @@ function asThemeMode(value: unknown, fallback: ThemeMode): ThemeMode {
   return typeof value === "string" && (THEME_MODES as readonly string[]).includes(value) ? (value as ThemeMode) : fallback;
 }
 
+function asRoomZone(value: unknown): RoomZone | undefined {
+  return typeof value === "string" && (ROOM_ZONES as readonly string[]).includes(value) ? (value as RoomZone) : undefined;
+}
+
 let roomKeySeed = 0;
 
 function generateRoomKey(): string {
@@ -49,6 +55,7 @@ function compileGeneral(raw: unknown): GeneralConfig {
     title: asString(raw.title, defaults.title),
     start_view: asStartView(raw.start_view, defaults.start_view),
     theme_mode: asThemeMode(raw.theme_mode, defaults.theme_mode),
+    person_entities: asStringArray(raw.person_entities),
   };
 }
 
@@ -60,6 +67,7 @@ function compileRoom(raw: unknown): EditorRoomConfig | null {
     key: asString(raw.key, generateRoomKey()),
     name,
     icon: asOptionalString(raw.icon),
+    zone: asRoomZone(raw.zone),
     temperature_entity: asOptionalString(raw.temperature_entity),
     humidity_entity: asOptionalString(raw.humidity_entity),
     light_entity: asOptionalString(raw.light_entity),
@@ -192,6 +200,7 @@ export function compileRoomForCard(room: EditorRoomConfig): RoomConfig {
   return {
     name: room.name,
     icon: room.icon,
+    zone: room.zone,
     temperature: room.temperature_entity,
     humidity: room.humidity_entity,
     lights: room.light_entity ? [{ entity: room.light_entity }] : [],

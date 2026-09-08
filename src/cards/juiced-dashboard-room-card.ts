@@ -52,6 +52,8 @@ export interface RoomCoverConfig {
 export interface RoomConfig {
   name: string;
   icon?: string;
+  /** Optional grouping ("buiten" | "gelijkvloers" | "boven") — a room without one lands in an "Overige" group. */
+  zone?: string;
   temperature?: string;
   humidity?: string;
   idle_text?: string;
@@ -68,6 +70,13 @@ export interface JuicedDashboardRoomCardConfig {
   subtitle?: string;
   rooms: RoomConfig[];
 }
+
+const ZONE_ORDER = ["buiten", "gelijkvloers", "boven"] as const;
+const ZONE_LABELS: Record<(typeof ZONE_ORDER)[number], string> = {
+  buiten: "Buiten",
+  gelijkvloers: "Gelijkvloers",
+  boven: "Boven",
+};
 
 /* ------------------------------------------------------------------ *
  * Pure helpers (no DOM/window dependency — unit-tested under Node)
@@ -528,7 +537,26 @@ export class JuicedDashboardRoomCard extends HTMLElementBase {
     if (!list) return;
     const hass = this._hass;
     const rooms = this._config?.rooms || [];
-    list.innerHTML = rooms.map((room, index) => this._roomRowHtml(room, index, hass)).join("");
+    if (!rooms.some((room) => room.zone)) {
+      list.innerHTML = `<div class="jrc-zone-grid">${rooms.map((room, index) => this._roomRowHtml(room, index, hass)).join("")}</div>`;
+      return;
+    }
+    const groups = ZONE_ORDER.map((zone) => ({ label: ZONE_LABELS[zone], indices: [] as number[] }));
+    const overige = { label: "Overige", indices: [] as number[] };
+    rooms.forEach((room, index) => {
+      const zoneIndex = ZONE_ORDER.indexOf((room.zone ?? "") as (typeof ZONE_ORDER)[number]);
+      (zoneIndex >= 0 ? groups[zoneIndex] : overige).indices.push(index);
+    });
+    list.innerHTML = [...groups, overige]
+      .filter((group) => group.indices.length > 0)
+      .map(
+        (group) => `
+          <div class="jrc-zone">
+            <h3 class="jrc-zone-title">${escapeHtml(group.label)}</h3>
+            <div class="jrc-zone-grid">${group.indices.map((index) => this._roomRowHtml(rooms[index], index, hass)).join("")}</div>
+          </div>`,
+      )
+      .join("");
   }
 
   private _roomRowHtml(room: RoomConfig, index: number, hass: HomeAssistant | null): string {
@@ -714,13 +742,18 @@ const CARD_CSS = `
     margin: 3px 0 0; font-size: 12.5px;
     color: var(--juiced-text-muted, var(--secondary-text-color));
   }
-  .jrc-list { display: flex; flex-direction: column; }
+  .jrc-list { display: flex; flex-direction: column; padding: 6px 18px 18px; gap: 16px; }
+  .jrc-zone-title {
+    margin: 0 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+    color: var(--juiced-text-muted, var(--secondary-text-color));
+  }
+  .jrc-zone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
   .jrc-row {
-    display: flex; align-items: center; gap: 13px; padding: 13px 18px;
-    border-top: 1px solid var(--juiced-border-subtle, var(--divider-color));
+    display: flex; align-items: center; gap: 13px; padding: 13px 14px;
+    border: 1px solid var(--juiced-border-subtle, var(--divider-color));
+    border-radius: var(--juiced-radius-md, 14px);
     cursor: pointer; -webkit-tap-highlight-color: transparent;
   }
-  .jrc-list .jrc-row:first-child { border-top: 0; }
   .jrc-row:hover, .jrc-row:focus-visible {
     background: var(--juiced-surface-elevated, var(--secondary-background-color, rgba(0,0,0,.03)));
   }

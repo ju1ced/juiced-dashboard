@@ -178,3 +178,33 @@ test("compileRoomForCard leaves categories empty when no entity is configured", 
   assert.equal(card.media_player, undefined);
   assert.equal(card.climate, undefined);
 });
+
+test("compileConfig defaults general.person_entities to an empty list", () => {
+  const config = compileConfig({});
+  assert.deepEqual(config.general.person_entities, []);
+});
+
+test("compileConfig filters general.person_entities to strings", () => {
+  const config = compileConfig({ general: { person_entities: ["person.joost", 42, null, "person.leen"] } });
+  assert.deepEqual(config.general.person_entities, ["person.joost", "person.leen"]);
+});
+
+test("compileConfig keeps a valid room zone", () => {
+  const config = compileConfig({ rooms: [{ name: "Bureau", zone: "gelijkvloers" }] });
+  assert.equal(config.rooms[0].zone, "gelijkvloers");
+});
+
+test("compileConfig drops an invalid room zone instead of keeping garbage", () => {
+  const config = compileConfig({ rooms: [{ name: "Bureau", zone: "kelder" }] });
+  assert.equal(config.rooms[0].zone, undefined);
+});
+
+test("compileConfig leaves a room's zone undefined when not configured", () => {
+  const config = compileConfig({ rooms: [{ name: "Bureau" }] });
+  assert.equal(config.rooms[0].zone, undefined);
+});
+
+test("compileRoomForCard carries the zone through to the card shape", () => {
+  const card = compileRoomForCard({ key: "bureau", name: "Bureau", zone: "boven" });
+  assert.equal(card.zone, "boven");
+});

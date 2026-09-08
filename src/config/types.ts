@@ -19,12 +19,18 @@ export type StartView = (typeof START_VIEWS)[number];
 export const THEME_MODES = ["system", "light", "dark"] as const;
 export type ThemeMode = (typeof THEME_MODES)[number];
 
+/** Optional grouping for the rooms list — a room without a zone lands in an "Overige" group. */
+export const ROOM_ZONES = ["buiten", "gelijkvloers", "boven"] as const;
+export type RoomZone = (typeof ROOM_ZONES)[number];
+
 export type EntityReference = string;
 
 export interface GeneralConfig {
   title: string;
   start_view: StartView;
   theme_mode: ThemeMode;
+  /** `person.*` entities shown as badges at the top of Home. */
+  person_entities: EntityReference[];
 }
 
 /** The flat, GUI-editable room shape — one entity per control category. */
@@ -32,6 +38,7 @@ export interface EditorRoomConfig {
   key: string;
   name: string;
   icon?: string;
+  zone?: RoomZone;
   temperature_entity?: EntityReference;
   humidity_entity?: EntityReference;
   light_entity?: EntityReference;

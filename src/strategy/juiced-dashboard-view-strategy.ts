@@ -12,6 +12,12 @@ import { registerJuicedDashboardSecurityCard } from "../cards/juiced-dashboard-s
 import { registerJuicedDashboardTodayCard } from "../cards/juiced-dashboard-today-card";
 import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, SecurityConfig, TodayConfig, ViewPath } from "../config/types";
 
+interface BadgeConfig {
+  type: "entity";
+  entity: string;
+  show_name: boolean;
+}
+
 export interface JuicedDashboardViewConfig {
   type: "custom:juiced-dashboard-view";
   view: ViewPath | "room";
@@ -70,10 +76,11 @@ function securitySection(security: SecurityConfig | undefined): LovelaceConfig |
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
   if (rooms.length === 0) {
-    return { type: "grid", cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
+    return { type: "grid", column_span: 2, cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
   }
   return {
     type: "grid",
+    column_span: 2,
     cards: [
       {
         type: "custom:juiced-dashboard-room-card",
@@ -83,6 +90,12 @@ function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
       },
     ],
   };
+}
+
+function personBadges(general: GeneralConfig | undefined): BadgeConfig[] | undefined {
+  const entities = general?.person_entities ?? [];
+  if (!entities.length) return undefined;
+  return entities.map((entity) => ({ type: "entity", entity, show_name: true }));
 }
 
 function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[] {
@@ -123,7 +136,14 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
       sections = placeholderSections("Meer", "Instellingen en geschiedenis volgen in een volgende stap.");
       break;
   }
-  return { type: "sections", max_columns: 2, dense_section_placement: true, sections };
+  const badges = config.view === "home" ? personBadges(config.general) : undefined;
+  return {
+    type: "sections",
+    max_columns: 4,
+    dense_section_placement: true,
+    sections,
+    ...(badges ? { badges } : {}),
+  };
 }
 
 export class JuicedDashboardViewStrategy extends HTMLElementBase {

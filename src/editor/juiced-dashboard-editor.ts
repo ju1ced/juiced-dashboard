@@ -12,7 +12,10 @@
  */
 
 import { compileConfig } from "../config/compiler";
-import type { CameraConfig, EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, SecurityConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
+import { ROOM_ZONES } from "../config/types";
+import type { CameraConfig, EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, RoomZone, SecurityConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
+
+const ZONE_LABELS: Record<RoomZone, string> = { buiten: "Buiten", gelijkvloers: "Gelijkvloers", boven: "Boven" };
 
 type HomeAssistantLike = Record<string, unknown>;
 
@@ -237,6 +240,7 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     if (!roomKey) return;
     if (field === "name") this._updateRoom(roomKey, { name: target.value });
     if (field === "icon") this._updateRoom(roomKey, { icon: target.value || undefined });
+    if (field === "zone") this._updateRoom(roomKey, { zone: (target.value || undefined) as RoomZone | undefined });
   }
 
   private _onSelectorChange(event: CustomEvent<{ value: unknown }>): void {
@@ -246,6 +250,14 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     const field = target.dataset.field;
     const scope = target.dataset.scope;
     if (!field) return;
+
+    if (scope === "general") {
+      if (field === "person_entities") {
+        const value = Array.isArray(event.detail?.value) ? event.detail.value.filter((v): v is string => typeof v === "string") : [];
+        this._updateGeneral("person_entities", value);
+      }
+      return;
+    }
 
     if (scope === "today") {
       if (field === "waste_entities") {
@@ -320,6 +332,9 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
             <option value="dark" ${c.general.theme_mode === "dark" ? "selected" : ""}>Donker</option>
           </select>
         </label>
+        <label>Bewoners (tonen als badges op Home)
+          <ha-selector data-scope="general" data-field="person_entities"></ha-selector>
+        </label>
       </div>
 
       <div class="jde-section">
@@ -371,6 +386,15 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       const scope = el.dataset.scope;
       const fieldKey = el.dataset.field;
       if (!fieldKey) return;
+
+      if (scope === "general") {
+        if (fieldKey === "person_entities") {
+          el.selector = { entity: { domain: "person", multiple: true } };
+          el.value = c.general.person_entities ?? [];
+          if (this._hass) el.hass = this._hass;
+        }
+        return;
+      }
 
       if (scope === "today") {
         if (fieldKey === "waste_entities") {
@@ -479,6 +503,12 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
         </div>
         <label>Icoon
           <input type="text" data-room="${room.key}" data-field="icon" value="${escapeHtml(room.icon ?? "")}" placeholder="mdi:sofa">
+        </label>
+        <label>Zone
+          <select data-room="${room.key}" data-field="zone">
+            <option value="" ${!room.zone ? "selected" : ""}>Geen</option>
+            ${ROOM_ZONES.map((zone) => `<option value="${zone}" ${room.zone === zone ? "selected" : ""}>${escapeHtml(ZONE_LABELS[zone])}</option>`).join("")}
+          </select>
         </label>
         ${ROOM_ENTITY_FIELDS.map(
           (field) => `

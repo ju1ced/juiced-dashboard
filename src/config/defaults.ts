@@ -8,6 +8,7 @@ export function createDefaultConfig(): JuicedDashboardConfigV1 {
       title: "Juiced Dashboard",
       start_view: "home",
       theme_mode: "system",
+      person_entities: [],
     },
     today: {
       waste_entities: [],

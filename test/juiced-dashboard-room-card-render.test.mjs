@@ -175,3 +175,31 @@ test("setConfig rejects a room without a name", () => {
   const card = makeCard();
   assert.throws(() => card.setConfig({ rooms: [{}] }), /name/);
 });
+
+test("rooms with no zone at all render as one flat grid without zone headers", () => {
+  const card = makeCard();
+  card.setConfig({ type: "custom:juiced-dashboard-room-card", rooms: [{ name: "Bureau" }, { name: "Slaapkamer" }] });
+  card.hass = { states: {} };
+  const listHtml = card.shadowRoot.getElementById("list").innerHTML;
+  assert.ok(!listHtml.includes("jrc-zone-title"));
+  assert.ok(listHtml.includes("Bureau"));
+  assert.ok(listHtml.includes("Slaapkamer"));
+});
+
+test("rooms with a mix of zones are grouped under zone headers, unzoned rooms under Overige", () => {
+  const card = makeCard();
+  card.setConfig({
+    type: "custom:juiced-dashboard-room-card",
+    rooms: [
+      { name: "Tuinhuis", zone: "buiten" },
+      { name: "Bureau", zone: "boven" },
+      { name: "Berging" },
+    ],
+  });
+  card.hass = { states: {} };
+  const listHtml = card.shadowRoot.getElementById("list").innerHTML;
+  assert.ok(listHtml.includes(">Buiten<"));
+  assert.ok(listHtml.includes(">Boven<"));
+  assert.ok(listHtml.includes(">Overige<"));
+  assert.ok(!listHtml.includes(">Gelijkvloers<"));
+});
