@@ -102,7 +102,7 @@ test("renders nothing but the style tag when neither alarm nor cameras are confi
   card.setConfig({ type: "custom:juiced-dashboard-security-card", security: { cameras: [] } });
   card.hass = { states: {} };
   const html = card.shadowRoot.innerHTML;
-  assert.ok(!html.includes("ha-card"));
+  assert.ok(!html.includes("<ha-card"));
 });
 
 test("an unavailable alarm entity omits the alarm row instead of showing a broken state", () => {
@@ -110,5 +110,5 @@ test("an unavailable alarm entity omits the alarm row instead of showing a broke
   card.setConfig({ type: "custom:juiced-dashboard-security-card", security: { alarm_entity: "alarm_control_panel.missing", cameras: [] } });
   card.hass = { states: {} };
   const html = card.shadowRoot.innerHTML;
-  assert.ok(!html.includes("jsc-alarm"));
+  assert.ok(!html.includes('class="jsc-alarm'));
 });
