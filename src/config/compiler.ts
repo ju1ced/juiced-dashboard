@@ -3,10 +3,12 @@ import {
   CONFIG_SCHEMA_VERSION,
   START_VIEWS,
   THEME_MODES,
+  type CameraConfig,
   type EditorRoomConfig,
   type GeneralConfig,
   type JuicedDashboardConfigV1,
   type QuickActionConfig,
+  type SecurityConfig,
   type StartView,
   type ThemeMode,
   type TodayConfig,
@@ -118,6 +120,45 @@ function compileQuickActions(raw: unknown): QuickActionConfig[] {
   return actions;
 }
 
+let cameraKeySeed = 0;
+
+function generateCameraKey(): string {
+  cameraKeySeed += 1;
+  return `camera-${Date.now().toString(36)}-${cameraKeySeed}`;
+}
+
+function compileCamera(raw: unknown): CameraConfig | null {
+  if (!isRecord(raw)) return null;
+  const name = asOptionalString(raw.name);
+  const cameraEntity = asOptionalString(raw.camera_entity);
+  if (!name || !cameraEntity) return null;
+  return {
+    key: asString(raw.key, generateCameraKey()),
+    name,
+    camera_entity: cameraEntity,
+    privacy_entity: asOptionalString(raw.privacy_entity),
+    privacy_service: asOptionalString(raw.privacy_service),
+  };
+}
+
+function compileCameras(raw: unknown): CameraConfig[] {
+  if (!Array.isArray(raw)) return [];
+  const cameras: CameraConfig[] = [];
+  for (const item of raw) {
+    const camera = compileCamera(item);
+    if (camera) cameras.push(camera);
+  }
+  return cameras;
+}
+
+function compileSecurity(raw: unknown): SecurityConfig {
+  if (!isRecord(raw)) return { cameras: [] };
+  return {
+    alarm_entity: asOptionalString(raw.alarm_entity),
+    cameras: compileCameras(raw.cameras),
+  };
+}
+
 function compileRooms(raw: unknown): EditorRoomConfig[] {
   if (!Array.isArray(raw)) return [];
   const rooms: EditorRoomConfig[] = [];
@@ -141,6 +182,7 @@ export function compileConfig(raw: unknown): JuicedDashboardConfigV1 {
     general: compileGeneral(source.general),
     today: compileToday(source.today),
     quick_actions: compileQuickActions(source.quick_actions),
+    security: compileSecurity(source.security),
     rooms: compileRooms(source.rooms),
   };
 }

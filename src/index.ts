@@ -49,7 +49,18 @@ export type { HassEntity, HomeAssistant, JuicedDashboardRoomCardConfig, RoomConf
 export { compileConfig, compileRoomForCard } from "./config/compiler";
 export { createDefaultConfig } from "./config/defaults";
 export { CONFIG_SCHEMA_VERSION, START_VIEWS, THEME_MODES, VIEW_PATHS } from "./config/types";
-export type { EditorRoomConfig, GeneralConfig, JuicedDashboardConfigV1, QuickActionConfig, StartView, ThemeMode, TodayConfig, ViewPath } from "./config/types";
+export type {
+  CameraConfig,
+  EditorRoomConfig,
+  GeneralConfig,
+  JuicedDashboardConfigV1,
+  QuickActionConfig,
+  SecurityConfig,
+  StartView,
+  ThemeMode,
+  TodayConfig,
+  ViewPath,
+} from "./config/types";
 
 export { JuicedDashboardStrategy, registerJuicedDashboardStrategy, roomPath } from "./strategy/juiced-dashboard-strategy";
 export { buildView, JuicedDashboardViewStrategy, registerJuicedDashboardViewStrategy } from "./strategy/juiced-dashboard-view-strategy";
@@ -59,6 +70,8 @@ export { JuicedDashboardTodayCard, registerJuicedDashboardTodayCard } from "./ca
 export type { JuicedDashboardTodayCardConfig } from "./cards/juiced-dashboard-today-card";
 export { JuicedDashboardQuickActions, registerJuicedDashboardQuickActions } from "./cards/juiced-dashboard-quick-actions";
 export type { JuicedDashboardQuickActionsConfig } from "./cards/juiced-dashboard-quick-actions";
+export { JuicedDashboardSecurityCard, registerJuicedDashboardSecurityCard } from "./cards/juiced-dashboard-security-card";
+export type { JuicedDashboardSecurityCardConfig } from "./cards/juiced-dashboard-security-card";
 
 declare const __JUICED_DASHBOARD_VERSION__: string;
 
