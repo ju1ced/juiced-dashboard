@@ -7,9 +7,18 @@ import { buildView } from "../dist/juiced-dashboard.js";
 
 const GENERAL = { title: "Ons Huis", start_view: "home", theme_mode: "system", person_entities: [] };
 
-test("buildView uses max_columns 1 so every section spans the full row", () => {
-  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
-  assert.equal(result.max_columns, 1);
+test("buildView gives every section a column_span matching max_columns, so each always claims the full computed row width", () => {
+  const result = buildView({
+    type: "custom:juiced-dashboard-view",
+    view: "home",
+    general: GENERAL,
+    today: { weather_entity: "weather.thuis", waste_entities: [] },
+    quick_actions: [{ key: "a", label: "A", entity: "light.a", service: "toggle" }],
+    rooms: [{ key: "bureau", name: "Bureau", light_entities: [], cover_entities: [], awning_entities: [] }],
+  });
+  for (const section of result.sections) {
+    assert.equal(section.column_span, result.max_columns);
+  }
 });
 
 test("Vandaag and Security merge into one section with a shared 2-column grid card when both are configured", () => {
