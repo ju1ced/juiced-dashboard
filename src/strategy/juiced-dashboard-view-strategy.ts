@@ -102,7 +102,7 @@ function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[
   if (!room) {
     return [{ type: "grid", cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
   }
-  return [{ type: "grid", cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
+  return [{ type: "grid", column_span: 2, cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
 }
 
 function placeholderSections(title: string, note: string): LovelaceConfig[] {

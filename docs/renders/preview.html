@@ -204,6 +204,7 @@
           {
             name: "Bureau",
             icon: "mdi:desk",
+            zone: "boven",
             temperature: "sensor.bureau_temperature",
             humidity: "sensor.bureau_humidity",
             lights: [{ entity: "light.bureau_spellenruimte" }, { entity: "light.bureau_spellentafel" }],
@@ -214,10 +215,12 @@
           {
             name: "Woonkamer",
             icon: "mdi:sofa",
+            zone: "gelijkvloers",
             temperature: "sensor.woonkamer_temperature",
             humidity: "sensor.woonkamer_humidity",
             lights: [{ entity: "light.woonkamer_living" }],
           },
+          { name: "Tuinhuis", icon: "mdi:home-outline", zone: "buiten" },
           { name: "Toilet & berging", icon: "mdi:toilet" },
         ],
       });
@@ -227,12 +230,15 @@
       });
 
       // ---- 2 & 3. Dashboard + view strategy ----
+      hass.states["person.joost"] = { state: "home", attributes: { friendly_name: "Joost" } };
+      hass.states["person.leen"] = { state: "not_home", attributes: { friendly_name: "Leen" } };
+
       const strategyInput = {
         type: "custom:juiced-dashboard",
-        general: { title: "Ons Huis", start_view: "home", theme_mode: "dark" },
+        general: { title: "Ons Huis", start_view: "home", theme_mode: "dark", person_entities: ["person.joost", "person.leen"] },
         rooms: [
-          { key: "bureau", name: "Bureau", icon: "mdi:desk", light_entity: "light.bureau_spellenruimte", climate_entity: "climate.daikin_bureau" },
-          { key: "woonkamer", name: "Woonkamer", icon: "mdi:sofa", light_entity: "light.woonkamer_living" },
+          { key: "bureau", name: "Bureau", icon: "mdi:desk", zone: "boven", light_entity: "light.bureau_spellenruimte", climate_entity: "climate.daikin_bureau" },
+          { key: "woonkamer", name: "Woonkamer", icon: "mdi:sofa", zone: "gelijkvloers", light_entity: "light.woonkamer_living" },
         ],
       };
 
@@ -262,8 +268,12 @@
       hass.states["weather.thuis"] = { state: "sunny", attributes: { temperature: 25 } };
       hass.states["sensor.batterij_soc"] = { state: "31", attributes: { unit_of_measurement: "%", friendly_name: "Batterij SoC" } };
       hass.states["sensor.zon_opbrengst"] = { state: "5812.0", attributes: { unit_of_measurement: "W", friendly_name: "Zon" } };
-      hass.states["sensor.gft"] = { state: "over 2 dagen", attributes: { friendly_name: "GFT" } };
-      hass.states["sensor.restafval"] = { state: "over 2 dagen", attributes: { friendly_name: "Restafval" } };
+      const fmtWasteDate = (d) => `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
+      hass.states["sensor.gft"] = { state: fmtWasteDate(new Date()), attributes: { friendly_name: "GFT" } };
+      hass.states["sensor.restafval"] = {
+        state: fmtWasteDate(new Date(Date.now() + 3 * 86400000)),
+        attributes: { friendly_name: "Restafval" },
+      };
 
       const todayCard = document.createElement("juiced-dashboard-today-card");
       document.getElementById("today-wrap").appendChild(todayCard);
