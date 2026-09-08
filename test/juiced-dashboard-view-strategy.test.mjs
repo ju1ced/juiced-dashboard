@@ -61,6 +61,32 @@ test("neither Vandaag nor Security configured omits the hero section entirely", 
   assert.ok(!sectionCardTypes.includes("custom:juiced-dashboard-security-card"));
 });
 
+test("every top-level card gets grid_options: {columns: full} so it claims the whole section width", () => {
+  const result = buildView({
+    type: "custom:juiced-dashboard-view",
+    view: "home",
+    general: GENERAL,
+    today: { weather_entity: "weather.thuis", waste_entities: [] },
+    security: { alarm_entity: "alarm_control_panel.huis", cameras: [] },
+    quick_actions: [{ key: "a", label: "A", entity: "light.a", service: "toggle" }],
+    rooms: [{ key: "bureau", name: "Bureau", light_entities: [], cover_entities: [], awning_entities: [] }],
+  });
+  const [heroSection, quickActionsSection, roomsSection] = result.sections;
+  assert.deepEqual(heroSection.cards[0].grid_options, { columns: "full" });
+  assert.deepEqual(quickActionsSection.cards[0].grid_options, { columns: "full" });
+  assert.deepEqual(roomsSection.cards[0].grid_options, { columns: "full" });
+});
+
+test("room detail subview card also gets grid_options: {columns: full}", () => {
+  const result = buildView({
+    type: "custom:juiced-dashboard-view",
+    view: "room",
+    general: GENERAL,
+    room: { key: "bureau", name: "Bureau", light_entities: [], cover_entities: [], awning_entities: [] },
+  });
+  assert.deepEqual(result.sections[0].cards[0].grid_options, { columns: "full" });
+});
+
 test("person_entities render as badges on Home but not on other views", () => {
   const general = { ...GENERAL, person_entities: ["person.joost", "person.leen"] };
   const home = buildView({ type: "custom:juiced-dashboard-view", view: "home", general, rooms: [] });
