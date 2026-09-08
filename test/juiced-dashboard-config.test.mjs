@@ -108,6 +108,44 @@ test("compileConfig falls back to the entity id as the quick action label when n
   assert.ok(config.quick_actions[0].key);
 });
 
+test("compileConfig defaults security to no alarm and no cameras", () => {
+  const config = compileConfig({});
+  assert.deepEqual(config.security, { cameras: [] });
+});
+
+test("compileConfig keeps a configured alarm entity", () => {
+  const config = compileConfig({ security: { alarm_entity: "alarm_control_panel.huis" } });
+  assert.equal(config.security.alarm_entity, "alarm_control_panel.huis");
+});
+
+test("compileConfig drops cameras missing a name or camera_entity", () => {
+  const config = compileConfig({
+    security: {
+      cameras: [
+        { key: "oprit", name: "Oprit", camera_entity: "camera.oprit" },
+        { name: "Geen entiteit" },
+        { camera_entity: "camera.zonder_naam" },
+      ],
+    },
+  });
+  assert.equal(config.security.cameras.length, 1);
+  assert.equal(config.security.cameras[0].key, "oprit");
+});
+
+test("compileConfig keeps a camera's optional privacy fields only when configured", () => {
+  const config = compileConfig({
+    security: {
+      cameras: [
+        { name: "Oprit", camera_entity: "camera.oprit" },
+        { name: "Tuin", camera_entity: "camera.tuin", privacy_entity: "switch.tuin_privacy", privacy_service: "toggle" },
+      ],
+    },
+  });
+  assert.equal(config.security.cameras[0].privacy_entity, undefined);
+  assert.equal(config.security.cameras[1].privacy_entity, "switch.tuin_privacy");
+  assert.equal(config.security.cameras[1].privacy_service, "toggle");
+});
+
 test("compileRoomForCard expands each single entity into the card's array shape", () => {
   const card = compileRoomForCard({
     key: "bureau",

@@ -12,7 +12,7 @@
  */
 
 import { compileConfig } from "../config/compiler";
-import type { EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
+import type { CameraConfig, EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, SecurityConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
 
 type HomeAssistantLike = Record<string, unknown>;
 
@@ -39,6 +39,7 @@ const ROOM_ENTITY_FIELDS: readonly RoomEntityField[] = [
 
 let newRoomSeed = 0;
 let newActionSeed = 0;
+let newCameraSeed = 0;
 
 /** Vandaag's single-entity fields (everything except the multi-entity waste_entities). */
 interface TodayEntityField {
@@ -169,6 +170,39 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     this._render();
   }
 
+  private _updateSecurity(patch: Partial<SecurityConfig>): void {
+    this._config = { ...this._config, security: { ...this._config.security, ...patch } };
+    this._emit();
+  }
+
+  private _updateCamera(key: string, patch: Partial<CameraConfig>): void {
+    this._config = {
+      ...this._config,
+      security: {
+        ...this._config.security,
+        cameras: this._config.security.cameras.map((camera) => (camera.key === key ? { ...camera, ...patch } : camera)),
+      },
+    };
+    this._emit();
+  }
+
+  private _addCamera(): void {
+    newCameraSeed += 1;
+    const camera: CameraConfig = { key: `camera-${Date.now().toString(36)}-${newCameraSeed}`, name: "Nieuwe camera", camera_entity: "" };
+    this._config = { ...this._config, security: { ...this._config.security, cameras: [...this._config.security.cameras, camera] } };
+    this._emit();
+    this._render();
+  }
+
+  private _removeCamera(key: string): void {
+    this._config = {
+      ...this._config,
+      security: { ...this._config.security, cameras: this._config.security.cameras.filter((camera) => camera.key !== key) },
+    };
+    this._emit();
+    this._render();
+  }
+
   private _onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLSelectElement | null;
     if (!target) return;
@@ -188,6 +222,14 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       if (field === "label") this._updateAction(actionKey, { label: target.value });
       if (field === "icon") this._updateAction(actionKey, { icon: target.value || undefined });
       if (field === "service") this._updateAction(actionKey, { service: target.value });
+      return;
+    }
+
+    if (target.dataset.scope === "camera") {
+      const cameraKey = target.dataset.cameraKey;
+      if (!cameraKey) return;
+      if (field === "name") this._updateCamera(cameraKey, { name: target.value });
+      if (field === "privacy_service") this._updateCamera(cameraKey, { privacy_service: target.value || undefined });
       return;
     }
 
@@ -224,6 +266,21 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       return;
     }
 
+    if (scope === "security") {
+      const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
+      this._updateSecurity({ alarm_entity: value });
+      return;
+    }
+
+    if (scope === "camera") {
+      const cameraKey = target.dataset.cameraKey;
+      if (!cameraKey) return;
+      const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
+      if (field === "camera_entity") this._updateCamera(cameraKey, { camera_entity: value ?? "" });
+      if (field === "privacy_entity") this._updateCamera(cameraKey, { privacy_entity: value });
+      return;
+    }
+
     const roomKey = target.dataset.room;
     if (!roomKey) return;
     const value = typeof event.detail?.value === "string" ? event.detail.value : undefined;
@@ -237,6 +294,8 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     if (target.dataset.action === "remove-room" && target.dataset.room) this._removeRoom(target.dataset.room);
     if (target.dataset.action === "add-action") this._addAction();
     if (target.dataset.action === "remove-action" && target.dataset.actionKey) this._removeAction(target.dataset.actionKey);
+    if (target.dataset.action === "add-camera") this._addCamera();
+    if (target.dataset.action === "remove-camera" && target.dataset.cameraKey) this._removeCamera(target.dataset.cameraKey);
   }
 
   private _render(): void {
@@ -274,6 +333,18 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
         <label>Afvalbronnen
           <ha-selector data-scope="today" data-field="waste_entities"></ha-selector>
         </label>
+      </div>
+
+      <div class="jde-section">
+        <h3>Security</h3>
+        <label>Alarm
+          <ha-selector data-scope="security" data-field="alarm_entity"></ha-selector>
+        </label>
+        <div class="jde-section-head">
+          <h4>Camera's</h4>
+          <button type="button" data-action="add-camera">+ Camera toevoegen</button>
+        </div>
+        ${c.security.cameras.length === 0 ? `<p class="jde-empty">Nog geen camera's geconfigureerd.</p>` : c.security.cameras.map((camera) => this._cameraHtml(camera)).join("")}
       </div>
 
       <div class="jde-section">
@@ -324,6 +395,28 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
         return;
       }
 
+      if (scope === "security") {
+        el.selector = { entity: { domain: "alarm_control_panel" } };
+        el.value = c.security.alarm_entity ?? "";
+        if (this._hass) el.hass = this._hass;
+        return;
+      }
+
+      if (scope === "camera") {
+        const cameraKey = el.dataset.cameraKey;
+        const camera = c.security.cameras.find((candidate) => candidate.key === cameraKey);
+        if (!camera) return;
+        if (fieldKey === "camera_entity") {
+          el.selector = { entity: { domain: "camera" } };
+          el.value = camera.camera_entity ?? "";
+        } else {
+          el.selector = { entity: {} };
+          el.value = camera.privacy_entity ?? "";
+        }
+        if (this._hass) el.hass = this._hass;
+        return;
+      }
+
       const roomKey = el.dataset.room;
       if (!roomKey) return;
       const room = c.rooms.find((candidate) => candidate.key === roomKey);
@@ -354,6 +447,29 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       </div>`;
   }
 
+  private _cameraHtml(camera: CameraConfig): string {
+    return `
+      <div class="jde-room">
+        <div class="jde-room-head">
+          <input type="text" data-scope="camera" data-camera-key="${camera.key}" data-field="name" value="${escapeHtml(camera.name)}" placeholder="Cameranaam">
+          <button type="button" data-action="remove-camera" data-camera-key="${camera.key}" aria-label="Camera verwijderen">&times;</button>
+        </div>
+        <label>Camera
+          <ha-selector data-scope="camera" data-camera-key="${camera.key}" data-field="camera_entity"></ha-selector>
+        </label>
+        <label>Privacyschakelaar (optioneel — enkel deze camera toont dan een privacylabel)
+          <ha-selector data-scope="camera" data-camera-key="${camera.key}" data-field="privacy_entity"></ha-selector>
+        </label>
+        ${
+          camera.privacy_entity
+            ? `<label>Privacy-service (bv. toggle)
+                 <input type="text" data-scope="camera" data-camera-key="${camera.key}" data-field="privacy_service" value="${escapeHtml(camera.privacy_service ?? "")}" placeholder="toggle">
+               </label>`
+            : ""
+        }
+      </div>`;
+  }
+
   private _roomHtml(room: EditorRoomConfig): string {
     return `
       <div class="jde-room">
@@ -380,7 +496,8 @@ const EDITOR_CSS = `
   .jde-section:last-child { border-bottom: 0; }
   .jde-section h3 { margin: 0 0 12px; font-size: 15px; font-weight: 600; }
   .jde-section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .jde-section-head h3 { margin: 0; }
+  .jde-section-head h3, .jde-section-head h4 { margin: 0; font-size: 13px; font-weight: 600; }
+  .jde-section-head { margin-top: 16px; }
   .jde-section-head button, .jde-room-head button {
     border: 1px solid var(--divider-color, #e0e0e0); background: var(--card-background-color, transparent);
     color: var(--primary-text-color); border-radius: 8px; padding: 6px 12px; cursor: pointer;

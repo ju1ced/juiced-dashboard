@@ -121,6 +121,10 @@
       <h2>6. Snelacties (custom:juiced-dashboard-quick-actions)</h2>
       <p class="caption">Click a chip — check the console for the simulated <code>callService</code> call.</p>
       <div id="qa-wrap"></div>
+
+      <h2>7. Security (custom:juiced-dashboard-security-card)</h2>
+      <p class="caption">Two cameras; only "Tuin" has a privacy switch configured, so only its row shows a privacy label.</p>
+      <div id="sec-wrap"></div>
     </main>
 
     <script type="module">
@@ -285,6 +289,28 @@
         ],
       });
       qaCard.hass = hass;
+
+      // ---- 7. Security card ----
+      const TINY_PNG =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
+      hass.states["alarm_control_panel.huis"] = { state: "disarmed", attributes: {} };
+      hass.states["camera.oprit"] = { state: "idle", attributes: { entity_picture: TINY_PNG, friendly_name: "Oprit" } };
+      hass.states["camera.tuin"] = { state: "idle", attributes: { friendly_name: "Tuin" } };
+      hass.states["switch.tuin_privacy"] = { state: "on", attributes: {} };
+
+      const secCard = document.createElement("juiced-dashboard-security-card");
+      document.getElementById("sec-wrap").appendChild(secCard);
+      secCard.setConfig({
+        type: "custom:juiced-dashboard-security-card",
+        security: {
+          alarm_entity: "alarm_control_panel.huis",
+          cameras: [
+            { key: "oprit", name: "Oprit", camera_entity: "camera.oprit" },
+            { key: "tuin", name: "Tuin", camera_entity: "camera.tuin", privacy_entity: "switch.tuin_privacy", privacy_service: "toggle" },
+          ],
+        },
+      });
+      secCard.hass = hass;
     </script>
   </body>
 </html>

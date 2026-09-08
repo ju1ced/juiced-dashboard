@@ -67,11 +67,31 @@ export interface QuickActionConfig {
   service: string;
 }
 
+/**
+ * A single camera. `privacy_entity` is optional and deliberately per-camera
+ * — not every camera has a privacy switch, and the privacy chip only shows
+ * for cameras that actually have one (see this session's design decision:
+ * "privacy enkel bij relevante camera's").
+ */
+export interface CameraConfig {
+  key: string;
+  name: string;
+  camera_entity: EntityReference;
+  privacy_entity?: EntityReference;
+  privacy_service?: string;
+}
+
+export interface SecurityConfig {
+  alarm_entity?: EntityReference;
+  cameras: CameraConfig[];
+}
+
 export interface JuicedDashboardConfigV1 {
   type: "custom:juiced-dashboard";
   schema_version: typeof CONFIG_SCHEMA_VERSION;
   general: GeneralConfig;
   today: TodayConfig;
   quick_actions: QuickActionConfig[];
+  security: SecurityConfig;
   rooms: EditorRoomConfig[];
 }

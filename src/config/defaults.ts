@@ -13,6 +13,9 @@ export function createDefaultConfig(): JuicedDashboardConfigV1 {
       waste_entities: [],
     },
     quick_actions: [],
+    security: {
+      cameras: [],
+    },
     rooms: [],
   };
 }

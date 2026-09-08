@@ -7,8 +7,9 @@
 
 import { compileRoomForCard } from "../config/compiler";
 import { registerJuicedDashboardQuickActions } from "../cards/juiced-dashboard-quick-actions";
+import { registerJuicedDashboardSecurityCard } from "../cards/juiced-dashboard-security-card";
 import { registerJuicedDashboardTodayCard } from "../cards/juiced-dashboard-today-card";
-import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, TodayConfig, ViewPath } from "../config/types";
+import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, SecurityConfig, TodayConfig, ViewPath } from "../config/types";
 
 export interface JuicedDashboardViewConfig {
   type: "custom:juiced-dashboard-view";
@@ -16,6 +17,7 @@ export interface JuicedDashboardViewConfig {
   general: GeneralConfig;
   today?: TodayConfig;
   quick_actions?: QuickActionConfig[];
+  security?: SecurityConfig;
   rooms?: EditorRoomConfig[];
   room?: EditorRoomConfig;
 }
@@ -53,6 +55,16 @@ function todaySection(today: TodayConfig | undefined): LovelaceConfig | undefine
 function quickActionsSection(actions: QuickActionConfig[] | undefined): LovelaceConfig | undefined {
   if (!actions || actions.length === 0) return undefined;
   return { type: "grid", cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
+}
+
+function hasSecurityContent(security: SecurityConfig | undefined): boolean {
+  if (!security) return false;
+  return Boolean(security.alarm_entity || (security.cameras ?? []).length > 0);
+}
+
+function securitySection(security: SecurityConfig | undefined): LovelaceConfig | undefined {
+  if (!hasSecurityContent(security)) return undefined;
+  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-security-card", security }] };
 }
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
@@ -103,9 +115,12 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   let sections: LovelaceConfig[];
   switch (config.view) {
     case "home":
-      sections = [todaySection(config.today), quickActionsSection(config.quick_actions), roomsSection(config.rooms ?? [])].filter(
-        (section): section is LovelaceConfig => Boolean(section),
-      );
+      sections = [
+        todaySection(config.today),
+        securitySection(config.security),
+        quickActionsSection(config.quick_actions),
+        roomsSection(config.rooms ?? []),
+      ].filter((section): section is LovelaceConfig => Boolean(section));
       break;
     case "rooms":
       sections = [roomsSection(config.rooms ?? [])];
@@ -135,6 +150,7 @@ export class JuicedDashboardViewStrategy extends HTMLElementBase {
 export function registerJuicedDashboardViewStrategy(): void {
   registerJuicedDashboardTodayCard();
   registerJuicedDashboardQuickActions();
+  registerJuicedDashboardSecurityCard();
   if (typeof customElements === "undefined") return;
   const tag = "ll-strategy-view-juiced-dashboard-view";
   if (!customElements.get(tag)) customElements.define(tag, JuicedDashboardViewStrategy);
