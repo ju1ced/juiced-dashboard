@@ -40,6 +40,16 @@ function markdown(content: string, title?: string): LovelaceConfig {
 const ROOMS_TITLE = "Kamers";
 const ROOMS_SUBTITLE = "Tik een kamer om lichten, rolluiken, luifels, radio of airco direct te bedienen";
 
+/**
+ * max_columns caps how many section-columns HA *may* lay out at a given
+ * viewport width — it does not stretch a lone column to fill the row (a
+ * view with max_columns:1 renders one narrow, minimum-width column,
+ * centered, no matter how wide the screen is). Every section here gives
+ * column_span == FULL_SPAN so it always claims the full row width HA
+ * actually computed for this viewport instead of just one column-track.
+ */
+const FULL_SPAN = 4;
+
 function hasTodayContent(today: TodayConfig | undefined): boolean {
   if (!today) return false;
   return Boolean(
@@ -56,7 +66,7 @@ function hasTodayContent(today: TodayConfig | undefined): boolean {
 
 function quickActionsSection(actions: QuickActionConfig[] | undefined): LovelaceConfig | undefined {
   if (!actions || actions.length === 0) return undefined;
-  return { type: "grid", cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
+  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-quick-actions", actions }] };
 }
 
 function hasSecurityContent(security: SecurityConfig | undefined): boolean {
@@ -75,16 +85,17 @@ function heroSection(today: TodayConfig | undefined, security: SecurityConfig | 
   if (hasTodayContent(today)) cards.push({ type: "custom:juiced-dashboard-today-card", today });
   if (hasSecurityContent(security)) cards.push({ type: "custom:juiced-dashboard-security-card", security });
   if (cards.length === 0) return undefined;
-  if (cards.length === 1) return { type: "grid", cards };
-  return { type: "grid", cards: [{ type: "grid", columns: 2, square: false, cards }] };
+  if (cards.length === 1) return { type: "grid", column_span: FULL_SPAN, cards };
+  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "grid", columns: 2, square: false, cards }] };
 }
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
   if (rooms.length === 0) {
-    return { type: "grid", cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
+    return { type: "grid", column_span: FULL_SPAN, cards: [markdown("Voeg kamers toe via **Dashboard bewerken → instellingen**.", ROOMS_TITLE)] };
   }
   return {
     type: "grid",
+    column_span: FULL_SPAN,
     cards: [
       {
         type: "custom:juiced-dashboard-room-card",
@@ -104,13 +115,13 @@ function personBadges(general: GeneralConfig | undefined): BadgeConfig[] | undef
 
 function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[] {
   if (!room) {
-    return [{ type: "grid", cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
+    return [{ type: "grid", column_span: FULL_SPAN, cards: [markdown("Deze kamerconfiguratie ontbreekt.", "Kamer")] }];
   }
-  return [{ type: "grid", cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
+  return [{ type: "grid", column_span: FULL_SPAN, cards: [{ type: "custom:juiced-dashboard-room-detail-card", room: compileRoomForCard(room) }] }];
 }
 
 function placeholderSections(title: string, note: string): LovelaceConfig[] {
-  return [{ type: "grid", cards: [markdown(note, title)] }];
+  return [{ type: "grid", column_span: FULL_SPAN, cards: [markdown(note, title)] }];
 }
 
 export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
@@ -141,12 +152,8 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   }
   const badges = config.view === "home" ? personBadges(config.general) : undefined;
   return {
-    // Every section here is meant to span the full row — each one already
-    // lays out its own internal content responsively (room grid, zone grid,
-    // room-detail sections grid), so HA's coarser section-column packing
-    // just adds unpredictable gaps between them without helping.
     type: "sections",
-    max_columns: 1,
+    max_columns: FULL_SPAN,
     dense_section_placement: true,
     sections,
     ...(badges ? { badges } : {}),
