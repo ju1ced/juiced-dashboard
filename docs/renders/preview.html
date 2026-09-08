@@ -125,6 +125,10 @@
       <h2>7. Security (custom:juiced-dashboard-security-card)</h2>
       <p class="caption">Two cameras; only "Tuin" has a privacy switch configured, so only its row shows a privacy label.</p>
       <div id="sec-wrap"></div>
+
+      <h2>8. Room detail subview (custom:juiced-dashboard-room-detail-card)</h2>
+      <p class="caption">The real content behind a room's subview page — hero, overview tiles, Klimaat/Verlichting/Rolluiken/Luifels/Media.</p>
+      <div id="detail-wrap"></div>
     </main>
 
     <script type="module">
@@ -311,6 +315,38 @@
         },
       });
       secCard.hass = hass;
+
+      // ---- 8. Room detail subview card ----
+      hass.states["sensor.zolder_temp"] = { state: "19.8", attributes: {} };
+      hass.states["sensor.zolder_hum"] = { state: "51", attributes: {} };
+      hass.states["light.zolder_1"] = { state: "on", attributes: { friendly_name: "Plafond" } };
+      hass.states["light.zolder_2"] = { state: "off", attributes: { friendly_name: "Bureau" } };
+      hass.states["cover.zolder_rolluik"] = { state: "open", attributes: { current_position: 65 } };
+      hass.states["media_player.zolder"] = { state: "paused", attributes: { friendly_name: "Zolder speaker" } };
+      hass.states["climate.zolder"] = {
+        state: "heat",
+        attributes: { current_temperature: 19.8, temperature: 21, hvac_modes: ["off", "heat", "auto"], target_temp_step: 0.5 },
+      };
+
+      const detailCard = document.createElement("juiced-dashboard-room-detail-card");
+      document.getElementById("detail-wrap").appendChild(detailCard);
+      detailCard.setConfig({
+        type: "custom:juiced-dashboard-room-detail-card",
+        room: {
+          name: "Zolder",
+          icon: "mdi:home-roof",
+          temperature: "sensor.zolder_temp",
+          humidity: "sensor.zolder_hum",
+          lights: [
+            { entity: "light.zolder_1" },
+            { entity: "light.zolder_2" },
+          ],
+          covers: [{ entity: "cover.zolder_rolluik" }],
+          media_player: "media_player.zolder",
+          climate: "climate.zolder",
+        },
+      });
+      detailCard.hass = hass;
     </script>
   </body>
 </html>
