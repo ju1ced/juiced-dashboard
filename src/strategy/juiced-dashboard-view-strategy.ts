@@ -141,7 +141,7 @@ function shortcutsSection(shortcuts: ShortcutConfig[] | undefined): LovelaceConf
       { type: "heading", heading: "Snel naar", heading_style: "title", grid_options: GRID_FULL },
       ...shortcuts.map((shortcut) => ({
         type: "shortcut",
-        text: shortcut.label,
+        label: shortcut.label,
         icon: shortcut.icon || "mdi:open-in-new",
         tap_action: { action: "navigate", navigation_path: shortcut.navigation_path },
         grid_options: { columns: 4 },

@@ -129,10 +129,10 @@ test("shortcuts render as a Snel naar section with native shortcut cards navigat
   assert.ok(shortcutsSection);
   const shortcutCards = shortcutsSection.cards.filter((c) => c.type === "shortcut");
   assert.deepEqual(
-    shortcutCards.map((c) => ({ text: c.text, path: c.tap_action.navigation_path, action: c.tap_action.action })),
+    shortcutCards.map((c) => ({ label: c.label, path: c.tap_action.navigation_path, action: c.tap_action.action })),
     [
-      { text: "Auto", path: "/kia-ev6", action: "navigate" },
-      { text: "Tuin", path: "/dashboard-test/garden", action: "navigate" },
+      { label: "Auto", path: "/kia-ev6", action: "navigate" },
+      { label: "Tuin", path: "/dashboard-test/garden", action: "navigate" },
     ],
   );
 });

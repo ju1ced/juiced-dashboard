@@ -30,13 +30,10 @@ const ALARM_MODE_LABELS: Record<string, string> = {
   triggered: "Alarm!",
 };
 
-const CAMERA_ROTATE_MS = 6000;
-
 export class JuicedDashboardSecurityCard extends HTMLElementBase {
   private _config: JuicedDashboardSecurityCardConfig | null = null;
   private _hass: HomeAssistant | null = null;
   private _cameraIndex = 0;
-  private _timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
     super();
@@ -79,32 +76,10 @@ export class JuicedDashboardSecurityCard extends HTMLElementBase {
 
   connectedCallback(): void {
     this.root.addEventListener("click", this._onClick as EventListener);
-    this._startTimer();
   }
 
   disconnectedCallback(): void {
     this.root.removeEventListener("click", this._onClick as EventListener);
-    this._stopTimer();
-  }
-
-  private _startTimer(): void {
-    this._stopTimer();
-    const cameras = this._config?.security.cameras ?? [];
-    if (cameras.length <= 1) return;
-    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
-    this._timer = setInterval(() => {
-      const count = this._config?.security.cameras.length ?? 0;
-      if (count === 0) return;
-      this._cameraIndex = (this._cameraIndex + 1) % count;
-      this._render();
-    }, CAMERA_ROTATE_MS);
-  }
-
-  private _stopTimer(): void {
-    if (this._timer !== null) {
-      clearInterval(this._timer);
-      this._timer = null;
-    }
   }
 
   private _onClick(event: MouseEvent): void {
@@ -124,7 +99,6 @@ export class JuicedDashboardSecurityCard extends HTMLElementBase {
       const index = Number(target.dataset.index);
       if (Number.isFinite(index)) {
         this._cameraIndex = index;
-        this._startTimer();
         this._render();
       }
       return;
@@ -133,7 +107,6 @@ export class JuicedDashboardSecurityCard extends HTMLElementBase {
       if (cameras.length === 0) return;
       const dir = action === "camera-prev" ? -1 : 1;
       this._cameraIndex = (this._cameraIndex + dir + cameras.length) % cameras.length;
-      this._startTimer();
       this._render();
       return;
     }

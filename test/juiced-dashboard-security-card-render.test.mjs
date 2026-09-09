@@ -33,7 +33,6 @@ function makeCard() {
   card._config = null;
   card._hass = null;
   card._cameraIndex = 0;
-  card._timer = null;
   card.shadowRoot = makeFakeShadowRoot();
   return card;
 }
@@ -85,16 +84,10 @@ test("camera-select click switches the shown camera without throwing", () => {
   const card = makeCard();
   card.setConfig(CONFIG);
   card.hass = HASS;
-  try {
-    assert.doesNotThrow(() => {
-      card._onClick({ target: { closest: () => ({ dataset: { action: "camera-select", index: "1" } }) } });
-    });
-    assert.equal(card._cameraIndex, 1);
-  } finally {
-    // camera-select (re)starts the auto-rotate interval — clear it so this
-    // test doesn't leak a live 6s timer into the test process.
-    card._stopTimer();
-  }
+  assert.doesNotThrow(() => {
+    card._onClick({ target: { closest: () => ({ dataset: { action: "camera-select", index: "1" } }) } });
+  });
+  assert.equal(card._cameraIndex, 1);
 });
 
 test("renders nothing but the style tag when neither alarm nor cameras are configured", () => {
@@ -103,6 +96,25 @@ test("renders nothing but the style tag when neither alarm nor cameras are confi
   card.hass = { states: {} };
   const html = card.shadowRoot.innerHTML;
   assert.ok(!html.includes("<ha-card"));
+});
+
+test("cameras never auto-rotate — connecting the card schedules no timer", () => {
+  const card = makeCard();
+  card.setConfig(CONFIG);
+  card.hass = HASS;
+
+  const realSetInterval = globalThis.setInterval;
+  let calls = 0;
+  globalThis.setInterval = (...args) => {
+    calls += 1;
+    return realSetInterval(...args);
+  };
+  try {
+    card.connectedCallback();
+    assert.equal(calls, 0);
+  } finally {
+    globalThis.setInterval = realSetInterval;
+  }
 });
 
 test("an unavailable alarm entity omits the alarm row instead of showing a broken state", () => {
