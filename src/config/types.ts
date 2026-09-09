@@ -97,6 +97,18 @@ export interface SecurityConfig {
   cameras: CameraConfig[];
 }
 
+/**
+ * A "Snel naar" navigation button — points at another dashboard or view
+ * (external, e.g. `/kia-ev6`, or one of this dashboard's own other views,
+ * e.g. `/juiced-dashboard-test/energy`). Not a service call, just navigation.
+ */
+export interface ShortcutConfig {
+  key: string;
+  label: string;
+  icon?: string;
+  navigation_path: string;
+}
+
 export interface JuicedDashboardConfigV1 {
   type: "custom:juiced-dashboard";
   schema_version: typeof CONFIG_SCHEMA_VERSION;
@@ -104,5 +116,6 @@ export interface JuicedDashboardConfigV1 {
   today: TodayConfig;
   quick_actions: QuickActionConfig[];
   security: SecurityConfig;
+  shortcuts: ShortcutConfig[];
   rooms: EditorRoomConfig[];
 }

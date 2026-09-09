@@ -61,6 +61,7 @@ export type {
   QuickActionConfig,
   RoomZone,
   SecurityConfig,
+  ShortcutConfig,
   StartView,
   ThemeMode,
   TodayConfig,

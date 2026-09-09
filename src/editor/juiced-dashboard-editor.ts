@@ -13,7 +13,7 @@
 
 import { compileConfig } from "../config/compiler";
 import { ROOM_ZONES } from "../config/types";
-import type { CameraConfig, EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, RoomZone, SecurityConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
+import type { CameraConfig, EditorRoomConfig, JuicedDashboardConfigV1, QuickActionConfig, RoomZone, SecurityConfig, ShortcutConfig, StartView, ThemeMode, TodayConfig } from "../config/types";
 
 const ZONE_LABELS: Record<RoomZone, string> = { buiten: "Buiten", gelijkvloers: "Gelijkvloers", boven: "Boven" };
 
@@ -44,6 +44,7 @@ const ROOM_ENTITY_FIELDS: readonly RoomEntityField[] = [
 let newRoomSeed = 0;
 let newActionSeed = 0;
 let newCameraSeed = 0;
+let newShortcutSeed = 0;
 
 /** Vandaag's single-entity fields (everything except the multi-entity waste_entities). */
 interface TodayEntityField {
@@ -213,6 +214,28 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     this._render();
   }
 
+  private _updateShortcut(key: string, patch: Partial<ShortcutConfig>): void {
+    this._config = {
+      ...this._config,
+      shortcuts: this._config.shortcuts.map((shortcut) => (shortcut.key === key ? { ...shortcut, ...patch } : shortcut)),
+    };
+    this._emit();
+  }
+
+  private _addShortcut(): void {
+    newShortcutSeed += 1;
+    const shortcut: ShortcutConfig = { key: `shortcut-${Date.now().toString(36)}-${newShortcutSeed}`, label: "Nieuwe snelkoppeling", navigation_path: "" };
+    this._config = { ...this._config, shortcuts: [...this._config.shortcuts, shortcut] };
+    this._emit();
+    this._render();
+  }
+
+  private _removeShortcut(key: string): void {
+    this._config = { ...this._config, shortcuts: this._config.shortcuts.filter((shortcut) => shortcut.key !== key) };
+    this._emit();
+    this._render();
+  }
+
   private _onInput(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLSelectElement | null;
     if (!target) return;
@@ -240,6 +263,15 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
       if (!cameraKey) return;
       if (field === "name") this._updateCamera(cameraKey, { name: target.value });
       if (field === "privacy_service") this._updateCamera(cameraKey, { privacy_service: target.value || undefined });
+      return;
+    }
+
+    if (target.dataset.scope === "shortcut") {
+      const shortcutKey = target.dataset.shortcutKey;
+      if (!shortcutKey) return;
+      if (field === "label") this._updateShortcut(shortcutKey, { label: target.value });
+      if (field === "icon") this._updateShortcut(shortcutKey, { icon: target.value || undefined });
+      if (field === "navigation_path") this._updateShortcut(shortcutKey, { navigation_path: target.value });
       return;
     }
 
@@ -321,6 +353,8 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
     if (target.dataset.action === "remove-action" && target.dataset.actionKey) this._removeAction(target.dataset.actionKey);
     if (target.dataset.action === "add-camera") this._addCamera();
     if (target.dataset.action === "remove-camera" && target.dataset.cameraKey) this._removeCamera(target.dataset.cameraKey);
+    if (target.dataset.action === "add-shortcut") this._addShortcut();
+    if (target.dataset.action === "remove-shortcut" && target.dataset.shortcutKey) this._removeShortcut(target.dataset.shortcutKey);
   }
 
   private _render(): void {
@@ -345,7 +379,7 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
             <option value="dark" ${c.general.theme_mode === "dark" ? "selected" : ""}>Donker</option>
           </select>
         </label>
-        <label>Bewoners (tonen als badges op Home)
+        <label>Bewoners (Gezin-kaart op Home)
           <ha-selector data-scope="general" data-field="person_entities"></ha-selector>
         </label>
       </div>
@@ -381,6 +415,14 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
           <button type="button" data-action="add-action">+ Actie toevoegen</button>
         </div>
         ${c.quick_actions.length === 0 ? `<p class="jde-empty">Nog geen snelacties geconfigureerd.</p>` : c.quick_actions.map((action) => this._actionHtml(action)).join("")}
+      </div>
+
+      <div class="jde-section">
+        <div class="jde-section-head">
+          <h3>Snel naar</h3>
+          <button type="button" data-action="add-shortcut">+ Snelkoppeling toevoegen</button>
+        </div>
+        ${c.shortcuts.length === 0 ? `<p class="jde-empty">Nog geen snelkoppelingen geconfigureerd.</p>` : c.shortcuts.map((shortcut) => this._shortcutHtml(shortcut)).join("")}
       </div>
 
       <div class="jde-section">
@@ -509,6 +551,22 @@ export class JuicedDashboardStrategyEditor extends HTMLElementBase {
                </label>`
             : ""
         }
+      </div>`;
+  }
+
+  private _shortcutHtml(shortcut: ShortcutConfig): string {
+    return `
+      <div class="jde-room">
+        <div class="jde-room-head">
+          <input type="text" data-scope="shortcut" data-shortcut-key="${shortcut.key}" data-field="label" value="${escapeHtml(shortcut.label)}" placeholder="Label">
+          <button type="button" data-action="remove-shortcut" data-shortcut-key="${shortcut.key}" aria-label="Snelkoppeling verwijderen">&times;</button>
+        </div>
+        <label>Icoon
+          <input type="text" data-scope="shortcut" data-shortcut-key="${shortcut.key}" data-field="icon" value="${escapeHtml(shortcut.icon ?? "")}" placeholder="mdi:car-electric">
+        </label>
+        <label>Pad (bv. /kia-ev6 of /juiced-dashboard-test/energy)
+          <input type="text" data-scope="shortcut" data-shortcut-key="${shortcut.key}" data-field="navigation_path" value="${escapeHtml(shortcut.navigation_path)}" placeholder="/dashboard-url-path">
+        </label>
       </div>`;
   }
 

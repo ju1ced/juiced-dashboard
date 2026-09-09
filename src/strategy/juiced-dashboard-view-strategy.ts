@@ -10,13 +10,7 @@ import { registerJuicedDashboardQuickActions } from "../cards/juiced-dashboard-q
 import { registerJuicedDashboardRoomDetailCard } from "../cards/juiced-dashboard-room-detail-card";
 import { registerJuicedDashboardSecurityCard } from "../cards/juiced-dashboard-security-card";
 import { registerJuicedDashboardTodayCard } from "../cards/juiced-dashboard-today-card";
-import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, SecurityConfig, TodayConfig, ViewPath } from "../config/types";
-
-interface BadgeConfig {
-  type: "entity";
-  entity: string;
-  show_name: boolean;
-}
+import type { EditorRoomConfig, GeneralConfig, QuickActionConfig, SecurityConfig, ShortcutConfig, TodayConfig, ViewPath } from "../config/types";
 
 export interface JuicedDashboardViewConfig {
   type: "custom:juiced-dashboard-view";
@@ -25,6 +19,7 @@ export interface JuicedDashboardViewConfig {
   today?: TodayConfig;
   quick_actions?: QuickActionConfig[];
   security?: SecurityConfig;
+  shortcuts?: ShortcutConfig[];
   rooms?: EditorRoomConfig[];
   room?: EditorRoomConfig;
 }
@@ -122,10 +117,37 @@ function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
   };
 }
 
-function personBadges(general: GeneralConfig | undefined): BadgeConfig[] | undefined {
+/** "Gezin": one tile per configured person entity, in the gap between the hero row and Kamers — not view-level badges, which HA always pins to the very top. */
+function familySection(general: GeneralConfig | undefined): LovelaceConfig | undefined {
   const entities = general?.person_entities ?? [];
   if (!entities.length) return undefined;
-  return entities.map((entity) => ({ type: "entity", entity, show_name: true }));
+  return {
+    type: "grid",
+    column_span: FULL_SPAN,
+    cards: [
+      { type: "heading", heading: "Gezin", heading_style: "title", grid_options: GRID_FULL },
+      ...entities.map((entity) => ({ type: "tile", entity, grid_options: { columns: 6 } })),
+    ],
+  };
+}
+
+/** "Snel naar": one-tap navigation to another dashboard or one of this dashboard's own other views. */
+function shortcutsSection(shortcuts: ShortcutConfig[] | undefined): LovelaceConfig | undefined {
+  if (!shortcuts || shortcuts.length === 0) return undefined;
+  return {
+    type: "grid",
+    column_span: FULL_SPAN,
+    cards: [
+      { type: "heading", heading: "Snel naar", heading_style: "title", grid_options: GRID_FULL },
+      ...shortcuts.map((shortcut) => ({
+        type: "shortcut",
+        text: shortcut.label,
+        icon: shortcut.icon || "mdi:open-in-new",
+        tap_action: { action: "navigate", navigation_path: shortcut.navigation_path },
+        grid_options: { columns: 4 },
+      })),
+    ],
+  };
 }
 
 function roomDetailSections(room: EditorRoomConfig | undefined): LovelaceConfig[] {
@@ -147,6 +169,8 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
     case "home":
       sections = [
         heroSection(config.today, config.security),
+        familySection(config.general),
+        shortcutsSection(config.shortcuts),
         quickActionsSection(config.quick_actions),
         roomsSection(config.rooms ?? []),
       ].filter((section): section is LovelaceConfig => Boolean(section));
@@ -167,13 +191,11 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
       sections = placeholderSections("Meer", "Instellingen en geschiedenis volgen in een volgende stap.");
       break;
   }
-  const badges = config.view === "home" ? personBadges(config.general) : undefined;
   return {
     type: "sections",
     max_columns: FULL_SPAN,
     dense_section_placement: true,
     sections,
-    ...(badges ? { badges } : {}),
   };
 }
 

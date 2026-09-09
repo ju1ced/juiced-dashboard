@@ -11,6 +11,7 @@ import {
   type QuickActionConfig,
   type RoomZone,
   type SecurityConfig,
+  type ShortcutConfig,
   type StartView,
   type ThemeMode,
   type TodayConfig,
@@ -167,6 +168,35 @@ function compileSecurity(raw: unknown): SecurityConfig {
   };
 }
 
+let shortcutKeySeed = 0;
+
+function generateShortcutKey(): string {
+  shortcutKeySeed += 1;
+  return `shortcut-${Date.now().toString(36)}-${shortcutKeySeed}`;
+}
+
+function compileShortcut(raw: unknown): ShortcutConfig | null {
+  if (!isRecord(raw)) return null;
+  const navigationPath = asOptionalString(raw.navigation_path);
+  if (!navigationPath) return null;
+  return {
+    key: asString(raw.key, generateShortcutKey()),
+    label: asString(raw.label, navigationPath),
+    icon: asOptionalString(raw.icon),
+    navigation_path: navigationPath,
+  };
+}
+
+function compileShortcuts(raw: unknown): ShortcutConfig[] {
+  if (!Array.isArray(raw)) return [];
+  const shortcuts: ShortcutConfig[] = [];
+  for (const item of raw) {
+    const shortcut = compileShortcut(item);
+    if (shortcut) shortcuts.push(shortcut);
+  }
+  return shortcuts;
+}
+
 function compileRooms(raw: unknown): EditorRoomConfig[] {
   if (!Array.isArray(raw)) return [];
   const rooms: EditorRoomConfig[] = [];
@@ -191,6 +221,7 @@ export function compileConfig(raw: unknown): JuicedDashboardConfigV1 {
     today: compileToday(source.today),
     quick_actions: compileQuickActions(source.quick_actions),
     security: compileSecurity(source.security),
+    shortcuts: compileShortcuts(source.shortcuts),
     rooms: compileRooms(source.rooms),
   };
 }

@@ -17,6 +17,7 @@ export function createDefaultConfig(): JuicedDashboardConfigV1 {
     security: {
       cameras: [],
     },
+    shortcuts: [],
     rooms: [],
   };
 }
