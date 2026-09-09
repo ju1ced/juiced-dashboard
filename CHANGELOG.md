@@ -4,6 +4,15 @@ Tracks the HACS-installable card(s) shipped from this repo (`dist/juiced-dashboa
 The static-YAML dashboard config in `dashboard/**` has its own history — see `git log` and
 [`docs/pr-roadmap.md`](docs/pr-roadmap.md).
 
+## 0.2.0-beta.2 - 2026-09-09
+
+### Added
+
+- "Gezin" section on Home: a tile per `general.person_entities` entity, positioned between the
+  hero row and Kamers instead of as view-level badges (which HA always pins to the very top).
+- "Snel naar" section on Home: one-tap navigation buttons (native HA `shortcut` cards) to
+  other dashboards or views, from a new repeatable `shortcuts` config section in the editor.
+
 ## 0.2.0-beta.1 - 2026-09-08
 
 First release of the full GUI-configured dashboard strategy — `custom:juiced-dashboard` now
