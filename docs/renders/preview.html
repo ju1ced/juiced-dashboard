@@ -236,6 +236,11 @@
       const strategyInput = {
         type: "custom:juiced-dashboard",
         general: { title: "Ons Huis", start_view: "home", theme_mode: "dark", person_entities: ["person.joost", "person.leen"] },
+        shortcuts: [
+          { key: "kia", label: "Auto", icon: "mdi:car-electric", navigation_path: "/kia-ev6" },
+          { key: "garden", label: "Tuin", icon: "mdi:flower", navigation_path: "/dashboard-test/garden" },
+          { key: "energy", label: "Energie", icon: "mdi:lightning-bolt", navigation_path: "/juiced-dashboard-test/energy" },
+        ],
         rooms: [
           {
             key: "bureau",
@@ -257,6 +262,7 @@
         type: "custom:juiced-dashboard-view",
         view: "home",
         general: strategyInput.general,
+        shortcuts: strategyInput.shortcuts,
         rooms: strategyInput.rooms,
       }).then((result) => {
         document.getElementById("view-output").textContent = JSON.stringify(result, null, 2);
