@@ -7,11 +7,12 @@ import { buildView } from "../dist/juiced-dashboard.js";
 
 const GENERAL = { title: "Ons Huis", start_view: "home", theme_mode: "system", person_entities: [] };
 
-test("buildView gives every section a column_span matching max_columns, so each always claims the full computed row width", () => {
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general: GENERAL,
+function homeView(overrides) {
+  return buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [], ...overrides });
+}
+
+test("buildView gives every top-level section a column_span matching max_columns, so each always claims the full computed row width", () => {
+  const result = homeView({
     today: { weather_entity: "weather.thuis", waste_entities: [] },
     quick_actions: [{ key: "a", label: "A", entity: "light.a", service: "toggle" }],
     rooms: [{ key: "bureau", name: "Bureau", light_entities: [], cover_entities: [], awning_entities: [] }],
@@ -21,51 +22,45 @@ test("buildView gives every section a column_span matching max_columns, so each 
   }
 });
 
-test("Vandaag and Security merge into one section with a shared 2-column grid card when both are configured", () => {
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general: GENERAL,
+test("Vandaag and Security merge into one section with a shared 2-column grid, each side in its own vertical-stack", () => {
+  const result = homeView({
     today: { weather_entity: "weather.thuis", waste_entities: [] },
     security: { alarm_entity: "alarm_control_panel.huis", cameras: [] },
-    rooms: [],
   });
   const heroSection = result.sections[0];
   assert.equal(heroSection.cards.length, 1);
   const innerGrid = heroSection.cards[0];
   assert.equal(innerGrid.type, "grid");
   assert.equal(innerGrid.columns, 2);
+  const [leftStack, rightStack] = innerGrid.cards;
+  assert.equal(leftStack.type, "vertical-stack");
   assert.deepEqual(
-    innerGrid.cards.map((c) => c.type),
-    ["custom:juiced-dashboard-today-card", "custom:juiced-dashboard-security-card"],
+    leftStack.cards.map((c) => c.type),
+    ["custom:juiced-dashboard-today-card"],
+  );
+  assert.equal(rightStack.type, "vertical-stack");
+  assert.deepEqual(
+    rightStack.cards.map((c) => c.type),
+    ["custom:juiced-dashboard-security-card"],
   );
 });
 
 test("only Security configured renders a single card with no forced 2-column grid", () => {
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general: GENERAL,
-    security: { alarm_entity: "alarm_control_panel.huis", cameras: [] },
-    rooms: [],
-  });
+  const result = homeView({ security: { alarm_entity: "alarm_control_panel.huis", cameras: [] } });
   const heroSection = result.sections[0];
   assert.equal(heroSection.cards.length, 1);
   assert.equal(heroSection.cards[0].type, "custom:juiced-dashboard-security-card");
 });
 
-test("neither Vandaag nor Security configured omits the hero section entirely", () => {
-  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
+test("neither Vandaag, Security, Gezin nor Snel naar configured omits the hero section entirely", () => {
+  const result = homeView({});
   const sectionCardTypes = result.sections.flatMap((s) => s.cards.map((c) => c.type));
   assert.ok(!sectionCardTypes.includes("custom:juiced-dashboard-today-card"));
   assert.ok(!sectionCardTypes.includes("custom:juiced-dashboard-security-card"));
 });
 
 test("every top-level card gets grid_options: {columns: full} so it claims the whole section width", () => {
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general: GENERAL,
+  const result = homeView({
     today: { weather_entity: "weather.thuis", waste_entities: [] },
     security: { alarm_entity: "alarm_control_panel.huis", cameras: [] },
     quick_actions: [{ key: "a", label: "A", entity: "light.a", service: "toggle" }],
@@ -87,58 +82,47 @@ test("room detail subview card also gets grid_options: {columns: full}", () => {
   assert.deepEqual(result.sections[0].cards[0].grid_options, { columns: "full" });
 });
 
-test("person_entities render as a Gezin section with one tile per person, positioned after the hero row", () => {
-  const general = { ...GENERAL, person_entities: ["person.joost", "person.leen"] };
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general,
+test("Gezin and Snel naar stack into the left column next to Security, filling the gap instead of forming their own rows", () => {
+  const result = homeView({
+    general: { ...GENERAL, person_entities: ["person.joost", "person.leen"] },
     today: { weather_entity: "weather.thuis", waste_entities: [] },
-    rooms: [],
+    security: { alarm_entity: "alarm_control_panel.huis", cameras: [] },
+    shortcuts: [{ key: "kia", label: "Auto", icon: "mdi:car-electric", navigation_path: "/kia-ev6" }],
   });
-  const familySection = result.sections[1];
-  assert.equal(familySection.cards[0].heading, "Gezin");
-  const personTiles = familySection.cards.slice(1);
+  const innerGrid = result.sections[0].cards[0];
+  const [leftStack] = innerGrid.cards;
   assert.deepEqual(
-    personTiles.map((c) => ({ type: c.type, entity: c.entity })),
+    leftStack.cards.map((c) => c.type ?? c.heading),
+    ["custom:juiced-dashboard-today-card", "heading", "grid", "heading", "grid"],
+  );
+  const [, gezinHeading, gezinTiles, snelNaarHeading, snelNaarButtons] = leftStack.cards;
+  assert.equal(gezinHeading.heading, "Gezin");
+  assert.deepEqual(
+    gezinTiles.cards.map((c) => ({ type: c.type, entity: c.entity })),
     [
       { type: "tile", entity: "person.joost" },
       { type: "tile", entity: "person.leen" },
     ],
   );
-});
-
-test("no Gezin section when person_entities is empty", () => {
-  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
-  const headings = result.sections.flatMap((s) => s.cards.filter((c) => c.type === "heading").map((c) => c.heading));
-  assert.ok(!headings.includes("Gezin"));
-});
-
-test("shortcuts render as a Snel naar section with native shortcut cards navigating to their configured path", () => {
-  const result = buildView({
-    type: "custom:juiced-dashboard-view",
-    view: "home",
-    general: GENERAL,
-    shortcuts: [
-      { key: "kia", label: "Auto", icon: "mdi:car-electric", navigation_path: "/kia-ev6" },
-      { key: "garden", label: "Tuin", navigation_path: "/dashboard-test/garden" },
-    ],
-    rooms: [],
+  assert.equal(snelNaarHeading.heading, "Snel naar");
+  assert.deepEqual(snelNaarButtons.cards[0], {
+    type: "shortcut",
+    label: "Auto",
+    icon: "mdi:car-electric",
+    tap_action: { action: "navigate", navigation_path: "/kia-ev6" },
   });
-  const shortcutsSection = result.sections.find((s) => s.cards.some((c) => c.heading === "Snel naar"));
-  assert.ok(shortcutsSection);
-  const shortcutCards = shortcutsSection.cards.filter((c) => c.type === "shortcut");
-  assert.deepEqual(
-    shortcutCards.map((c) => ({ label: c.label, path: c.tap_action.navigation_path, action: c.tap_action.action })),
-    [
-      { label: "Auto", path: "/kia-ev6", action: "navigate" },
-      { label: "Tuin", path: "/dashboard-test/garden", action: "navigate" },
-    ],
-  );
 });
 
-test("no Snel naar section when no shortcuts are configured", () => {
-  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
-  const headings = result.sections.flatMap((s) => s.cards.filter((c) => c.type === "heading").map((c) => c.heading));
-  assert.ok(!headings.includes("Snel naar"));
+test("Gezin alone (no Vandaag/Security/Snel naar) still renders as its own full-width stack, not a forced empty 2-column grid", () => {
+  const result = homeView({ general: { ...GENERAL, person_entities: ["person.joost"] } });
+  const heroSection = result.sections[0];
+  const stack = heroSection.cards[0];
+  assert.equal(stack.type, "vertical-stack");
+  assert.equal(stack.cards[0].heading, "Gezin");
+});
+
+test("no Gezin or Snel naar content when neither person_entities nor shortcuts are configured", () => {
+  const result = homeView({ today: { weather_entity: "weather.thuis", waste_entities: [] } });
+  const heroSection = result.sections[0];
+  assert.equal(heroSection.cards[0].type, "custom:juiced-dashboard-today-card");
 });
