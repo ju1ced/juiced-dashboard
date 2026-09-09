@@ -4,6 +4,16 @@ Tracks the HACS-installable card(s) shipped from this repo (`dist/juiced-dashboa
 The static-YAML dashboard config in `dashboard/**` has its own history — see `git log` and
 [`docs/pr-roadmap.md`](docs/pr-roadmap.md).
 
+## 0.2.0-beta.3 - 2026-09-09
+
+### Fixed
+
+- "Snel naar" shortcut buttons showed the navigation target's own title ("Nebula", "garden",
+  the dashboard's own title) instead of the configured label — HA's native `shortcut` card
+  reads the display text from a `label` property, not `text`; fixed to use the right one.
+- Removed the security card's 6-second camera auto-rotation — cameras now only change on
+  prev/next/select, never on their own.
+
 ## 0.2.0-beta.2 - 2026-09-09
 
 ### Added
