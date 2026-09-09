@@ -87,13 +87,58 @@ test("room detail subview card also gets grid_options: {columns: full}", () => {
   assert.deepEqual(result.sections[0].cards[0].grid_options, { columns: "full" });
 });
 
-test("person_entities render as badges on Home but not on other views", () => {
+test("person_entities render as a Gezin section with one tile per person, positioned after the hero row", () => {
   const general = { ...GENERAL, person_entities: ["person.joost", "person.leen"] };
-  const home = buildView({ type: "custom:juiced-dashboard-view", view: "home", general, rooms: [] });
+  const result = buildView({
+    type: "custom:juiced-dashboard-view",
+    view: "home",
+    general,
+    today: { weather_entity: "weather.thuis", waste_entities: [] },
+    rooms: [],
+  });
+  const familySection = result.sections[1];
+  assert.equal(familySection.cards[0].heading, "Gezin");
+  const personTiles = familySection.cards.slice(1);
   assert.deepEqual(
-    home.badges.map((b) => b.entity),
-    ["person.joost", "person.leen"],
+    personTiles.map((c) => ({ type: c.type, entity: c.entity })),
+    [
+      { type: "tile", entity: "person.joost" },
+      { type: "tile", entity: "person.leen" },
+    ],
   );
-  const rooms = buildView({ type: "custom:juiced-dashboard-view", view: "rooms", general, rooms: [] });
-  assert.equal(rooms.badges, undefined);
+});
+
+test("no Gezin section when person_entities is empty", () => {
+  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
+  const headings = result.sections.flatMap((s) => s.cards.filter((c) => c.type === "heading").map((c) => c.heading));
+  assert.ok(!headings.includes("Gezin"));
+});
+
+test("shortcuts render as a Snel naar section with native shortcut cards navigating to their configured path", () => {
+  const result = buildView({
+    type: "custom:juiced-dashboard-view",
+    view: "home",
+    general: GENERAL,
+    shortcuts: [
+      { key: "kia", label: "Auto", icon: "mdi:car-electric", navigation_path: "/kia-ev6" },
+      { key: "garden", label: "Tuin", navigation_path: "/dashboard-test/garden" },
+    ],
+    rooms: [],
+  });
+  const shortcutsSection = result.sections.find((s) => s.cards.some((c) => c.heading === "Snel naar"));
+  assert.ok(shortcutsSection);
+  const shortcutCards = shortcutsSection.cards.filter((c) => c.type === "shortcut");
+  assert.deepEqual(
+    shortcutCards.map((c) => ({ text: c.text, path: c.tap_action.navigation_path, action: c.tap_action.action })),
+    [
+      { text: "Auto", path: "/kia-ev6", action: "navigate" },
+      { text: "Tuin", path: "/dashboard-test/garden", action: "navigate" },
+    ],
+  );
+});
+
+test("no Snel naar section when no shortcuts are configured", () => {
+  const result = buildView({ type: "custom:juiced-dashboard-view", view: "home", general: GENERAL, rooms: [] });
+  const headings = result.sections.flatMap((s) => s.cards.filter((c) => c.type === "heading").map((c) => c.heading));
+  assert.ok(!headings.includes("Snel naar"));
 });

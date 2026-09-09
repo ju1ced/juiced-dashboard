@@ -118,6 +118,23 @@ test("compileConfig keeps a configured alarm entity", () => {
   assert.equal(config.security.alarm_entity, "alarm_control_panel.huis");
 });
 
+test("compileConfig defaults shortcuts to an empty list", () => {
+  const config = compileConfig({});
+  assert.deepEqual(config.shortcuts, []);
+});
+
+test("compileConfig drops a shortcut missing navigation_path", () => {
+  const config = compileConfig({ shortcuts: [{ label: "Kia" }, { label: "Tuin", navigation_path: "/dashboard-test/garden" }] });
+  assert.equal(config.shortcuts.length, 1);
+  assert.equal(config.shortcuts[0].navigation_path, "/dashboard-test/garden");
+});
+
+test("compileConfig falls back to the navigation_path as the shortcut label when none is given", () => {
+  const config = compileConfig({ shortcuts: [{ navigation_path: "/kia-ev6" }] });
+  assert.equal(config.shortcuts[0].label, "/kia-ev6");
+  assert.ok(config.shortcuts[0].key);
+});
+
 test("compileConfig drops cameras missing a name or camera_entity", () => {
   const config = compileConfig({
     security: {
