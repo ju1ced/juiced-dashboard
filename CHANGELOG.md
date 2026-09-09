@@ -4,6 +4,14 @@ Tracks the HACS-installable card(s) shipped from this repo (`dist/juiced-dashboa
 The static-YAML dashboard config in `dashboard/**` has its own history — see `git log` and
 [`docs/pr-roadmap.md`](docs/pr-roadmap.md).
 
+## 0.2.0-beta.4 - 2026-09-09
+
+### Fixed
+
+- Gezin and Snel naar rendered as their own full-width rows below the hero row, leaving the
+  actual gap they were meant to fill (below Vandaag, next to a taller Security/camera card)
+  empty. Vandaag, Gezin, and Snel naar now stack into one column next to Security instead.
+
 ## 0.2.0-beta.3 - 2026-09-09
 
 ### Fixed
