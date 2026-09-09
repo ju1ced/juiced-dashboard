@@ -1,6 +1,6 @@
 {
   "name": "juiced-dashboard",
-  "version": "0.2.0-beta.1",
+  "version": "0.2.0-beta.2",
   "private": true,
   "type": "module",
   "description": "HACS-installable custom cards for the Juiced dashboard, alongside its YAML dashboard config and dev tooling (markdown lint).",
