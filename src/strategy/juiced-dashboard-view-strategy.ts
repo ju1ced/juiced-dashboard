@@ -79,23 +79,80 @@ function hasSecurityContent(security: SecurityConfig | undefined): boolean {
   return Boolean(security.alarm_entity || (security.cameras ?? []).length > 0);
 }
 
+/** "Gezin": a heading + one tile per configured person entity. */
+function familyCards(general: GeneralConfig | undefined): LovelaceConfig[] {
+  const entities = general?.person_entities ?? [];
+  if (!entities.length) return [];
+  return [
+    { type: "heading", heading: "Gezin", heading_style: "title" },
+    { type: "grid", columns: 2, square: false, cards: entities.map((entity) => ({ type: "tile", entity })) },
+  ];
+}
+
+/** "Snel naar": a heading + one-tap navigation buttons to other dashboards/views. */
+function shortcutCards(shortcuts: ShortcutConfig[] | undefined): LovelaceConfig[] {
+  if (!shortcuts || shortcuts.length === 0) return [];
+  return [
+    { type: "heading", heading: "Snel naar", heading_style: "title" },
+    {
+      type: "grid",
+      columns: 2,
+      square: false,
+      cards: shortcuts.map((shortcut) => ({
+        type: "shortcut",
+        label: shortcut.label,
+        icon: shortcut.icon || "mdi:open-in-new",
+        tap_action: { action: "navigate", navigation_path: shortcut.navigation_path },
+      })),
+    },
+  ];
+}
+
 /**
- * Vandaag + Security share one section so they sit in the same row and get
- * the same row height (HA's grid card stretches its children by default) —
- * two cards of very different content length looked visually mismatched as
- * separate sections.
+ * Vandaag, Gezin and Snel naar stack in one column next to Security in the
+ * other — Security (with its camera) tends to run taller than Vandaag
+ * alone, so Gezin/Snel naar fill that gap instead of sitting in their own
+ * full-width rows further down the page. Falls back to a single stack
+ * (still full width, no forced empty second column) when only one side has
+ * content.
  */
-function heroSection(today: TodayConfig | undefined, security: SecurityConfig | undefined): LovelaceConfig | undefined {
-  const cards: LovelaceConfig[] = [];
-  if (hasTodayContent(today)) cards.push({ type: "custom:juiced-dashboard-today-card", today });
-  if (hasSecurityContent(security)) cards.push({ type: "custom:juiced-dashboard-security-card", security });
-  if (cards.length === 0) return undefined;
-  if (cards.length === 1) return { type: "grid", column_span: FULL_SPAN, cards: [{ ...cards[0], grid_options: GRID_FULL }] };
-  return {
-    type: "grid",
-    column_span: FULL_SPAN,
-    cards: [{ type: "grid", columns: 2, square: false, grid_options: GRID_FULL, cards }],
-  };
+function heroSection(
+  today: TodayConfig | undefined,
+  security: SecurityConfig | undefined,
+  general: GeneralConfig | undefined,
+  shortcuts: ShortcutConfig[] | undefined,
+): LovelaceConfig | undefined {
+  const left: LovelaceConfig[] = [];
+  if (hasTodayContent(today)) left.push({ type: "custom:juiced-dashboard-today-card", today });
+  left.push(...familyCards(general));
+  left.push(...shortcutCards(shortcuts));
+
+  const right: LovelaceConfig[] = [];
+  if (hasSecurityContent(security)) right.push({ type: "custom:juiced-dashboard-security-card", security });
+
+  if (left.length === 0 && right.length === 0) return undefined;
+  if (left.length > 0 && right.length > 0) {
+    return {
+      type: "grid",
+      column_span: FULL_SPAN,
+      cards: [
+        {
+          type: "grid",
+          columns: 2,
+          square: false,
+          grid_options: GRID_FULL,
+          cards: [
+            { type: "vertical-stack", cards: left },
+            { type: "vertical-stack", cards: right },
+          ],
+        },
+      ],
+    };
+  }
+
+  const only = left.length > 0 ? left : right;
+  if (only.length === 1) return { type: "grid", column_span: FULL_SPAN, cards: [{ ...only[0], grid_options: GRID_FULL }] };
+  return { type: "grid", column_span: FULL_SPAN, cards: [{ type: "vertical-stack", cards: only, grid_options: GRID_FULL }] };
 }
 
 function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
@@ -113,39 +170,6 @@ function roomsSection(rooms: EditorRoomConfig[]): LovelaceConfig {
         rooms: rooms.map(compileRoomForCard),
         grid_options: GRID_FULL,
       },
-    ],
-  };
-}
-
-/** "Gezin": one tile per configured person entity, in the gap between the hero row and Kamers — not view-level badges, which HA always pins to the very top. */
-function familySection(general: GeneralConfig | undefined): LovelaceConfig | undefined {
-  const entities = general?.person_entities ?? [];
-  if (!entities.length) return undefined;
-  return {
-    type: "grid",
-    column_span: FULL_SPAN,
-    cards: [
-      { type: "heading", heading: "Gezin", heading_style: "title", grid_options: GRID_FULL },
-      ...entities.map((entity) => ({ type: "tile", entity, grid_options: { columns: 6 } })),
-    ],
-  };
-}
-
-/** "Snel naar": one-tap navigation to another dashboard or one of this dashboard's own other views. */
-function shortcutsSection(shortcuts: ShortcutConfig[] | undefined): LovelaceConfig | undefined {
-  if (!shortcuts || shortcuts.length === 0) return undefined;
-  return {
-    type: "grid",
-    column_span: FULL_SPAN,
-    cards: [
-      { type: "heading", heading: "Snel naar", heading_style: "title", grid_options: GRID_FULL },
-      ...shortcuts.map((shortcut) => ({
-        type: "shortcut",
-        label: shortcut.label,
-        icon: shortcut.icon || "mdi:open-in-new",
-        tap_action: { action: "navigate", navigation_path: shortcut.navigation_path },
-        grid_options: { columns: 4 },
-      })),
     ],
   };
 }
@@ -168,9 +192,7 @@ export function buildView(config: JuicedDashboardViewConfig): LovelaceConfig {
   switch (config.view) {
     case "home":
       sections = [
-        heroSection(config.today, config.security),
-        familySection(config.general),
-        shortcutsSection(config.shortcuts),
+        heroSection(config.today, config.security, config.general, config.shortcuts),
         quickActionsSection(config.quick_actions),
         roomsSection(config.rooms ?? []),
       ].filter((section): section is LovelaceConfig => Boolean(section));
